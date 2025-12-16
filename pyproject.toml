@@ -1,0 +1,181 @@
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[project]
+name = "noveum-trace"
+version = "0.1.0"
+description = "Python SDK for Noveum AI/ML evaluation platform"
+readme = "README.md"
+license = "MIT"
+authors = [
+    { name = "Noveum Team", email = "sdk@noveum.ai" }
+]
+keywords = ["ai", "ml", "evaluation", "testing", "traces", "datasets"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+requires-python = ">=3.9"
+
+dependencies = [
+    "httpx>=0.25.0",
+    "pydantic>=2.0.0",
+    "pydantic-settings>=2.0.0",
+    "python-dotenv>=1.0.0",
+    "typing-extensions>=4.5.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.0",
+    "pytest-asyncio>=0.21.0",
+    "pytest-cov>=4.1.0",
+    "pytest-mock>=3.11.0",
+    "ruff>=0.1.0",
+    "black>=23.0.0",
+    "mypy>=1.5.0",
+    "sphinx>=7.0.0",
+    "sphinx-rtd-theme>=1.3.0",
+]
+
+test = [
+    "pytest>=7.4.0",
+    "pytest-asyncio>=0.21.0",
+    "pytest-cov>=4.1.0",
+    "pytest-mock>=3.11.0",
+    "responses>=0.23.0",
+]
+
+docs = [
+    "sphinx>=7.0.0",
+    "sphinx-rtd-theme>=1.3.0",
+    "sphinx-autodoc-typehints>=1.24.0",
+]
+
+[tool.poetry]
+name = "noveum-trace"
+version = "0.1.0"
+description = "Python SDK for Noveum AI/ML evaluation platform"
+authors = ["Noveum Team <sdk@noveum.ai>"]
+readme = "README.md"
+license = "MIT"
+packages = [
+    { include = "noveum" }
+]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+httpx = "^0.25.0"
+pydantic = "^2.0.0"
+pydantic-settings = "^2.0.0"
+python-dotenv = "^1.0.0"
+typing-extensions = "^4.5.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.4.0"
+pytest-asyncio = "^0.21.0"
+pytest-cov = "^4.1.0"
+pytest-mock = "^3.11.0"
+ruff = "^0.1.0"
+black = "^23.0.0"
+mypy = "^1.5.0"
+sphinx = "^7.0.0"
+sphinx-rtd-theme = "^1.3.0"
+
+[tool.black]
+line-length = 100
+target-version = ["py39", "py310", "py311", "py312"]
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+)/
+'''
+
+[tool.ruff]
+line-length = 100
+target-version = "py39"
+select = [
+    "E",      # pycodestyle errors
+    "W",      # pycodestyle warnings
+    "F",      # pyflakes
+    "I",      # isort
+    "C",      # flake8-comprehensions
+    "B",      # flake8-bugbear
+    "UP",     # pyupgrade
+]
+ignore = [
+    "E501",   # line too long (handled by black)
+    "B008",   # do not perform function calls in argument defaults
+]
+
+[tool.ruff.isort]
+known-first-party = ["noveum"]
+
+[tool.mypy]
+python_version = "3.9"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = false
+disallow_incomplete_defs = false
+check_untyped_defs = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+strict_equality = true
+
+[[tool.mypy.overrides]]
+module = "tests.*"
+ignore_errors = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = "--strict-markers -v --tb=short"
+markers = [
+    "unit: Unit tests",
+    "integration: Integration tests",
+    "slow: Slow running tests",
+    "async: Async tests",
+]
+asyncio_mode = "auto"
+
+[tool.coverage.run]
+source = ["noveum"]
+omit = [
+    "*/tests/*",
+    "*/site-packages/*",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+    "if TYPE_CHECKING:",
+    "class .*\\bProtocol\\):",
+    "@(abc\\.)?abstractmethod",
+]
