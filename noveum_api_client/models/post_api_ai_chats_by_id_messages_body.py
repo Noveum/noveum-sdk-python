@@ -1,0 +1,77 @@
+from __future__ import annotations
+
+from collections.abc import Mapping
+from typing import TYPE_CHECKING, Any, TypeVar
+
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
+
+if TYPE_CHECKING:
+    from ..models.post_api_ai_chats_by_id_messages_body_messages_item import PostApiAiChatsByIdMessagesBodyMessagesItem
+
+
+T = TypeVar("T", bound="PostApiAiChatsByIdMessagesBody")
+
+
+@_attrs_define
+class PostApiAiChatsByIdMessagesBody:
+    """
+    Attributes:
+        messages (list[PostApiAiChatsByIdMessagesBodyMessagesItem]):
+    """
+
+    messages: list[PostApiAiChatsByIdMessagesBodyMessagesItem]
+    additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
+
+    def to_dict(self) -> dict[str, Any]:
+        messages = []
+        for messages_item_data in self.messages:
+            messages_item = messages_item_data.to_dict()
+            messages.append(messages_item)
+
+        field_dict: dict[str, Any] = {}
+        field_dict.update(self.additional_properties)
+        field_dict.update(
+            {
+                "messages": messages,
+            }
+        )
+
+        return field_dict
+
+    @classmethod
+    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
+        from ..models.post_api_ai_chats_by_id_messages_body_messages_item import (
+            PostApiAiChatsByIdMessagesBodyMessagesItem,
+        )
+
+        d = dict(src_dict)
+        messages = []
+        _messages = d.pop("messages")
+        for messages_item_data in _messages:
+            messages_item = PostApiAiChatsByIdMessagesBodyMessagesItem.from_dict(messages_item_data)
+
+            messages.append(messages_item)
+
+        post_api_ai_chats_by_id_messages_body = cls(
+            messages=messages,
+        )
+
+        post_api_ai_chats_by_id_messages_body.additional_properties = d
+        return post_api_ai_chats_by_id_messages_body
+
+    @property
+    def additional_keys(self) -> list[str]:
+        return list(self.additional_properties.keys())
+
+    def __getitem__(self, key: str) -> Any:
+        return self.additional_properties[key]
+
+    def __setitem__(self, key: str, value: Any) -> None:
+        self.additional_properties[key] = value
+
+    def __delitem__(self, key: str) -> None:
+        del self.additional_properties[key]
+
+    def __contains__(self, key: str) -> bool:
+        return key in self.additional_properties
