@@ -1,0 +1,12 @@
+[bandit]
+exclude_dirs = 
+    /tests/
+    /test_results/
+    /.venv/
+    /venv/
+    /.tox/
+
+skips = 
+    B101
+    B601
+
