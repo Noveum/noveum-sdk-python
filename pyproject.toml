@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "noveum-sdk-python"
+name = "noveum-sdk"
 version = "1.0.0"
 description = "Official Python SDK for the Noveum.ai API - AI/ML evaluation and testing platform"
 authors = ["Noveum Team <team@noveum.ai>"]

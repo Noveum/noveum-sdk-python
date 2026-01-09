@@ -80,7 +80,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: pypi
-      url: https://pypi.org/p/noveum-sdk
+      url: https://pypi.org/p/noveum-api-client
     permissions:
       id-token: write  # IMPORTANT: mandatory for trusted publishing
     steps:
@@ -113,3 +113,4 @@ jobs:
         generate_release_notes: true
         draft: false
         prerelease: ${{ contains(github.ref, 'alpha') || contains(github.ref, 'beta') || contains(github.ref, 'rc') }}
+
