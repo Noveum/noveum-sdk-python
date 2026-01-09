@@ -1,10 +1,8 @@
 # Noveum SDK - Python Client
 
-[![PyPI version](https://img.shields.io/pypi/v/noveum-sdk-python.svg)](https://pypi.org/project/noveum-sdk-python/)
-[![Python versions](https://img.shields.io/pypi/pyversions/noveum-sdk-python.svg)](https://pypi.org/project/noveum-sdk-python/)
-[![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://github.com/Noveum/noveum-sdk-python/blob/main/LICENSE)
-[![CI](https://github.com/Noveum/noveum-sdk-python/workflows/CI/badge.svg)](https://github.com/Noveum/noveum-sdk-python/actions)
-[![codecov](https://codecov.io/gh/Noveum/noveum-sdk-python/branch/main/graph/badge.svg)](https://codecov.io/gh/Noveum/noveum-sdk-python)
+![Status](https://img.shields.io/badge/status-production--ready-brightgreen)
+![Python](https://img.shields.io/badge/python-3.10%2B-blue)
+![License](https://img.shields.io/badge/license-MIT-green)
 
 A professional Python SDK for the [Noveum.ai](https://noveum.ai) API. Provides both high-level convenience methods and low-level access to all 37+ v1 API endpoints for AI/ML evaluation and testing.
 
@@ -22,20 +20,11 @@ A professional Python SDK for the [Noveum.ai](https://noveum.ai) API. Provides b
 
 ### Installation
 
-#### From PyPI (Recommended)
-
 ```bash
-pip install noveum-sdk-python
-```
+# Clone or extract the SDK
+cd noveum-sdk-autogen
 
-#### From Source
-
-```bash
-# Clone the repository
-git clone https://github.com/Noveum/noveum-sdk-python.git
-cd noveum-sdk-python
-
-# Install in development mode
+# Install in development mode (recommended)
 pip install -e .
 
 # Or install normally
@@ -440,32 +429,24 @@ except Exception as e:
 
 ## Testing
 
-### Run Tests
+### Run Integration Tests
 
 ```bash
-# Run unit tests (fast, no API key needed)
-pytest tests/unit/ -v
-
-# Run integration tests (requires API key)
+# Set API key
 export NOVEUM_API_KEY="nv_your_api_key"
-pytest tests/integration/ -v
 
-# Run all tests
+# Run tests
 pytest tests/ -v
 
 # Run specific test
-pytest tests/unit/test_client_wrapper.py::TestNoveumClientInit -v
+pytest tests/test_integration_complete.py::TestDatasets -v
 ```
 
 ### Run with Coverage
 
 ```bash
-# Unit tests with coverage
-pytest tests/unit/ --cov=noveum_api_client --cov-report=html
-open htmlcov/index.html
-
-# All tests with coverage
 pytest tests/ --cov=noveum_api_client --cov-report=html
+open htmlcov/index.html
 ```
 
 ## Best Practices
@@ -673,45 +654,40 @@ noveum-sdk-autogen/
 
 ## Publishing to PyPI
 
-This package is automatically published to PyPI when a new version tag is pushed:
+To publish this SDK to PyPI:
 
 ```bash
 # Update version in pyproject.toml
 vim pyproject.toml
 
-# Update CHANGELOG.md with release notes
-vim CHANGELOG.md
+# Build distribution
+poetry build
 
-# Commit changes
-git commit -am "chore: Bump version to X.Y.Z"
+# Publish to PyPI
+poetry publish
 
-# Create and push tag
-git tag vX.Y.Z
-git push origin main --tags
+# Or publish to private repository
+poetry publish -r my-repo
 ```
-
-GitHub Actions will automatically build and publish to PyPI using Trusted Publishing.
 
 ## Support
 
-- **PyPI Package**: https://pypi.org/project/noveum-sdk-python/
 - **API Documentation**: https://api.noveum.ai/docs
-- **GitHub Repository**: https://github.com/Noveum/noveum-sdk-python
-- **GitHub Issues**: https://github.com/Noveum/noveum-sdk-python/issues
+- **GitHub Issues**: Open on repository
 - **Email**: support@noveum.ai
 - **Docs**: https://noveum.ai/docs
 
 ## License
 
-Apache 2.0 License - See LICENSE file for details
+MIT License - See LICENSE file for details
 
 ## Contributing
 
-Contributions welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+Contributions welcome! Please see CONTRIBUTING.md for guidelines.
 
 ## Changelog
 
-See [CHANGELOG.md](CHANGELOG.md) for version history and updates.
+See CHANGELOG.md for version history and updates.
 
 ---
 

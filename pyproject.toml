@@ -1,25 +1,9 @@
 [tool.poetry]
-name = "noveum-sdk-python"
+name = "noveum-api-client"
 version = "1.0.0"
-description = "Official Python SDK for the Noveum.ai API - AI/ML evaluation and testing platform"
-authors = ["Noveum Team <team@noveum.ai>"]
+description = "A client library for accessing Noveum API"
+authors = []
 readme = "README.md"
-homepage = "https://noveum.ai"
-repository = "https://github.com/Noveum/noveum-sdk-python"
-documentation = "https://docs.noveum.ai"
-keywords = ["noveum", "ai", "ml", "evaluation", "testing", "api", "sdk"]
-license = "Apache-2.0"
-classifiers = [
-    "Development Status :: 5 - Production/Stable",
-    "Intended Audience :: Developers",
-    "License :: OSI Approved :: Apache Software License",
-    "Operating System :: OS Independent",
-    "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
-    "Programming Language :: Python :: 3.12",
-    "Topic :: Software Development :: Libraries :: Python Modules",
-]
 packages = [
     { include = "noveum_api_client" },
 ]
@@ -31,39 +15,12 @@ httpx = ">=0.23.0,<0.29.0"
 attrs = ">=22.2.0"
 python-dateutil = "^2.8.0"
 
-[tool.poetry.group.dev.dependencies]
-pytest = "^7.4.0"
-pytest-cov = "^4.1.0"
-pytest-asyncio = "^0.21.0"
-black = "^23.7.0"
-isort = "^5.12.0"
-ruff = "^0.1.0"
-mypy = "^1.5.0"
-bandit = "^1.7.5"
-safety = "^2.3.5"
-python-dotenv = "^1.0.0"
-
 [build-system]
-requires = ["poetry-core>=2.0.0,<3.0.0", "setuptools>=45", "wheel"]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.ruff]
 line-length = 120
-target-version = "py310"
 
 [tool.ruff.lint]
-select = ["F", "E", "W", "I", "UP", "B", "C4", "SIM"]
-
-[tool.black]
-line-length = 120
-target-version = ['py310', 'py311', 'py312']
-
-[tool.isort]
-profile = "black"
-line_length = 120
-
-[tool.mypy]
-python_version = "3.10"
-warn_return_any = true
-warn_unused_configs = true
-disallow_untyped_defs = false
+select = ["F", "I", "UP"]
