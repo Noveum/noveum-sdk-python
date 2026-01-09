@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "noveum-sdk"
-version = "1.0.2"
+version = "1.0.3"
 description = "A client library for accessing Noveum API"
 authors = []
 readme = "README.md"
@@ -21,7 +21,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.commitizen]
 name = "cz_conventional_commits"
-version = "1.0.2"
+version = "1.0.3"
 version_files = [
     "pyproject.toml:version"
 ]
