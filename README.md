@@ -6,6 +6,11 @@
 [![CI](https://github.com/Noveum/noveum-sdk-python/workflows/CI/badge.svg)](https://github.com/Noveum/noveum-sdk-python/actions)
 [![codecov](https://codecov.io/gh/Noveum/noveum-sdk-python/branch/main/graph/badge.svg)](https://codecov.io/gh/Noveum/noveum-sdk-python)
 
+[![Noveum Platform](https://img.shields.io/badge/Noveum-Platform-blue?style=flat&logo=data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMTIgMkw0IDdWMTdMMTIgMjJMMjAgMTdWN0wxMiAyWiIgZmlsbD0id2hpdGUiLz48L3N2Zz4=)](https://noveum.ai/)
+[![noveum-trace](https://img.shields.io/pypi/v/noveum-trace.svg?label=noveum-trace&color=green)](https://pypi.org/project/noveum-trace/)
+[![AI Observability](https://img.shields.io/badge/AI-Observability-orange?style=flat)](https://noveum.ai/)
+[![LLM Evaluation](https://img.shields.io/badge/LLM-Evaluation-purple?style=flat)](https://noveum.ai/)
+
 A professional Python SDK for the [Noveum.ai](https://noveum.ai) API. Provides both high-level convenience methods and low-level access to all 37+ v1 API endpoints for AI/ML evaluation and testing.
 
 ## Features
@@ -695,7 +700,7 @@ GitHub Actions will automatically build and publish to PyPI using Trusted Publis
 ## Support
 
 - **PyPI Package**: https://pypi.org/project/noveum-sdk-python/
-- **API Documentation**: https://api.noveum.ai/docs
+- **API Documentation**: https://noveum.ai/docs
 - **GitHub Repository**: https://github.com/Noveum/noveum-sdk-python
 - **GitHub Issues**: https://github.com/Noveum/noveum-sdk-python/issues
 - **Email**: support@noveum.ai
