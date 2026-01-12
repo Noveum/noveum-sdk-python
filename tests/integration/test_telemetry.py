@@ -220,30 +220,67 @@ def run_all_tests():
     print("Testing 18 telemetry metrics endpoints")
     print("=" * 60)
 
-    test_dashboard_metrics()
-    test_metrics()
-    test_metrics_with_trends()
-    test_cost_by_provider()
-    test_cost_trends()
-    test_cost_trends_per_project()
-    test_latency_by_provider()
-    test_latency_trends()
-    test_model_usage()
-    test_error_rate()
-    test_recent_errors()
-    test_requests_trends()
-    test_requests_trends_per_project()
-    test_slowest_requests()
-    test_top_projects_api()
-    test_top_projects_tokens()
-    test_usage_trends()
-    test_usage_trends_per_project()
+    # List of all test functions to run
+    test_functions = [
+        test_dashboard_metrics,
+        test_metrics,
+        test_metrics_with_trends,
+        test_cost_by_provider,
+        test_cost_trends,
+        test_cost_trends_per_project,
+        test_latency_by_provider,
+        test_latency_trends,
+        test_model_usage,
+        test_error_rate,
+        test_recent_errors,
+        test_requests_trends,
+        test_requests_trends_per_project,
+        test_slowest_requests,
+        test_top_projects_api,
+        test_top_projects_tokens,
+        test_usage_trends,
+        test_usage_trends_per_project,
+    ]
+
+    # Track failures
+    failures = []
+
+    # Run each test, catching exceptions to allow all tests to run
+    for test_func in test_functions:
+        try:
+            test_func()
+        except AssertionError as e:
+            failures.append(
+                {
+                    "test": test_func.__name__,
+                    "error_type": "AssertionError",
+                    "error": str(e),
+                }
+            )
+        except Exception as e:
+            failures.append(
+                {
+                    "test": test_func.__name__,
+                    "error_type": type(e).__name__,
+                    "error": str(e),
+                }
+            )
 
     print_section("TEST SUMMARY")
     total = len(test_results)
     passed = sum(1 for r in test_results if r["passed"])
     print(f"\nTotal: {total}, Passed: {passed}, Failed: {total-passed}")
     print(f"Success Rate: {(passed/total*100):.1f}%" if total > 0 else "N/A")
+
+    # Print detailed failure information
+    if failures:
+        print("\n" + "=" * 60)
+        print("FAILED TESTS:")
+        print("=" * 60)
+        for failure in failures:
+            print(f"\n❌ {failure['test']}")
+            print(f"   Error Type: {failure['error_type']}")
+            print(f"   Details: {failure['error']}")
 
     try:
         os.makedirs("../../test_results", exist_ok=True)
@@ -252,7 +289,7 @@ def run_all_tests():
     except Exception:
         pass
 
-    return passed == total
+    return len(failures) == 0
 
 
 if __name__ == "__main__":

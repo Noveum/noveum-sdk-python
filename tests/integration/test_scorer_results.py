@@ -36,6 +36,12 @@ BASE_URL = os.getenv("NOVEUM_BASE_URL", "https://api.noveum.ai")
 
 test_results = []
 
+if not API_KEY:
+    pytest.skip("NOVEUM_API_KEY not set; skipping integration tests", allow_module_level=True)
+
+noveum_client = NoveumClient(api_key=API_KEY, base_url=BASE_URL)
+low_level_client = Client(base_url=BASE_URL, headers={"Authorization": f"Bearer {API_KEY}"})
+
 
 def log_test(name: str, passed: bool, details: str = "") -> bool:
     test_results.append({"test": name, "passed": passed, "details": details, "timestamp": datetime.now().isoformat()})
@@ -49,10 +55,10 @@ def print_section(title: str):
     print("=" * 60)
 
 
-def test_list_results(client, low_level_client):
+def test_list_results(noveum_client, low_level_client):
     print_section("TEST 1: List Scorer Results")
     try:
-        response = client.get_results(limit=10)
+        response = noveum_client.get_results(limit=10)
         passed = response["status_code"] == 200
         log_test("List scorer results (high-level)", passed, f"Status: {response['status_code']}")
     except Exception as e:
@@ -67,18 +73,11 @@ def test_list_results(client, low_level_client):
 
 
 def run_all_tests():
-    if not API_KEY:
-        pytest.skip("NOVEUM_API_KEY not set")
-
     print("\n" + "=" * 60)
     print("SCORER RESULTS API TESTS")
     print("=" * 60)
 
-    global client, low_level_client
-    client = NoveumClient(api_key=API_KEY, base_url=BASE_URL)
-    low_level_client = Client(base_url=BASE_URL, headers={"Authorization": f"Bearer {API_KEY}"})
-
-    test_list_results(client, low_level_client)
+    test_list_results(noveum_client, low_level_client)
 
     print_section("TEST SUMMARY")
     total = len(test_results)

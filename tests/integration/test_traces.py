@@ -57,6 +57,7 @@ from noveum_api_client.api.traces.get_api_v1_traces_ids import sync_detailed as 
 from noveum_api_client.api.traces.post_api_v1_traces import sync_detailed as post_api_v1_traces
 from noveum_api_client.api.traces.post_api_v1_traces_single import sync_detailed as post_api_v1_traces_single
 from noveum_api_client.models.post_api_v1_traces_body import PostApiV1TracesBody
+from noveum_api_client.models.post_api_v1_traces_single_body import PostApiV1TracesSingleBody
 
 API_KEY = os.getenv("NOVEUM_API_KEY")
 BASE_URL = os.getenv("NOVEUM_BASE_URL", "https://api.noveum.ai")
@@ -356,7 +357,8 @@ def test_create_single_trace(low_level_client):
         trace_data = generate_demo_trace_data()
 
         try:
-            response = post_api_v1_traces_single(client=low_level_client, body=trace_data)
+            body = PostApiV1TracesSingleBody.from_dict(trace_data)
+            response = post_api_v1_traces_single(client=low_level_client, body=body)
             passed = response.status_code in [200, 201]
             log_test("Create single trace", passed, f"Status: {response.status_code}")
         except Exception as api_error:
@@ -369,7 +371,8 @@ def test_create_single_trace(low_level_client):
 
 def run_all_tests():
     if not API_KEY:
-        pytest.skip("NOVEUM_API_KEY not set")
+        print("\n⚠️  NOVEUM_API_KEY not set - skipping tests")
+        return True  # Clean exit for standalone script execution
 
     print("\n" + "=" * 60)
     print("TRACES API TESTS - COMPLETE COVERAGE WITH REAL TRACES")

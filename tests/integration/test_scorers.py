@@ -61,6 +61,7 @@ from noveum_api_client.api.datasets import (
 from noveum_api_client.api.scorer_results import (
     get_api_v1_scorers_results,
     post_api_v1_scorers_results,
+    post_api_v1_scorers_results_batch,
 )
 from noveum_api_client.api.scorers import (
     delete_api_v1_scorers_by_id,
@@ -73,6 +74,9 @@ from noveum_api_client.models.post_api_v1_datasets_body import PostApiV1Datasets
 from noveum_api_client.models.post_api_v1_datasets_by_dataset_slug_items_body import (
     PostApiV1DatasetsByDatasetSlugItemsBody,
 )
+from noveum_api_client.models.post_api_v1_scorers_body import PostApiV1ScorersBody
+from noveum_api_client.models.post_api_v1_scorers_results_batch_body import PostApiV1ScorersResultsBatchBody
+from noveum_api_client.models.put_api_v1_scorers_by_id_body import PutApiV1ScorersByIdBody
 
 # =============================================================================
 # Configuration
@@ -290,13 +294,14 @@ def test_create_scorer(low_level_client):
     print(f"Creating scorer: {scorer_name}")
 
     try:
-        # Note: Adjust body based on actual API requirements
-        body = {
-            "name": scorer_name,
-            "description": "Test scorer created by SDK automated tests",
-            "type": "llm_as_judge",  # or whatever type is appropriate
-            "config": {"model": "gpt-4", "prompt": "Evaluate this response for quality"},
-        }
+        # Create proper PostApiV1ScorersBody instance with required fields
+        body = PostApiV1ScorersBody(
+            name=scorer_name,
+            description="Test scorer created by SDK automated tests",
+            type_="llm_as_judge",  # Note: type_ parameter maps to "type" in JSON
+            tag="test",  # Required field
+            config={"model": "gpt-4", "prompt": "Evaluate this response for quality"},
+        )
 
         response = post_api_v1_scorers(client=low_level_client, body=body)
 
@@ -348,7 +353,10 @@ def test_update_scorer(low_level_client):
         return
 
     try:
-        body = {"name": f"Updated_{CREATED_SCORER_ID}", "description": "Updated scorer description from automated test"}
+        # Create proper PutApiV1ScorersByIdBody instance for update
+        body = PutApiV1ScorersByIdBody(
+            name=f"Updated_{CREATED_SCORER_ID}", description="Updated scorer description from automated test"
+        )
 
         response = put_api_v1_scorers_by_id(client=low_level_client, id=CREATED_SCORER_ID, body=body)
 
@@ -383,10 +391,11 @@ def test_upload_scorer_results(low_level_client):
     print(f"   ⏳ Uploading {len(scorer_results)} scorer results (limited for testing)...")
 
     try:
-        # Note: Adjust body based on actual API requirements
-        body = {"scorer_id": CREATED_SCORER_ID, "dataset_slug": CREATED_DATASET_SLUG, "results": scorer_results}
+        # Prepare batch results using the proper model structure
+        # The batch API expects a "results" array where each item has the required fields
+        body = PostApiV1ScorersResultsBatchBody.from_dict({"results": scorer_results})
 
-        response = post_api_v1_scorers_results(client=low_level_client, body=body)
+        response = post_api_v1_scorers_results_batch(client=low_level_client, body=body)
 
         passed = response.status_code in [200, 201]
         log_test(
