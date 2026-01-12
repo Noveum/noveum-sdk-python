@@ -1,16 +1,26 @@
 #!/usr/bin/env python3
 """
-Auth API Tests - Complete Coverage
+Auth API Tests - Partial Coverage (11 Tests Implemented)
 
-Tests all 75 authentication/authorization endpoints:
+This test suite implements 11 tests covering the following endpoints:
+- Session management (get session, list sessions)
+- Organization management (list, get full, get active member)
+- User account management (list accounts)
+- Passkey management (list user passkeys)
+- Admin functions (list users)
+- Utility endpoints (OK, error)
+
+Note: The Noveum API includes approximately 75 authentication/authorization
+endpoints. This test file provides partial coverage with plans to expand.
+
+TODO: Expand coverage to include untested endpoints such as:
 - Sign up/Sign in (email, social, username, OTP, passkey)
-- Password management
+- Password management (reset, change, forgot)
 - Email verification
-- Session management
 - Account linking/unlinking
-- Organization management (CRUD, members, roles, permissions, invitations)
-- User management (CRUD, ban, impersonate)
-- Admin functions
+- Full organization CRUD (members, roles, permissions, invitations)
+- Complete user management (CRUD, ban, impersonate)
+- Additional admin functions
 
 Usage: python test_auth.py
 """
@@ -205,9 +215,9 @@ def test_get_auth_error(low_level_client):
 
 def run_all_tests():
     print("\n" + "=" * 60)
-    print("AUTH API TESTS - COMPLETE COVERAGE")
+    print("AUTH API TESTS - PARTIAL COVERAGE")
     print("=" * 60)
-    print("Testing 75 authentication/authorization endpoints")
+    print("Testing 11 authentication/authorization endpoints")
     print("=" * 60)
 
     global client, low_level_client

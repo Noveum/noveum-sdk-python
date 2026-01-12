@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 """
-ETL Jobs API Tests
+ETL Jobs API Tests - Partial Coverage (1 Test Implemented)
 
-Tests ETL job management endpoints (9 endpoints):
+Currently implements 1 test:
 - List ETL jobs
+
+TODO: Expand coverage to include remaining ETL job management endpoints:
 - Create ETL job
 - Get job by ID
 - Update job
@@ -12,6 +14,9 @@ Tests ETL job management endpoints (9 endpoints):
 - Get job status
 - Get job runs
 - Run mapper
+
+Note: The Noveum API includes 9 ETL job management endpoints.
+This test file provides partial coverage with plans to expand.
 
 Usage: python test_etl_jobs.py
 """

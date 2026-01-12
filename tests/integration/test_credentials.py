@@ -1,15 +1,20 @@
 #!/usr/bin/env python3
 """
-Credentials API Tests
+Credentials API Tests - Partial Coverage (1 Test Implemented)
 
-Tests credential management endpoints (7 endpoints):
+Currently implements 1 test:
 - List credentials
+
+TODO: Expand coverage to include remaining credential management endpoints:
 - Create credential
 - Get credential
 - Update credential
 - Delete credential
 - Toggle active/inactive
 - Validate credential
+
+Note: The Noveum API includes 7 credential management endpoints.
+This test file provides partial coverage with plans to expand.
 
 Usage: python test_credentials.py
 """

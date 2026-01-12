@@ -88,7 +88,7 @@ safety = "^3.7.0"
 python-dotenv = "^1.0.0"
 
 [build-system]
-requires = ["setuptools>=45", "wheel", "setuptools-scm>=6.2"]
+requires = ["setuptools>=45", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [tool.commitizen]

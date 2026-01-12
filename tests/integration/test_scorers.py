@@ -1,29 +1,33 @@
 #!/usr/bin/env python3
 """
-Scorers API Tests - Complete Workflow
+Scorers API Tests - Partial Coverage (8 Tests Implemented)
 
-This script tests the complete scorer workflow:
+This script tests a scorer workflow with 8 implemented tests:
 
 Phase 1: Dataset Setup (using conversation data)
-- Create a dataset
-- Upload conversation items to the dataset
+- Create a dataset ✓
+- Upload conversation items to the dataset ✓
 
 Phase 2: Scorer Operations
-- List scorers
-- Create scorer
-- Get scorer by ID
-- Update scorer
-- Delete scorer
+- List scorers ✓
+- Create scorer ✓
+- Get scorer by ID ✓
+- Update scorer ✓
 
 Phase 3: Scorer Results Operations
-- Upload scorer results (from scorer_results_dataset_new copy.json)
-- List scorer results
+- Upload scorer results (from scorer_results_dataset_new.json) ✓
+- List scorer results ✓
+
+Cleanup: Automated cleanup of created resources ✓
+
+TODO: Expand coverage to include:
+- Delete scorer (formal test)
 - Get scorer result by ID
-- Delete scorer results
+- Delete scorer results (formal test)
 
 Test Data Files:
 - test_data/conversation_dataset.json (100 conversation items)
-- test_data/scorer_results_dataset_new copy.json (1500+ scorer results)
+- test_data/scorer_results_dataset_new.json (10 evaluation items)
 
 Usage:
     python test_scorers.py
@@ -85,7 +89,7 @@ created_resources: dict[str, list[Any]] = {"datasets": [], "scorers": [], "score
 # Test data files
 TEST_DATA_DIR = os.path.join(os.path.dirname(__file__), "test_data")
 CONVERSATION_DATA_FILE = os.path.join(TEST_DATA_DIR, "conversation_dataset.json")
-SCORER_RESULTS_FILE = os.path.join(TEST_DATA_DIR, "scorer_results_dataset_new copy.json")
+SCORER_RESULTS_FILE = os.path.join(TEST_DATA_DIR, "scorer_results_dataset_new.json")
 
 # Globals for tracking created resources
 CREATED_DATASET_SLUG = None
@@ -464,7 +468,7 @@ def run_all_tests():
     print("\n" + "=" * 60)
     print("SCORERS API TESTS - COMPLETE WORKFLOW")
     print("=" * 60)
-    print(f"API Key: {API_KEY[:10]}...")
+    print(f"API Key: {'*' * 8}...{'*' * 4} (set)")
     print(f"Base URL: {BASE_URL}")
     print("=" * 60)
 

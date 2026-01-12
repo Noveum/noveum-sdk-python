@@ -1,21 +1,26 @@
 #!/usr/bin/env python3
 """
-Datasets API Tests - Complete Coverage with FULL Real Dataset
+Datasets API Tests - Partial Coverage (9 Tests Implemented)
 
-Tests all 15 dataset management endpoints with FULL REAL test data:
+Tests dataset management with FULL REAL test data (9 implemented tests):
 
-Phase 1: Dataset CRUD (4 endpoints)
-- List datasets
-- Create dataset
-- Get dataset by slug
-- Update dataset
+Phase 1: Dataset CRUD (4 tests) ✓
+- List datasets ✓
+- Create dataset ✓
+- Get dataset by slug ✓
+- Update dataset ✓
 
-Phase 2: Dataset Items CRUD (5 endpoints) - USES FULL REAL DATA
-- Add items (FULL dataset from conversation_dataset.json)
-- List items
-- Get single item
-- Delete single item
-- Bulk delete items
+Phase 2: Dataset Items CRUD (5 tests) - USES FULL REAL DATA ✓
+- Add items (FULL dataset from conversation_dataset.json) ✓
+- List items ✓
+- Get single item ✓
+- Delete single item ✓
+- Bulk delete items ✓
+
+Cleanup: Automated cleanup of created resources ✓
+
+TODO: Expand coverage to include additional dataset management endpoints
+(The Noveum API includes ~15 dataset-related endpoints)
 
 Test Data Files:
 - test_data/conversation_dataset.json (100 real conversation items - 8.2MB)
@@ -535,7 +540,7 @@ def run_all_tests():
     print("\n" + "=" * 60)
     print("DATASETS API TESTS - COMPLETE COVERAGE")
     print("=" * 60)
-    print(f"API Key: {API_KEY[:10]}...")
+    print(f"API Key: {'*' * 8}...{'*' * 4} (set)")
     print(f"Base URL: {BASE_URL}")
     print("=" * 60)
 

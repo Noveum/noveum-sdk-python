@@ -34,7 +34,7 @@ class TestConfig:
             return False, "NOVEUM_API_KEY environment variable not set"
 
         if not cls.API_KEY.startswith("nv_"):
-            return False, f"Invalid API key format. Expected 'nv_...', got '{cls.API_KEY[:5]}...'"
+            return False, "Invalid API key format. Expected 'nv_...'"
 
         if not cls.ORG_SLUG:
             return False, "NOVEUM_ORG_SLUG environment variable not set"
@@ -44,7 +44,7 @@ class TestConfig:
     @classmethod
     def display(cls):
         """Display current configuration (with masked API key)"""
-        masked_key = f"{cls.API_KEY[:10]}...{cls.API_KEY[-4:]}" if cls.API_KEY else "NOT SET"
+        masked_key = f"{'*' * 8}...{'*' * 4} (set)" if cls.API_KEY else "NOT SET"
 
         print("=" * 60)
         print("TEST CONFIGURATION")

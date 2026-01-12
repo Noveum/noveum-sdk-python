@@ -1,15 +1,21 @@
 #!/usr/bin/env python3
 """
-Projects API Tests
+Projects API Tests - Partial Coverage (1 Test Implemented)
 
-Tests project management endpoints (12 endpoints):
+Currently implements 1 test:
 - List projects
+
+TODO: Expand coverage to include remaining project management endpoints:
 - Create project
 - Get project
 - Update project
 - Delete project
 - Project settings
 - Team management
+- Additional project endpoints
+
+Note: The Noveum API includes 12 project management endpoints.
+This test file provides partial coverage with plans to expand.
 
 Usage: python test_projects.py
 """

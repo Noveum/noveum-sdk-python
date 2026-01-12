@@ -54,6 +54,7 @@ from noveum_api_client.api.traces.get_api_v1_traces_filter_values import (
 from noveum_api_client.api.traces.get_api_v1_traces_ids import sync_detailed as get_api_v1_traces_ids
 from noveum_api_client.api.traces.post_api_v1_traces import sync_detailed as post_api_v1_traces
 from noveum_api_client.api.traces.post_api_v1_traces_single import sync_detailed as post_api_v1_traces_single
+from noveum_api_client.models.post_api_v1_traces_body import PostApiV1TracesBody
 
 API_KEY = os.getenv("NOVEUM_API_KEY", "******")
 BASE_URL = os.getenv("NOVEUM_BASE_URL", "https://api.noveum.ai")
@@ -62,6 +63,11 @@ ENVIRONMENT = os.getenv("NOVEUM_ENVIRONMENT", "test")
 
 test_results: list[dict[str, Any]] = []
 created_resources: dict[str, list[Any]] = {"traces": [], "trace_ids": []}
+
+# Global client variables (initialized in run_tests)
+client: NoveumClient
+low_level_client: Client
+SAMPLE_TRACE_ID: str | None
 
 
 def log_test(name: str, passed: bool, details: str = "") -> bool:
@@ -162,24 +168,31 @@ def create_demo_traces(count: int = 10):
         print(f"   Project: {PROJECT_NAME}")
         print(f"   Environment: {ENVIRONMENT}")
 
+        successful_count = 0
         for i in range(count):
             trace_data = generate_demo_trace_data()
 
-            # Use SDK to send trace
-            with trace_llm(
-                model=trace_data["attributes"]["llm.model"], operation=trace_data["attributes"]["llm.operation"]
-            ) as span:
-                # Set attributes
-                span.set_attributes(trace_data["attributes"])
+            try:
+                # Use SDK to send trace
+                with trace_llm(
+                    model=trace_data["attributes"]["llm.model"], operation=trace_data["attributes"]["llm.operation"]
+                ) as span:
+                    # Set attributes
+                    span.set_attributes(trace_data["attributes"])
 
-                # Simulate some processing time
-                time.sleep(0.1)
+                    # Simulate some processing time
+                    time.sleep(0.1)
 
-            created_resources["trace_ids"].append(trace_data["trace_id"])
-            print(f"   ✅ Created trace {i+1}/{count}: {trace_data['trace_id'][:8]}...")
+                # Only append trace_id after successful completion
+                created_resources["trace_ids"].append(trace_data["trace_id"])
+                successful_count += 1
+                print(f"   ✅ Created trace {i+1}/{count}: {trace_data['trace_id'][:8]}...")
+            except Exception as e:
+                print(f"   ⚠️  Failed to create trace {i+1}/{count}: {str(e)[:50]}")
+                continue
 
-        print(f"\n✅ Created {count} demo traces successfully!")
-        return True
+        print(f"\n✅ Created {successful_count}/{count} demo traces successfully!")
+        return successful_count > 0
 
     except ImportError:
         print("   ⚠️  noveum_trace SDK not installed")
@@ -187,16 +200,20 @@ def create_demo_traces(count: int = 10):
 
         # Fallback: Use raw API
         traces = []
+        trace_ids = []
         for _ in range(count):
             trace_data = generate_demo_trace_data()
             traces.append(trace_data)
-            created_resources["trace_ids"].append(trace_data["trace_id"])
+            trace_ids.append(trace_data["trace_id"])
 
         try:
-            # Send traces using batch endpoint
-            response = post_api_v1_traces(client=low_level_client, body={"traces": traces})  # type: ignore[arg-type, name-defined]
+            # Send traces using batch endpoint with proper type
+            body = PostApiV1TracesBody.from_dict({"traces": traces})
+            response = post_api_v1_traces(client=low_level_client, body=body)
 
             if response.status_code in [200, 201]:
+                # Only append trace_ids after successful API call
+                created_resources["trace_ids"].extend(trace_ids)
                 print(f"   ✅ Created {count} traces via API")
                 return True
             else:

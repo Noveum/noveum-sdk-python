@@ -1,14 +1,19 @@
 #!/usr/bin/env python3
 """
-Scorer Results API Tests
+Scorer Results API Tests - Partial Coverage (1 Test Implemented)
 
-Tests scorer results endpoints (6 endpoints):
+Currently implements 1 test:
 - List results
+
+TODO: Expand coverage to include remaining scorer results endpoints:
 - Create result
 - Get result
 - Update result
 - Delete result
 - Batch create results
+
+Note: The Noveum API includes 6 scorer results endpoints.
+This test file provides partial coverage with plans to expand.
 
 Usage: python test_scorer_results.py
 """
