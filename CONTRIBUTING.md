@@ -48,6 +48,10 @@ This project adheres to a code of conduct. By participating, you are expected to
 
 2. Install the package in development mode with dev dependencies:
    ```bash
+   # Upgrade pip and setuptools first (required for PEP 621)
+   pip install --upgrade pip setuptools wheel
+   
+   # Install package with dev dependencies
    pip install -e ".[dev]"
    ```
 

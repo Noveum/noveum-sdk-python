@@ -42,11 +42,17 @@ pip install noveum-sdk-python
 git clone https://github.com/Noveum/noveum-sdk-python.git
 cd noveum-sdk-python
 
+# Upgrade pip and setuptools (required for PEP 621)
+pip install --upgrade pip setuptools wheel
+
 # Install in development mode
 pip install -e .
 
-# Or install normally
-pip install .
+# Or install with dev dependencies for development
+pip install -e ".[dev]"
+
+# Verify installation
+python verify_install.py
 ```
 
 ### Basic Usage (High-Level Client)
@@ -447,9 +453,14 @@ except Exception as e:
 
 ## Testing
 
-### Run Tests
+For detailed testing instructions, see [TESTING.md](TESTING.md).
+
+### Quick Start
 
 ```bash
+# Install with dev dependencies
+pip install -e ".[dev]"
+
 # Run unit tests (fast, no API key needed)
 pytest tests/unit/ -v
 
@@ -457,23 +468,26 @@ pytest tests/unit/ -v
 export NOVEUM_API_KEY="nv_your_api_key"
 pytest tests/integration/ -v
 
-# Run all tests
-pytest tests/ -v
-
-# Run specific test
-pytest tests/unit/test_client_wrapper.py::TestNoveumClientInit -v
+# Run all tests with coverage
+pytest tests/ -v --cov=noveum_api_client --cov-report=term-missing
 ```
 
-### Run with Coverage
+### Troubleshooting Test Setup
+
+If you encounter `ModuleNotFoundError: No module named 'pytest'`:
 
 ```bash
-# Unit tests with coverage
-pytest tests/unit/ --cov=noveum_api_client --cov-report=html
-open htmlcov/index.html
+# Ensure setuptools is up to date (required for PEP 621)
+pip install --upgrade pip setuptools wheel
 
-# All tests with coverage
-pytest tests/ --cov=noveum_api_client --cov-report=html
+# Reinstall with dev dependencies
+pip install -e ".[dev]"
+
+# Verify pytest is installed
+pytest --version
 ```
+
+For more troubleshooting and advanced testing options, see [TESTING.md](TESTING.md).
 
 ## Best Practices
 

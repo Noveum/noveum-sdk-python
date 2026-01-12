@@ -1,6 +1,59 @@
+# PEP 621 compliant project metadata for pip compatibility
+[project]
+name = "noveum-sdk"
+version = "1.0.3"
+description = "Official Python SDK for the Noveum.ai API - AI/ML evaluation and testing platform"
+authors = [
+    {name = "Noveum Team", email = "team@noveum.ai"}
+]
+readme = "README.md"
+license = {text = "Apache-2.0"}
+requires-python = ">=3.10"
+keywords = ["noveum", "ai", "ml", "evaluation", "testing", "api", "sdk", "observability", "llm", "tracing"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+
+dependencies = [
+    "httpx>=0.23.0,<0.29.0",
+    "attrs>=22.2.0",
+    "python-dateutil>=2.8.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.0",
+    "pytest-cov>=4.1.0",
+    "pytest-asyncio>=0.21.0",
+    "black>=23.7.0",
+    "isort>=5.12.0",
+    "ruff>=0.1.0",
+    "mypy>=1.5.0",
+    "bandit>=1.7.5",
+    "safety>=2.3.5",
+    "python-dotenv>=1.0.0",
+]
+
+[project.urls]
+Homepage = "https://noveum.ai"
+Repository = "https://github.com/Noveum/noveum-sdk-python"
+Documentation = "https://docs.noveum.ai"
+"Bug Tracker" = "https://github.com/Noveum/noveum-sdk-python/issues"
+Changelog = "https://github.com/Noveum/noveum-sdk-python/blob/main/CHANGELOG.md"
+
+# Poetry configuration (for Poetry users)
 [tool.poetry]
 name = "noveum-sdk"
-version = "1.0.0"
+version = "1.0.3"
 description = "Official Python SDK for the Noveum.ai API - AI/ML evaluation and testing platform"
 authors = ["Noveum Team <team@noveum.ai>"]
 readme = "README.md"
@@ -44,8 +97,8 @@ safety = "^2.3.5"
 python-dotenv = "^1.0.0"
 
 [build-system]
-requires = ["poetry-core>=2.0.0,<3.0.0", "setuptools>=45", "wheel"]
-build-backend = "poetry.core.masonry.api"
+requires = ["setuptools>=45", "wheel", "setuptools-scm>=6.2"]
+build-backend = "setuptools.build_meta"
 
 [tool.ruff]
 line-length = 120
