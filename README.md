@@ -1,10 +1,11 @@
 # Noveum SDK - Python Client
 
-[![PyPI version](https://img.shields.io/pypi/v/noveum-sdk-python.svg)](https://pypi.org/project/noveum-sdk-python/)
-[![Python versions](https://img.shields.io/pypi/pyversions/noveum-sdk-python.svg)](https://pypi.org/project/noveum-sdk-python/)
-[![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://github.com/Noveum/noveum-sdk-python/blob/main/LICENSE)
-[![CI](https://github.com/Noveum/noveum-sdk-python/workflows/CI/badge.svg)](https://github.com/Noveum/noveum-sdk-python/actions)
+[![CI](https://github.com/Noveum/noveum-sdk-python/actions/workflows/ci.yml/badge.svg)](https://github.com/Noveum/noveum-sdk-python/actions/workflows/ci.yml)
+[![Release](https://github.com/Noveum/noveum-sdk-python/actions/workflows/release.yml/badge.svg)](https://github.com/Noveum/noveum-sdk-python/actions/workflows/release.yml)
 [![codecov](https://codecov.io/gh/Noveum/noveum-sdk-python/branch/main/graph/badge.svg)](https://codecov.io/gh/Noveum/noveum-sdk-python)
+[![PyPI version](https://badge.fury.io/py/noveum-sdk-python.svg)](https://badge.fury.io/py/noveum-sdk-python)
+[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
+[![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 [![Noveum Platform](https://img.shields.io/badge/Noveum-Platform-blue?style=flat&logo=data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMTIgMkw0IDdWMTdMMTIgMjJMMjAgMTdWN0wxMiAyWiIgZmlsbD0id2hpdGUiLz48L3N2Zz4=)](https://noveum.ai/)
 [![noveum-trace](https://img.shields.io/pypi/v/noveum-trace.svg?label=noveum-trace&color=green)](https://pypi.org/project/noveum-trace/)
