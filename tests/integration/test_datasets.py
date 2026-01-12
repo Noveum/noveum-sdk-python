@@ -144,7 +144,7 @@ def load_test_data(file_path: str) -> list[dict]:
 # =============================================================================
 
 
-def test_list_datasets():
+def test_list_datasets(client, low_level_client):
     """Test 1: List Datasets (GET /api/v1/datasets)"""
     print_section("TEST 1: List Datasets")
 
@@ -161,14 +161,14 @@ def test_list_datasets():
 
     try:
         # Low-level client
-        response = get_api_v1_datasets.sync_detailed(client=low_level_client, limit=10)
+        response = get_api_v1_datasets(client=low_level_client, limit=10)
         passed = response.status_code == 200
         log_test("List datasets (low-level)", passed, f"Status: {response.status_code}")
     except Exception as e:
         log_test("List datasets (low-level)", False, f"Exception: {str(e)}")
 
 
-def test_create_dataset():
+def test_create_dataset(low_level_client):
     """Test 2: Create Dataset (POST /api/v1/datasets)"""
     print_section("TEST 2: Create Dataset")
 
@@ -186,7 +186,7 @@ def test_create_dataset():
             name=dataset_name, slug=dataset_slug, description="Test dataset created by SDK automated tests"
         )
 
-        response = post_api_v1_datasets.sync_detailed(client=low_level_client, body=body)
+        response = post_api_v1_datasets(client=low_level_client, body=body)
 
         passed = response.status_code in [200, 201]
         log_test("Create dataset", passed, f"Status: {response.status_code}")
@@ -202,7 +202,7 @@ def test_create_dataset():
         log_test("Create dataset", False, f"Exception: {str(e)}")
 
 
-def test_get_dataset():
+def test_get_dataset(low_level_client):
     """Test 3: Get Dataset by Slug (GET /api/v1/datasets/{slug})"""
     print_section("TEST 3: Get Dataset by Slug")
 
@@ -211,7 +211,7 @@ def test_get_dataset():
         return
 
     try:
-        response = get_api_v1_datasets_by_slug.sync_detailed(client=low_level_client, slug=CREATED_DATASET_SLUG)
+        response = get_api_v1_datasets_by_slug(client=low_level_client, slug=CREATED_DATASET_SLUG)
 
         passed = response.status_code == 200
         log_test("Get dataset by slug", passed, f"Status: {response.status_code}")
@@ -223,7 +223,7 @@ def test_get_dataset():
         log_test("Get dataset by slug", False, f"Exception: {str(e)}")
 
 
-def test_update_dataset():
+def test_update_dataset(low_level_client):
     """Test 4: Update Dataset (PUT /api/v1/datasets/{slug})"""
     print_section("TEST 4: Update Dataset")
 
@@ -237,9 +237,7 @@ def test_update_dataset():
             name=f"Updated_{CREATED_DATASET_SLUG}", description="Updated description from automated test"
         )
 
-        response = put_api_v1_datasets_by_slug.sync_detailed(
-            client=low_level_client, slug=CREATED_DATASET_SLUG, body=body
-        )
+        response = put_api_v1_datasets_by_slug(client=low_level_client, slug=CREATED_DATASET_SLUG, body=body)
 
         passed = response.status_code in [200, 204]
         log_test("Update dataset", passed, f"Status: {response.status_code}")
@@ -248,7 +246,7 @@ def test_update_dataset():
         log_test("Update dataset", False, f"Exception: {str(e)}")
 
 
-def test_add_dataset_items():
+def test_add_dataset_items(low_level_client):
     """Test 5: Add Dataset Items (POST /api/v1/datasets/{slug}/items) - FULL DATASET"""
     print_section("TEST 5: Add Conversation Items to Dataset")
 
@@ -351,7 +349,7 @@ def test_add_dataset_items():
             # Use from_dict() to properly create the body model
             body = PostApiV1DatasetsByDatasetSlugItemsBody.from_dict({"items": conversation_items})
 
-            response = post_api_v1_datasets_by_dataset_slug_items.sync_detailed(
+            response = post_api_v1_datasets_by_dataset_slug_items(
                 client=low_level_client, dataset_slug=CREATED_DATASET_SLUG, body=body
             )
 
@@ -381,7 +379,7 @@ def test_add_dataset_items():
     print(f"\n📊 Total items in dataset: {len(CREATED_ITEM_IDS)}")
 
 
-def test_list_dataset_items():
+def test_list_dataset_items(low_level_client):
     """Test 6: List Dataset Items (GET /api/v1/datasets/{slug}/items)"""
     print_section("TEST 6: List Dataset Items")
 
@@ -390,7 +388,7 @@ def test_list_dataset_items():
         return
 
     try:
-        response = get_api_v1_datasets_by_dataset_slug_items.sync_detailed(
+        response = get_api_v1_datasets_by_dataset_slug_items(
             client=low_level_client, dataset_slug=CREATED_DATASET_SLUG, limit=25
         )
 
@@ -407,7 +405,7 @@ def test_list_dataset_items():
         log_test("List dataset items", False, f"Exception: {str(e)}")
 
 
-def test_get_single_item():
+def test_get_single_item(low_level_client):
     """Test 7: Get Single Dataset Item (GET /api/v1/datasets/{slug}/items/{id})"""
     print_section("TEST 7: Get Single Dataset Item")
 
@@ -423,7 +421,7 @@ def test_get_single_item():
     print(f"Getting item: {test_item_id}")
 
     try:
-        response = get_api_v1_datasets_by_dataset_slug_items_by_item_id.sync_detailed(
+        response = get_api_v1_datasets_by_dataset_slug_items_by_item_id(
             client=low_level_client, dataset_slug=CREATED_DATASET_SLUG, item_id=test_item_id
         )
 
@@ -437,7 +435,7 @@ def test_get_single_item():
         log_test("Get single item", False, f"Exception: {str(e)}")
 
 
-def test_delete_single_item():
+def test_delete_single_item(low_level_client):
     """Test 8: Delete Single Dataset Item (DELETE /api/v1/datasets/{slug}/items/{id})"""
     print_section("TEST 8: Delete Single Dataset Item")
 
@@ -454,7 +452,7 @@ def test_delete_single_item():
     print(f"Deleting item: {test_item_id}")
 
     try:
-        response = delete_api_v1_datasets_by_dataset_slug_items_by_item_id.sync_detailed(
+        response = delete_api_v1_datasets_by_dataset_slug_items_by_item_id(
             client=low_level_client, dataset_slug=CREATED_DATASET_SLUG, item_id=test_item_id
         )
 
@@ -469,7 +467,7 @@ def test_delete_single_item():
         log_test("Delete single item", False, f"Exception: {str(e)}")
 
 
-def test_bulk_delete_items():
+def test_bulk_delete_items(low_level_client):
     """Test 9: Bulk Delete Dataset Items (DELETE /api/v1/datasets/{slug}/items)"""
     print_section("TEST 9: Bulk Delete Dataset Items")
 
@@ -489,7 +487,7 @@ def test_bulk_delete_items():
         # Use from_dict() with camelCase (itemIds not item_ids)
         body = DeleteApiV1DatasetsByDatasetSlugItemsBody.from_dict({"itemIds": items_to_delete})
 
-        response = delete_api_v1_datasets_by_dataset_slug_items.sync_detailed(
+        response = delete_api_v1_datasets_by_dataset_slug_items(
             client=low_level_client, dataset_slug=CREATED_DATASET_SLUG, body=body
         )
 
@@ -506,7 +504,7 @@ def test_bulk_delete_items():
         log_test("Bulk delete items", False, f"Exception: {str(e)}")
 
 
-def test_cleanup():
+def test_cleanup(low_level_client):
     """Cleanup: Delete all created resources"""
     print_section("CLEANUP: Deleting Test Resources")
 
@@ -514,7 +512,7 @@ def test_cleanup():
     for dataset_slug in created_resources["datasets"]:
         try:
             print(f"🗑️  Deleting dataset: {dataset_slug}")
-            response = delete_api_v1_datasets_by_slug.sync_detailed(client=low_level_client, slug=dataset_slug)
+            response = delete_api_v1_datasets_by_slug(client=low_level_client, slug=dataset_slug)
 
             if response.status_code in [200, 204]:
                 print(f"   ✅ Deleted: {dataset_slug}")
@@ -548,21 +546,21 @@ def run_all_tests():
 
     # Phase 1: Dataset CRUD
     print("\n" + "🔧 PHASE 1: DATASET CRUD OPERATIONS")
-    test_list_datasets()
-    test_create_dataset()
-    test_get_dataset()
-    test_update_dataset()
+    test_list_datasets(client, low_level_client)
+    test_create_dataset(low_level_client)
+    test_get_dataset(low_level_client)
+    test_update_dataset(low_level_client)
 
     # Phase 2: Dataset Items
     print("\n" + "📦 PHASE 2: DATASET ITEMS OPERATIONS")
-    test_add_dataset_items()
-    test_list_dataset_items()
-    test_get_single_item()
-    test_delete_single_item()
-    test_bulk_delete_items()
+    test_add_dataset_items(low_level_client)
+    test_list_dataset_items(low_level_client)
+    test_get_single_item(low_level_client)
+    test_delete_single_item(low_level_client)
+    test_bulk_delete_items(low_level_client)
 
     # Cleanup
-    test_cleanup()
+    test_cleanup(low_level_client)
 
     # Summary
     print_section("TEST SUMMARY")

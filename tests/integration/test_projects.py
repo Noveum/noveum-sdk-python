@@ -45,10 +45,10 @@ def print_section(title: str):
     print("=" * 60)
 
 
-def test_list_projects():
+def test_list_projects(low_level_client):
     print_section("TEST 1: List Projects")
     try:
-        response = get_api_v1_projects.sync_detailed(client=low_level_client, limit=10)
+        response = get_api_v1_projects(client=low_level_client, limit=10)
         passed = response.status_code == 200
         log_test("List projects", passed, f"Status: {response.status_code}")
     except Exception as e:
@@ -64,7 +64,7 @@ def run_all_tests():
     client = NoveumClient(api_key=API_KEY, base_url=BASE_URL)
     low_level_client = Client(base_url=BASE_URL, headers={"Authorization": f"Bearer {API_KEY}"})
 
-    test_list_projects()
+    test_list_projects(low_level_client)
 
     print_section("TEST SUMMARY")
     total = len(test_results)

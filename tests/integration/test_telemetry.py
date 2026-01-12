@@ -96,180 +96,180 @@ def print_section(title: str):
     print("=" * 60)
 
 
-def test_dashboard_metrics():
+def test_dashboard_metrics(low_level_client):
     print_section("TEST 1: Dashboard Metrics")
     try:
-        response = get_api_telemetry_metrics_dashboard.sync_detailed(client=low_level_client)
+        response = get_api_telemetry_metrics_dashboard(client=low_level_client)
         passed = response.status_code == 200
         log_test("Dashboard metrics", passed, f"Status: {response.status_code}")
     except Exception as e:
         log_test("Dashboard metrics", False, f"Exception: {str(e)}")
 
 
-def test_metrics():
+def test_metrics(low_level_client):
     print_section("TEST 2: General Metrics")
     try:
-        response = get_api_telemetry_metrics.sync_detailed(client=low_level_client)
+        response = get_api_telemetry_metrics(client=low_level_client)
         passed = response.status_code == 200
         log_test("General metrics", passed, f"Status: {response.status_code}")
     except Exception as e:
         log_test("General metrics", False, f"Exception: {str(e)}")
 
 
-def test_metrics_with_trends():
+def test_metrics_with_trends(low_level_client):
     print_section("TEST 3: Metrics with Trends")
     try:
-        response = get_api_telemetry_metrics_with_trends.sync_detailed(client=low_level_client)
+        response = get_api_telemetry_metrics_with_trends(client=low_level_client)
         passed = response.status_code == 200
         log_test("Metrics with trends", passed, f"Status: {response.status_code}")
     except Exception as e:
         log_test("Metrics with trends", False, f"Exception: {str(e)}")
 
 
-def test_cost_by_provider():
+def test_cost_by_provider(low_level_client):
     print_section("TEST 4: Cost by Provider")
     try:
-        response = get_api_telemetry_metrics_cost_by_provider.sync_detailed(client=low_level_client)
+        response = get_api_telemetry_metrics_cost_by_provider(client=low_level_client)
         passed = response.status_code == 200
         log_test("Cost by provider", passed, f"Status: {response.status_code}")
     except Exception as e:
         log_test("Cost by provider", False, f"Exception: {str(e)}")
 
 
-def test_cost_trends():
+def test_cost_trends(low_level_client):
     print_section("TEST 5: Cost Trends")
     try:
-        response = get_api_telemetry_metrics_cost_trends.sync_detailed(client=low_level_client)
+        response = get_api_telemetry_metrics_cost_trends(client=low_level_client)
         passed = response.status_code == 200
         log_test("Cost trends", passed, f"Status: {response.status_code}")
     except Exception as e:
         log_test("Cost trends", False, f"Exception: {str(e)}")
 
 
-def test_cost_trends_per_project():
+def test_cost_trends_per_project(low_level_client):
     print_section("TEST 6: Cost Trends Per Project")
     try:
-        response = get_api_telemetry_metrics_cost_trends_per_project.sync_detailed(client=low_level_client)
+        response = get_api_telemetry_metrics_cost_trends_per_project(client=low_level_client)
         passed = response.status_code == 200
         log_test("Cost trends per project", passed, f"Status: {response.status_code}")
     except Exception as e:
         log_test("Cost trends per project", False, f"Exception: {str(e)}")
 
 
-def test_latency_by_provider():
+def test_latency_by_provider(low_level_client):
     print_section("TEST 7: Latency by Provider")
     try:
-        response = get_api_telemetry_metrics_latency_by_provider.sync_detailed(client=low_level_client)
+        response = get_api_telemetry_metrics_latency_by_provider(client=low_level_client)
         passed = response.status_code == 200
         log_test("Latency by provider", passed, f"Status: {response.status_code}")
     except Exception as e:
         log_test("Latency by provider", False, f"Exception: {str(e)}")
 
 
-def test_latency_trends():
+def test_latency_trends(low_level_client):
     print_section("TEST 8: Latency Trends")
     try:
-        response = get_api_telemetry_metrics_latency_trends.sync_detailed(client=low_level_client)
+        response = get_api_telemetry_metrics_latency_trends(client=low_level_client)
         passed = response.status_code == 200
         log_test("Latency trends", passed, f"Status: {response.status_code}")
     except Exception as e:
         log_test("Latency trends", False, f"Exception: {str(e)}")
 
 
-def test_model_usage():
+def test_model_usage(low_level_client):
     print_section("TEST 9: Model Usage")
     try:
-        response = get_api_telemetry_metrics_model_usage.sync_detailed(client=low_level_client)
+        response = get_api_telemetry_metrics_model_usage(client=low_level_client)
         passed = response.status_code == 200
         log_test("Model usage", passed, f"Status: {response.status_code}")
     except Exception as e:
         log_test("Model usage", False, f"Exception: {str(e)}")
 
 
-def test_error_rate():
+def test_error_rate(low_level_client):
     print_section("TEST 10: Error Rate")
     try:
-        response = get_api_telemetry_metrics_error_rate.sync_detailed(client=low_level_client)
+        response = get_api_telemetry_metrics_error_rate(client=low_level_client)
         passed = response.status_code == 200
         log_test("Error rate", passed, f"Status: {response.status_code}")
     except Exception as e:
         log_test("Error rate", False, f"Exception: {str(e)}")
 
 
-def test_recent_errors():
+def test_recent_errors(low_level_client):
     print_section("TEST 11: Recent Errors")
     try:
-        response = get_api_telemetry_metrics_recent_errors.sync_detailed(client=low_level_client, limit=10)
+        response = get_api_telemetry_metrics_recent_errors(client=low_level_client, limit=10)
         passed = response.status_code == 200
         log_test("Recent errors", passed, f"Status: {response.status_code}")
     except Exception as e:
         log_test("Recent errors", False, f"Exception: {str(e)}")
 
 
-def test_requests_trends():
+def test_requests_trends(low_level_client):
     print_section("TEST 12: Requests Trends")
     try:
-        response = get_api_telemetry_metrics_requests_trends.sync_detailed(client=low_level_client)
+        response = get_api_telemetry_metrics_requests_trends(client=low_level_client)
         passed = response.status_code == 200
         log_test("Requests trends", passed, f"Status: {response.status_code}")
     except Exception as e:
         log_test("Requests trends", False, f"Exception: {str(e)}")
 
 
-def test_requests_trends_per_project():
+def test_requests_trends_per_project(low_level_client):
     print_section("TEST 13: Requests Trends Per Project")
     try:
-        response = get_api_telemetry_metrics_requests_trends_per_project.sync_detailed(client=low_level_client)
+        response = get_api_telemetry_metrics_requests_trends_per_project(client=low_level_client)
         passed = response.status_code == 200
         log_test("Requests trends per project", passed, f"Status: {response.status_code}")
     except Exception as e:
         log_test("Requests trends per project", False, f"Exception: {str(e)}")
 
 
-def test_slowest_requests():
+def test_slowest_requests(low_level_client):
     print_section("TEST 14: Slowest Requests")
     try:
-        response = get_api_telemetry_metrics_slowest_requests.sync_detailed(client=low_level_client, limit=10)
+        response = get_api_telemetry_metrics_slowest_requests(client=low_level_client, limit=10)
         passed = response.status_code == 200
         log_test("Slowest requests", passed, f"Status: {response.status_code}")
     except Exception as e:
         log_test("Slowest requests", False, f"Exception: {str(e)}")
 
 
-def test_top_projects_api():
+def test_top_projects_api(low_level_client):
     print_section("TEST 15: Top Projects by API")
     try:
-        response = get_api_telemetry_metrics_top_projects_api.sync_detailed(client=low_level_client, limit=10)
+        response = get_api_telemetry_metrics_top_projects_api(client=low_level_client, limit=10)
         passed = response.status_code == 200
         log_test("Top projects by API", passed, f"Status: {response.status_code}")
     except Exception as e:
         log_test("Top projects by API", False, f"Exception: {str(e)}")
 
 
-def test_top_projects_tokens():
+def test_top_projects_tokens(low_level_client):
     print_section("TEST 16: Top Projects by Tokens")
     try:
-        response = get_api_telemetry_metrics_top_projects_tokens.sync_detailed(client=low_level_client, limit=10)
+        response = get_api_telemetry_metrics_top_projects_tokens(client=low_level_client, limit=10)
         passed = response.status_code == 200
         log_test("Top projects by tokens", passed, f"Status: {response.status_code}")
     except Exception as e:
         log_test("Top projects by tokens", False, f"Exception: {str(e)}")
 
 
-def test_usage_trends():
+def test_usage_trends(low_level_client):
     print_section("TEST 17: Usage Trends")
     try:
-        response = get_api_telemetry_metrics_usage_trends.sync_detailed(client=low_level_client)
+        response = get_api_telemetry_metrics_usage_trends(client=low_level_client)
         passed = response.status_code == 200
         log_test("Usage trends", passed, f"Status: {response.status_code}")
     except Exception as e:
         log_test("Usage trends", False, f"Exception: {str(e)}")
 
 
-def test_usage_trends_per_project():
+def test_usage_trends_per_project(low_level_client):
     print_section("TEST 18: Usage Trends Per Project")
     try:
-        response = get_api_telemetry_metrics_usage_trends_per_project.sync_detailed(client=low_level_client)
+        response = get_api_telemetry_metrics_usage_trends_per_project(client=low_level_client)
         passed = response.status_code == 200
         log_test("Usage trends per project", passed, f"Status: {response.status_code}")
     except Exception as e:
@@ -287,24 +287,24 @@ def run_all_tests():
     client = NoveumClient(api_key=API_KEY, base_url=BASE_URL)
     low_level_client = Client(base_url=BASE_URL, headers={"Authorization": f"Bearer {API_KEY}"})
 
-    test_dashboard_metrics()
-    test_metrics()
-    test_metrics_with_trends()
-    test_cost_by_provider()
-    test_cost_trends()
-    test_cost_trends_per_project()
-    test_latency_by_provider()
-    test_latency_trends()
-    test_model_usage()
-    test_error_rate()
-    test_recent_errors()
-    test_requests_trends()
-    test_requests_trends_per_project()
-    test_slowest_requests()
-    test_top_projects_api()
-    test_top_projects_tokens()
-    test_usage_trends()
-    test_usage_trends_per_project()
+    test_dashboard_metrics(low_level_client)
+    test_metrics(low_level_client)
+    test_metrics_with_trends(low_level_client)
+    test_cost_by_provider(low_level_client)
+    test_cost_trends(low_level_client)
+    test_cost_trends_per_project(low_level_client)
+    test_latency_by_provider(low_level_client)
+    test_latency_trends(low_level_client)
+    test_model_usage(low_level_client)
+    test_error_rate(low_level_client)
+    test_recent_errors(low_level_client)
+    test_requests_trends(low_level_client)
+    test_requests_trends_per_project(low_level_client)
+    test_slowest_requests(low_level_client)
+    test_top_projects_api(low_level_client)
+    test_top_projects_tokens(low_level_client)
+    test_usage_trends(low_level_client)
+    test_usage_trends_per_project(low_level_client)
 
     print_section("TEST SUMMARY")
     total = len(test_results)

@@ -152,7 +152,7 @@ def load_test_data(file_path: str) -> list[dict]:
 # =============================================================================
 
 
-def test_create_dataset():
+def test_create_dataset(low_level_client):
     """Phase 1.1: Create Dataset for Scorers"""
     print_section("PHASE 1.1: Create Dataset for Scorer Testing")
 
@@ -171,7 +171,7 @@ def test_create_dataset():
             description="Test dataset for scorer operations - created by SDK automated tests",
         )
 
-        response = post_api_v1_datasets.sync_detailed(client=low_level_client, body=body)
+        response = post_api_v1_datasets(client=low_level_client, body=body)
 
         passed = response.status_code in [200, 201]
         log_test("Create scorer dataset", passed, f"Status: {response.status_code}")
@@ -187,7 +187,7 @@ def test_create_dataset():
         log_test("Create scorer dataset", False, f"Exception: {str(e)}")
 
 
-def test_upload_conversation_data():
+def test_upload_conversation_data(low_level_client):
     """Phase 1.2: Upload Conversation Data to Dataset"""
     print_section("PHASE 1.2: Upload Conversation Data to Dataset")
 
@@ -232,7 +232,7 @@ def test_upload_conversation_data():
     try:
         body = PostApiV1DatasetsByDatasetSlugItemsBody.from_dict({"items": conversation_items})
 
-        response = post_api_v1_datasets_by_dataset_slug_items.sync_detailed(
+        response = post_api_v1_datasets_by_dataset_slug_items(
             client=low_level_client, dataset_slug=CREATED_DATASET_SLUG, body=body
         )
 
@@ -257,12 +257,12 @@ def test_upload_conversation_data():
 # =============================================================================
 
 
-def test_list_scorers():
+def test_list_scorers(low_level_client):
     """Phase 2.1: List Scorers"""
     print_section("PHASE 2.1: List Scorers")
 
     try:
-        response = get_api_v1_scorers.sync_detailed(client=low_level_client, limit=10)
+        response = get_api_v1_scorers(client=low_level_client, limit=10)
         passed = response.status_code == 200
         log_test("List scorers", passed, f"Status: {response.status_code}")
 
@@ -273,7 +273,7 @@ def test_list_scorers():
         log_test("List scorers", False, f"Exception: {str(e)}")
 
 
-def test_create_scorer():
+def test_create_scorer(low_level_client):
     """Phase 2.2: Create Scorer"""
     print_section("PHASE 2.2: Create Scorer")
 
@@ -292,7 +292,7 @@ def test_create_scorer():
             "config": {"model": "gpt-4", "prompt": "Evaluate this response for quality"},
         }
 
-        response = post_api_v1_scorers.sync_detailed(client=low_level_client, body=body)
+        response = post_api_v1_scorers(client=low_level_client, body=body)
 
         passed = response.status_code in [200, 201]
         log_test("Create scorer", passed, f"Status: {response.status_code}")
@@ -312,7 +312,7 @@ def test_create_scorer():
         log_test("Create scorer", False, f"Exception: {str(e)}")
 
 
-def test_get_scorer():
+def test_get_scorer(low_level_client):
     """Phase 2.3: Get Scorer by ID"""
     print_section("PHASE 2.3: Get Scorer by ID")
 
@@ -321,7 +321,7 @@ def test_get_scorer():
         return
 
     try:
-        response = get_api_v1_scorers_by_id.sync_detailed(client=low_level_client, id=CREATED_SCORER_ID)
+        response = get_api_v1_scorers_by_id(client=low_level_client, id=CREATED_SCORER_ID)
 
         passed = response.status_code == 200
         log_test("Get scorer by ID", passed, f"Status: {response.status_code}")
@@ -333,7 +333,7 @@ def test_get_scorer():
         log_test("Get scorer by ID", False, f"Exception: {str(e)}")
 
 
-def test_update_scorer():
+def test_update_scorer(low_level_client):
     """Phase 2.4: Update Scorer"""
     print_section("PHASE 2.4: Update Scorer")
 
@@ -344,7 +344,7 @@ def test_update_scorer():
     try:
         body = {"name": f"Updated_{CREATED_SCORER_ID}", "description": "Updated scorer description from automated test"}
 
-        response = put_api_v1_scorers_by_id.sync_detailed(client=low_level_client, id=CREATED_SCORER_ID, body=body)
+        response = put_api_v1_scorers_by_id(client=low_level_client, id=CREATED_SCORER_ID, body=body)
 
         passed = response.status_code in [200, 204]
         log_test("Update scorer", passed, f"Status: {response.status_code}")
@@ -358,7 +358,7 @@ def test_update_scorer():
 # =============================================================================
 
 
-def test_upload_scorer_results():
+def test_upload_scorer_results(low_level_client):
     """Phase 3.1: Upload Scorer Results"""
     print_section("PHASE 3.1: Upload Scorer Results to Dataset")
 
@@ -380,7 +380,7 @@ def test_upload_scorer_results():
         # Note: Adjust body based on actual API requirements
         body = {"scorer_id": CREATED_SCORER_ID, "dataset_slug": CREATED_DATASET_SLUG, "results": scorer_results}
 
-        response = post_api_v1_scorers_results.sync_detailed(client=low_level_client, body=body)
+        response = post_api_v1_scorers_results(client=low_level_client, body=body)
 
         passed = response.status_code in [200, 201]
         log_test(
@@ -399,12 +399,12 @@ def test_upload_scorer_results():
         log_test("Upload scorer results", False, f"Exception: {str(e)}")
 
 
-def test_list_scorer_results():
+def test_list_scorer_results(low_level_client):
     """Phase 3.2: List Scorer Results"""
     print_section("PHASE 3.2: List Scorer Results")
 
     try:
-        response = get_api_v1_scorers_results.sync_detailed(client=low_level_client, limit=10)
+        response = get_api_v1_scorers_results(client=low_level_client, limit=10)
 
         passed = response.status_code == 200
         log_test("List scorer results", passed, f"Status: {response.status_code}")
@@ -421,7 +421,7 @@ def test_list_scorer_results():
 # =============================================================================
 
 
-def test_cleanup():
+def test_cleanup(low_level_client):
     """Cleanup: Delete all created resources"""
     print_section("CLEANUP: Deleting Test Resources")
 
@@ -429,7 +429,7 @@ def test_cleanup():
     for scorer_id in created_resources["scorers"]:
         try:
             print(f"🗑️  Deleting scorer: {scorer_id}")
-            response = delete_api_v1_scorers_by_id.sync_detailed(client=low_level_client, id=scorer_id)
+            response = delete_api_v1_scorers_by_id(client=low_level_client, id=scorer_id)
 
             if response.status_code in [200, 204]:
                 print(f"   ✅ Deleted scorer: {scorer_id}")
@@ -442,7 +442,7 @@ def test_cleanup():
     for dataset_slug in created_resources["datasets"]:
         try:
             print(f"🗑️  Deleting dataset: {dataset_slug}")
-            response = delete_api_v1_datasets_by_slug.sync_detailed(client=low_level_client, slug=dataset_slug)
+            response = delete_api_v1_datasets_by_slug(client=low_level_client, slug=dataset_slug)
 
             if response.status_code in [200, 204]:
                 print(f"   ✅ Deleted dataset: {dataset_slug}")
@@ -475,23 +475,23 @@ def run_all_tests():
 
     # Phase 1: Dataset Setup
     print("\n" + "📦 PHASE 1: DATASET SETUP")
-    test_create_dataset()
-    test_upload_conversation_data()
+    test_create_dataset(low_level_client)
+    test_upload_conversation_data(low_level_client)
 
     # Phase 2: Scorer Operations
     print("\n" + "🎯 PHASE 2: SCORER OPERATIONS")
-    test_list_scorers()
-    test_create_scorer()
-    test_get_scorer()
-    test_update_scorer()
+    test_list_scorers(low_level_client)
+    test_create_scorer(low_level_client)
+    test_get_scorer(low_level_client)
+    test_update_scorer(low_level_client)
 
     # Phase 3: Scorer Results
     print("\n" + "📊 PHASE 3: SCORER RESULTS OPERATIONS")
-    test_upload_scorer_results()
-    test_list_scorer_results()
+    test_upload_scorer_results(low_level_client)
+    test_list_scorer_results(low_level_client)
 
     # Cleanup
-    test_cleanup()
+    test_cleanup(low_level_client)
 
     # Summary
     print_section("TEST SUMMARY")

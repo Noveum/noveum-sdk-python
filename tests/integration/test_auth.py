@@ -64,7 +64,7 @@ def print_section(title: str):
 # ============================================================================
 
 
-def test_get_session():
+def test_get_session(low_level_client):
     print_section("TEST 1: Get Session")
     try:
         response = get_api_auth_get_session(client=low_level_client)
@@ -74,7 +74,7 @@ def test_get_session():
         log_test("Get session", False, f"Exception: {str(e)}")
 
 
-def test_list_sessions():
+def test_list_sessions(low_level_client):
     print_section("TEST 2: List Sessions")
     try:
         response = get_api_auth_list_sessions(client=low_level_client)
@@ -89,7 +89,7 @@ def test_list_sessions():
 # ============================================================================
 
 
-def test_list_organizations():
+def test_list_organizations(low_level_client):
     print_section("TEST 3: List Organizations")
     try:
         response = get_api_auth_organization_list(client=low_level_client)
@@ -99,7 +99,7 @@ def test_list_organizations():
         log_test("List organizations", False, f"Exception: {str(e)}")
 
 
-def test_get_full_organization():
+def test_get_full_organization(low_level_client):
     print_section("TEST 4: Get Full Organization")
     try:
         response = get_api_auth_organization_get_full_organization(client=low_level_client)
@@ -109,7 +109,7 @@ def test_get_full_organization():
         log_test("Get full organization", False, f"Exception: {str(e)}")
 
 
-def test_get_active_member():
+def test_get_active_member(low_level_client):
     print_section("TEST 5: Get Active Member")
     try:
         response = get_api_auth_organization_get_active_member(client=low_level_client)
@@ -124,7 +124,7 @@ def test_get_active_member():
 # ============================================================================
 
 
-def test_list_accounts():
+def test_list_accounts(low_level_client):
     print_section("TEST 6: List Accounts")
     try:
         response = get_api_auth_list_accounts(client=low_level_client)
@@ -139,7 +139,7 @@ def test_list_accounts():
 # ============================================================================
 
 
-def test_list_passkeys():
+def test_list_passkeys(low_level_client):
     print_section("TEST 7: List User Passkeys")
     try:
         response = get_api_auth_passkey_list_user_passkeys(client=low_level_client)
@@ -154,7 +154,7 @@ def test_list_passkeys():
 # ============================================================================
 
 
-def test_list_users():
+def test_list_users(low_level_client):
     print_section("TEST 8: List Users (Admin)")
     try:
         response = list_users(client=low_level_client, limit=10)
@@ -178,7 +178,7 @@ def test_list_user_sessions_admin():
 # ============================================================================
 
 
-def test_get_auth_ok():
+def test_get_auth_ok(low_level_client):
     print_section("TEST 10: Auth OK Endpoint")
     try:
         response = get_api_auth_ok(client=low_level_client)
@@ -188,7 +188,7 @@ def test_get_auth_ok():
         log_test("Auth OK endpoint", False, f"Exception: {str(e)}")
 
 
-def test_get_auth_error():
+def test_get_auth_error(low_level_client):
     print_section("TEST 11: Auth Error Endpoint")
     try:
         response = get_api_auth_error(client=low_level_client)
@@ -215,27 +215,27 @@ def run_all_tests():
     low_level_client = Client(base_url=BASE_URL, headers={"Authorization": f"Bearer {API_KEY}"})
 
     # Session tests
-    test_get_session()
-    test_list_sessions()
+    test_get_session(low_level_client)
+    test_list_sessions(low_level_client)
 
     # Organization tests
-    test_list_organizations()
-    test_get_full_organization()
-    test_get_active_member()
+    test_list_organizations(low_level_client)
+    test_get_full_organization(low_level_client)
+    test_get_active_member(low_level_client)
 
     # User account tests
-    test_list_accounts()
+    test_list_accounts(low_level_client)
 
     # Passkey tests
-    test_list_passkeys()
+    test_list_passkeys(low_level_client)
 
     # Admin tests
-    test_list_users()
+    test_list_users(low_level_client)
     test_list_user_sessions_admin()
 
     # Utility endpoints
-    test_get_auth_ok()
-    test_get_auth_error()
+    test_get_auth_ok(low_level_client)
+    test_get_auth_error(low_level_client)
 
     print_section("TEST SUMMARY")
     total = len(test_results)

@@ -45,30 +45,30 @@ def print_section(title: str):
     print("=" * 60)
 
 
-def test_health():
+def test_health(low_level_client):
     print_section("TEST 1: Health Check")
     try:
-        response = get_api_health.sync_detailed(client=low_level_client)
+        response = get_api_health(client=low_level_client)
         passed = response.status_code == 200
         log_test("Health check", passed, f"Status: {response.status_code}")
     except Exception as e:
         log_test("Health check", False, f"Exception: {str(e)}")
 
 
-def test_status():
+def test_status(low_level_client):
     print_section("TEST 2: Status")
     try:
-        response = get_api_v1_status.sync_detailed(client=low_level_client)
+        response = get_api_v1_status(client=low_level_client)
         passed = response.status_code == 200
         log_test("Status check", passed, f"Status: {response.status_code}")
     except Exception as e:
         log_test("Status check", False, f"Exception: {str(e)}")
 
 
-def test_generate_slug():
+def test_generate_slug(low_level_client):
     print_section("TEST 3: Generate Organization Slug")
     try:
-        response = get_api_organizations_generate_slug.sync_detailed(client=low_level_client, name="Test Organization")
+        response = get_api_organizations_generate_slug(client=low_level_client, name="Test Organization")
         passed = response.status_code == 200
         log_test("Generate org slug", passed, f"Status: {response.status_code}")
     except Exception as e:
@@ -84,9 +84,9 @@ def run_all_tests():
     client = NoveumClient(api_key=API_KEY, base_url=BASE_URL)
     low_level_client = Client(base_url=BASE_URL, headers={"Authorization": f"Bearer {API_KEY}"})
 
-    test_health()
-    test_status()
-    test_generate_slug()
+    test_health(low_level_client)
+    test_status(low_level_client)
+    test_generate_slug(low_level_client)
 
     print_section("TEST SUMMARY")
     total = len(test_results)

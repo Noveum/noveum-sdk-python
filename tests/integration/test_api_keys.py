@@ -44,7 +44,7 @@ def print_section(title: str):
     print("=" * 60)
 
 
-def test_list_api_keys():
+def test_list_api_keys(low_level_client):
     print_section("TEST 1: List API Keys")
     try:
         response = get_api_by_organisation_slug_api_keys(client=low_level_client, organisation_slug=ORG_SLUG)
@@ -63,7 +63,7 @@ def run_all_tests():
     client = NoveumClient(api_key=API_KEY, base_url=BASE_URL)
     low_level_client = Client(base_url=BASE_URL, headers={"Authorization": f"Bearer {API_KEY}"})
 
-    test_list_api_keys()
+    test_list_api_keys(low_level_client)
 
     print_section("TEST SUMMARY")
     total = len(test_results)

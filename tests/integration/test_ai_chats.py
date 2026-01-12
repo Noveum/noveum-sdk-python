@@ -44,10 +44,10 @@ def print_section(title: str):
     print("=" * 60)
 
 
-def test_list_chats():
+def test_list_chats(low_level_client):
     print_section("TEST 1: List AI Chats")
     try:
-        response = get_api_ai_chats.sync_detailed(client=low_level_client, limit=10)
+        response = get_api_ai_chats(client=low_level_client, limit=10)
         passed = response.status_code == 200
         log_test("List AI chats", passed, f"Status: {response.status_code}")
     except Exception as e:
@@ -110,7 +110,7 @@ def run_all_tests():
     client = NoveumClient(api_key=API_KEY, base_url=BASE_URL)
     low_level_client = Client(base_url=BASE_URL, headers={"Authorization": f"Bearer {API_KEY}"})
 
-    test_list_chats()
+    test_list_chats(low_level_client)
     test_create_chat()
     test_get_chat()
     test_update_chat()

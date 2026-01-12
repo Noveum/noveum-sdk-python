@@ -48,10 +48,10 @@ def print_section(title: str):
     print("=" * 60)
 
 
-def test_list_credentials():
+def test_list_credentials(low_level_client):
     print_section("TEST 1: List Credentials")
     try:
-        response = get_api_by_organisation_slug_credentials.sync_detailed(
+        response = get_api_by_organisation_slug_credentials(
             client=low_level_client, organisation_slug=ORG_SLUG, limit=10
         )
         passed = response.status_code == 200
@@ -69,7 +69,7 @@ def run_all_tests():
     client = NoveumClient(api_key=API_KEY, base_url=BASE_URL)
     low_level_client = Client(base_url=BASE_URL, headers={"Authorization": f"Bearer {API_KEY}"})
 
-    test_list_credentials()
+    test_list_credentials(low_level_client)
 
     print_section("TEST SUMMARY")
     total = len(test_results)

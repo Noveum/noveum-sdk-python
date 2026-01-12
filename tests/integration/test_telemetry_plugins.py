@@ -44,10 +44,10 @@ def print_section(title: str):
     print("=" * 60)
 
 
-def test_list_plugins():
+def test_list_plugins(low_level_client):
     print_section("TEST 1: List Telemetry Plugins")
     try:
-        response = get_api_telemetry_plugins.sync_detailed(client=low_level_client)
+        response = get_api_telemetry_plugins(client=low_level_client)
         passed = response.status_code == 200
         log_test("List telemetry plugins", passed, f"Status: {response.status_code}")
     except Exception as e:
@@ -110,7 +110,7 @@ def run_all_tests():
     client = NoveumClient(api_key=API_KEY, base_url=BASE_URL)
     low_level_client = Client(base_url=BASE_URL, headers={"Authorization": f"Bearer {API_KEY}"})
 
-    test_list_plugins()
+    test_list_plugins(low_level_client)
     test_get_plugin_by_id()
     test_create_plugin()
     test_update_plugin()

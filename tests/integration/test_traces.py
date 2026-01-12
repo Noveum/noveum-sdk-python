@@ -208,7 +208,7 @@ def create_demo_traces(count: int = 10):
             return False
 
 
-def test_list_traces():
+def test_list_traces(low_level_client):
     print_section("TEST 1: List Traces")
     try:
         response = get_api_v1_traces(client=low_level_client, size=20)
@@ -223,7 +223,7 @@ def test_list_traces():
         log_test("List traces", False, f"Exception: {str(e)}")
 
 
-def test_get_trace_ids():
+def test_get_trace_ids(low_level_client):
     print_section("TEST 2: Get Trace IDs")
     try:
         response = get_api_v1_traces_ids(client=low_level_client, size=20)
@@ -246,7 +246,7 @@ def test_get_trace_ids():
         log_test("Get trace IDs", False, f"Exception: {str(e)}")
 
 
-def test_get_trace_by_id():
+def test_get_trace_by_id(low_level_client):
     print_section("TEST 3: Get Trace by ID")
 
     if "SAMPLE_TRACE_ID" not in globals() or not SAMPLE_TRACE_ID:
@@ -261,7 +261,7 @@ def test_get_trace_by_id():
         log_test("Get trace by ID", False, f"Exception: {str(e)}")
 
 
-def test_get_trace_spans():
+def test_get_trace_spans(low_level_client):
     print_section("TEST 4: Get Trace Spans")
 
     if "SAMPLE_TRACE_ID" not in globals() or not SAMPLE_TRACE_ID:
@@ -276,7 +276,7 @@ def test_get_trace_spans():
         log_test("Get trace spans", False, f"Exception: {str(e)}")
 
 
-def test_connection_status():
+def test_connection_status(low_level_client):
     print_section("TEST 5: Connection Status")
     try:
         response = get_api_v1_traces_connection_status(client=low_level_client)
@@ -286,7 +286,7 @@ def test_connection_status():
         log_test("Connection status", False, f"Exception: {str(e)}")
 
 
-def test_directory_tree():
+def test_directory_tree(low_level_client):
     print_section("TEST 6: Directory Tree")
     try:
         response = get_api_v1_traces_directory_tree(client=low_level_client)
@@ -296,7 +296,7 @@ def test_directory_tree():
         log_test("Directory tree", False, f"Exception: {str(e)}")
 
 
-def test_environments_by_projects():
+def test_environments_by_projects(low_level_client):
     print_section("TEST 7: Environments by Projects")
     try:
         response = get_api_v1_traces_environments_by_projects(client=low_level_client)
@@ -306,7 +306,7 @@ def test_environments_by_projects():
         log_test("Environments by projects", False, f"Exception: {str(e)}")
 
 
-def test_filter_values():
+def test_filter_values(low_level_client):
     print_section("TEST 8: Filter Values")
     try:
         response = get_api_v1_traces_filter_values(client=low_level_client)
@@ -330,7 +330,7 @@ def test_create_traces():
         log_test("Create traces (batch)", False, f"Exception: {str(e)}")
 
 
-def test_create_single_trace():
+def test_create_single_trace(low_level_client):
     print_section("TEST 10: Create Single Trace")
     try:
         # Create single demo trace
@@ -365,18 +365,18 @@ def run_all_tests():
     # Phase 1: Create demo traces FIRST
     print("\n🔧 PHASE 1: CREATE DEMO TRACES")
     test_create_traces()
-    test_create_single_trace()
+    test_create_single_trace(low_level_client)
 
     # Phase 2: Test trace retrieval endpoints
     print("\n📊 PHASE 2: TEST TRACE RETRIEVAL")
-    test_connection_status()
-    test_directory_tree()
-    test_environments_by_projects()
-    test_filter_values()
-    test_list_traces()
-    test_get_trace_ids()
-    test_get_trace_by_id()
-    test_get_trace_spans()
+    test_connection_status(low_level_client)
+    test_directory_tree(low_level_client)
+    test_environments_by_projects(low_level_client)
+    test_filter_values(low_level_client)
+    test_list_traces(low_level_client)
+    test_get_trace_ids(low_level_client)
+    test_get_trace_by_id(low_level_client)
+    test_get_trace_spans(low_level_client)
 
     print_section("TEST SUMMARY")
     total = len(test_results)
