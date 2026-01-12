@@ -61,7 +61,9 @@ class PostApiAuthPasskeyGenerateAuthenticateOptionsResponse200AllowCredentialsIt
             transports=transports,
         )
 
-        post_api_auth_passkey_generate_authenticate_options_response_200_allow_credentials_item.additional_properties = d
+        post_api_auth_passkey_generate_authenticate_options_response_200_allow_credentials_item.additional_properties = (
+            d
+        )
         return post_api_auth_passkey_generate_authenticate_options_response_200_allow_credentials_item
 
     @property

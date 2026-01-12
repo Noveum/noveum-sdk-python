@@ -59,7 +59,9 @@ class PostApiAuthPasskeyGenerateAuthenticateOptionsResponse200AuthenticatorSelec
             user_verification=user_verification,
         )
 
-        post_api_auth_passkey_generate_authenticate_options_response_200_authenticator_selection.additional_properties = d
+        post_api_auth_passkey_generate_authenticate_options_response_200_authenticator_selection.additional_properties = (
+            d
+        )
         return post_api_auth_passkey_generate_authenticate_options_response_200_authenticator_selection
 
     @property
