@@ -16,6 +16,8 @@ import sys
 from datetime import datetime
 from typing import Any
 
+import pytest
+
 sys.path.insert(0, os.path.abspath("../.."))
 sys.path.insert(0, os.path.abspath("../../tests"))
 
@@ -30,7 +32,7 @@ from noveum_api_client.api.api_keys.post_api_by_organisation_slug_api_keys impor
     sync_detailed as post_api_by_organisation_slug_api_keys,
 )
 
-API_KEY = os.getenv("NOVEUM_API_KEY", "******")
+API_KEY = os.getenv("NOVEUM_API_KEY")
 BASE_URL = os.getenv("NOVEUM_BASE_URL", "https://api.noveum.ai")
 ORG_SLUG = os.getenv("NOVEUM_ORG_SLUG", "NoveumSDK")
 
@@ -67,6 +69,7 @@ def test_list_api_keys(low_level_client):
 def test_create_api_key(low_level_client):
     print_section("TEST 2: Create API Key")
     try:
+        api_key_id = None
         # Create API key with a test title
         test_title = f"SDK Test Key {datetime.now().strftime('%Y%m%d_%H%M%S')}"
         body = {"title": test_title}
@@ -135,6 +138,9 @@ def cleanup_resources(low_level_client):
 
 
 def run_all_tests():
+    if not API_KEY:
+        pytest.skip("NOVEUM_API_KEY not set")
+
     print("\n" + "=" * 60)
     print("API KEYS TESTS")
     print("=" * 60)

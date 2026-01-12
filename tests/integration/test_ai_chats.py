@@ -19,17 +19,14 @@ import sys
 from datetime import datetime
 from typing import Any
 
-sys.path.insert(0, os.path.abspath("../.."))
-sys.path.insert(0, os.path.abspath("../../tests"))
+import pytest
 
 from noveum_api_client import Client, NoveumClient
 from noveum_api_client.api.ai.delete_api_ai_chats_by_id import sync_detailed as delete_api_ai_chats_by_id
 from noveum_api_client.api.ai.get_api_ai_chats import sync_detailed as get_api_ai_chats
 from noveum_api_client.api.ai.get_api_ai_chats_by_id import sync_detailed as get_api_ai_chats_by_id
 from noveum_api_client.api.ai.post_api_ai_chats import sync_detailed as post_api_ai_chats
-from noveum_api_client.api.ai.post_api_ai_chats_by_id_messages import (
-    sync_detailed as post_api_ai_chats_by_id_messages,
-)
+from noveum_api_client.api.ai.post_api_ai_chats_by_id_messages import sync_detailed as post_api_ai_chats_by_id_messages
 from noveum_api_client.api.ai.put_api_ai_chats_by_id import sync_detailed as put_api_ai_chats_by_id
 from noveum_api_client.models.post_api_ai_chats_body import PostApiAiChatsBody
 from noveum_api_client.models.post_api_ai_chats_by_id_messages_body import PostApiAiChatsByIdMessagesBody
@@ -41,7 +38,10 @@ from noveum_api_client.models.post_api_ai_chats_by_id_messages_body_messages_ite
 )
 from noveum_api_client.models.put_api_ai_chats_by_id_body import PutApiAiChatsByIdBody
 
-API_KEY = os.getenv("NOVEUM_API_KEY", "******")
+sys.path.insert(0, os.path.abspath("../.."))
+sys.path.insert(0, os.path.abspath("../../tests"))
+
+API_KEY = os.getenv("NOVEUM_API_KEY")
 BASE_URL = os.getenv("NOVEUM_BASE_URL", "https://api.noveum.ai")
 
 test_results: list[dict[str, Any]] = []
@@ -186,6 +186,9 @@ def cleanup_resources(low_level_client):
 
 
 def run_all_tests():
+    if not API_KEY:
+        pytest.skip("NOVEUM_API_KEY not set")
+
     print("\n" + "=" * 60)
     print("AI CHATS API TESTS")
     print("=" * 60)

@@ -23,13 +23,15 @@ import os
 import sys
 from datetime import datetime
 
+import pytest
+
 sys.path.insert(0, os.path.abspath("../.."))
 sys.path.insert(0, os.path.abspath("../../tests"))
 
 from noveum_api_client import Client, NoveumClient
 from noveum_api_client.api.scorer_results.get_api_v1_scorers_results import sync_detailed as get_api_v1_scorers_results
 
-API_KEY = os.getenv("NOVEUM_API_KEY", "******")
+API_KEY = os.getenv("NOVEUM_API_KEY")
 BASE_URL = os.getenv("NOVEUM_BASE_URL", "https://api.noveum.ai")
 
 test_results = []
@@ -65,6 +67,9 @@ def test_list_results(client, low_level_client):
 
 
 def run_all_tests():
+    if not API_KEY:
+        pytest.skip("NOVEUM_API_KEY not set")
+
     print("\n" + "=" * 60)
     print("SCORER RESULTS API TESTS")
     print("=" * 60)

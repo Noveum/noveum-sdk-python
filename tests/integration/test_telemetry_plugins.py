@@ -19,13 +19,15 @@ import sys
 from datetime import datetime
 from typing import Any
 
+import pytest
+
 sys.path.insert(0, os.path.abspath("../.."))
 sys.path.insert(0, os.path.abspath("../../tests"))
 
 from noveum_api_client import Client, NoveumClient
 from noveum_api_client.api.telemetry_plugins.get_api_telemetry_plugins import sync_detailed as get_api_telemetry_plugins
 
-API_KEY = os.getenv("NOVEUM_API_KEY", "******")
+API_KEY = os.getenv("NOVEUM_API_KEY")
 BASE_URL = os.getenv("NOVEUM_BASE_URL", "https://api.noveum.ai")
 
 test_results: list[dict[str, Any]] = []
@@ -100,6 +102,9 @@ def test_test_plugin():
 
 
 def run_all_tests():
+    if not API_KEY:
+        pytest.skip("NOVEUM_API_KEY not set")
+
     print("\n" + "=" * 60)
     print("TELEMETRY PLUGINS API TESTS")
     print("=" * 60)

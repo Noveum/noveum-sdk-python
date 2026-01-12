@@ -11,7 +11,7 @@ concurrency:
   cancel-in-progress: false  # Don't cancel releases, let them complete
 
 env:
-  PYTHON_VERSION: "3.11"
+  PYTHON_VERSION: "3.12"
 
 jobs:
   test:
@@ -78,9 +78,6 @@ jobs:
     needs:
     - build
     runs-on: ubuntu-latest
-    environment:
-      name: pypi
-      url: https://pypi.org/p/noveum-sdk
     permissions:
       id-token: write  # IMPORTANT: mandatory for trusted publishing
     steps:

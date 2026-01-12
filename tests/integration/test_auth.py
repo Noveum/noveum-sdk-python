@@ -30,6 +30,8 @@ import os
 import sys
 from datetime import datetime
 
+import pytest
+
 sys.path.insert(0, os.path.abspath("../.."))
 sys.path.insert(0, os.path.abspath("../../tests"))
 
@@ -51,7 +53,7 @@ from noveum_api_client.api.auth.get_api_auth_passkey_list_user_passkeys import (
     sync_detailed as get_api_auth_passkey_list_user_passkeys,
 )
 
-API_KEY = os.getenv("NOVEUM_API_KEY", "******")
+API_KEY = os.getenv("NOVEUM_API_KEY")
 BASE_URL = os.getenv("NOVEUM_BASE_URL", "https://api.noveum.ai")
 
 test_results = []
@@ -214,6 +216,9 @@ def test_get_auth_error(low_level_client):
 
 
 def run_all_tests():
+    if not API_KEY:
+        pytest.skip("NOVEUM_API_KEY not set")
+
     print("\n" + "=" * 60)
     print("AUTH API TESTS - PARTIAL COVERAGE")
     print("=" * 60)

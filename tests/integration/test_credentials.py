@@ -22,8 +22,11 @@ Usage: python test_credentials.py
 import json
 import os
 import sys
+import traceback
 from datetime import datetime
 from typing import Any
+
+import pytest
 
 sys.path.insert(0, os.path.abspath("../.."))
 sys.path.insert(0, os.path.abspath("../../tests"))
@@ -33,7 +36,7 @@ from noveum_api_client.api.credentials.get_api_by_organisation_slug_credentials 
     sync_detailed as get_api_by_organisation_slug_credentials,
 )
 
-API_KEY = os.getenv("NOVEUM_API_KEY", "******")
+API_KEY = os.getenv("NOVEUM_API_KEY")
 BASE_URL = os.getenv("NOVEUM_BASE_URL", "https://api.noveum.ai")
 ORG_SLUG = os.getenv("NOVEUM_ORG_SLUG", "NoveumSDK")
 
@@ -66,6 +69,9 @@ def test_list_credentials(low_level_client):
 
 
 def run_all_tests():
+    if not API_KEY:
+        pytest.skip("NOVEUM_API_KEY not set")
+
     print("\n" + "=" * 60)
     print("CREDENTIALS API TESTS")
     print("=" * 60)
@@ -86,8 +92,10 @@ def run_all_tests():
         os.makedirs("../../test_results", exist_ok=True)
         with open(f"../../test_results/credentials_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json", "w") as f:
             json.dump(test_results, f, indent=2)
-    except Exception:
-        pass
+    except Exception as e:
+        print("\n⚠️  WARNING: Failed to save test results to file")
+        print(f"Error: {type(e).__name__}: {str(e)}")
+        print(f"Traceback:\n{traceback.format_exc()}")
 
     return passed == total
 

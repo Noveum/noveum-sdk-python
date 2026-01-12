@@ -30,6 +30,8 @@ from datetime import datetime
 from random import choice, randint
 from typing import Any
 
+import pytest
+
 sys.path.insert(0, os.path.abspath("../.."))
 sys.path.insert(0, os.path.abspath("../../tests"))
 
@@ -56,7 +58,7 @@ from noveum_api_client.api.traces.post_api_v1_traces import sync_detailed as pos
 from noveum_api_client.api.traces.post_api_v1_traces_single import sync_detailed as post_api_v1_traces_single
 from noveum_api_client.models.post_api_v1_traces_body import PostApiV1TracesBody
 
-API_KEY = os.getenv("NOVEUM_API_KEY", "******")
+API_KEY = os.getenv("NOVEUM_API_KEY")
 BASE_URL = os.getenv("NOVEUM_BASE_URL", "https://api.noveum.ai")
 PROJECT_NAME = os.getenv("NOVEUM_PROJECT", "SDK_Test_Project")
 ENVIRONMENT = os.getenv("NOVEUM_ENVIRONMENT", "test")
@@ -266,7 +268,7 @@ def test_get_trace_ids(low_level_client):
 def test_get_trace_by_id(low_level_client):
     print_section("TEST 3: Get Trace by ID")
 
-    if "SAMPLE_TRACE_ID" not in globals() or not SAMPLE_TRACE_ID:
+    if SAMPLE_TRACE_ID is None:
         log_test("Get trace by ID", True, "Skipped - no trace ID available")
         return
 
@@ -281,7 +283,7 @@ def test_get_trace_by_id(low_level_client):
 def test_get_trace_spans(low_level_client):
     print_section("TEST 4: Get Trace Spans")
 
-    if "SAMPLE_TRACE_ID" not in globals() or not SAMPLE_TRACE_ID:
+    if SAMPLE_TRACE_ID is None:
         log_test("Get trace spans", True, "Skipped - no trace ID available")
         return
 
@@ -358,14 +360,17 @@ def test_create_single_trace(low_level_client):
             passed = response.status_code in [200, 201]
             log_test("Create single trace", passed, f"Status: {response.status_code}")
         except Exception as api_error:
-            # If API call fails, mark as skipped (might need specific format)
-            log_test("Create single trace", True, f"Skipped - API format: {str(api_error)[:50]}")
+            # If API call fails, mark as failed (may need format adjustment)
+            log_test("Create single trace", False, f"API error (may need format adjustment): {str(api_error)[:50]}")
 
     except Exception as e:
         log_test("Create single trace", False, f"Exception: {str(e)}")
 
 
 def run_all_tests():
+    if not API_KEY:
+        pytest.skip("NOVEUM_API_KEY not set")
+
     print("\n" + "=" * 60)
     print("TRACES API TESTS - COMPLETE COVERAGE WITH REAL TRACES")
     print("=" * 60)
