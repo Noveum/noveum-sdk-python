@@ -59,20 +59,9 @@ authors = ["Noveum Team <team@noveum.ai>"]
 readme = "README.md"
 homepage = "https://noveum.ai"
 repository = "https://github.com/Noveum/noveum-sdk-python"
-documentation = "https://docs.noveum.ai"
+documentation = "https://github.com/Noveum/noveum-sdk-python"
 keywords = ["noveum", "ai", "ml", "evaluation", "testing", "api", "sdk"]
 license = "Apache-2.0"
-classifiers = [
-    "Development Status :: 5 - Production/Stable",
-    "Intended Audience :: Developers",
-    "License :: OSI Approved :: Apache Software License",
-    "Operating System :: OS Independent",
-    "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
-    "Programming Language :: Python :: 3.12",
-    "Topic :: Software Development :: Libraries :: Python Modules",
-]
 packages = [
     { include = "noveum_api_client" },
 ]
@@ -99,6 +88,14 @@ python-dotenv = "^1.0.0"
 [build-system]
 requires = ["setuptools>=45", "wheel", "setuptools-scm>=6.2"]
 build-backend = "setuptools.build_meta"
+
+[tool.commitizen]
+name = "cz_conventional_commits"
+version = "1.0.3"
+version_files = [
+    "pyproject.toml:version"
+]
+tag_format = "v$version"
 
 [tool.ruff]
 line-length = 120
