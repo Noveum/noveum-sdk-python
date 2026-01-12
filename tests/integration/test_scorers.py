@@ -45,8 +45,6 @@ import uuid
 from datetime import datetime
 from typing import Any
 
-import pytest
-
 # Add parent directories to path
 sys.path.insert(0, os.path.abspath("../.."))
 sys.path.insert(0, os.path.abspath("../../tests"))
@@ -60,7 +58,6 @@ from noveum_api_client.api.datasets import (
 )
 from noveum_api_client.api.scorer_results import (
     get_api_v1_scorers_results,
-    post_api_v1_scorers_results,
     post_api_v1_scorers_results_batch,
 )
 from noveum_api_client.api.scorers import (
@@ -477,7 +474,9 @@ def test_cleanup(low_level_client):
 def run_all_tests():
     """Run all scorer tests"""
     if not API_KEY:
-        pytest.skip("NOVEUM_API_KEY not set")
+        print("❌ ERROR: NOVEUM_API_KEY not set")
+        print("Please set the NOVEUM_API_KEY environment variable and try again.")
+        sys.exit(1)
 
     print("\n" + "=" * 60)
     print("SCORERS API TESTS - COMPLETE WORKFLOW")

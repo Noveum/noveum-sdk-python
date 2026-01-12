@@ -30,8 +30,6 @@ from datetime import datetime
 from random import choice, randint
 from typing import Any
 
-import pytest
-
 sys.path.insert(0, os.path.abspath("../.."))
 sys.path.insert(0, os.path.abspath("../../tests"))
 
