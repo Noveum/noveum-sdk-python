@@ -41,7 +41,7 @@ from noveum_api_client.api.auth.get_api_auth_passkey_list_user_passkeys import (
     sync_detailed as get_api_auth_passkey_list_user_passkeys,
 )
 
-API_KEY = os.getenv("NOVEUM_API_KEY", "nv_H18oSsoyVFvllPma7XAeR3PgGENXKobr")
+API_KEY = os.getenv("NOVEUM_API_KEY", "******")
 BASE_URL = os.getenv("NOVEUM_BASE_URL", "https://api.noveum.ai")
 
 test_results = []

@@ -55,7 +55,7 @@ from noveum_api_client.api.traces.get_api_v1_traces_ids import sync_detailed as 
 from noveum_api_client.api.traces.post_api_v1_traces import sync_detailed as post_api_v1_traces
 from noveum_api_client.api.traces.post_api_v1_traces_single import sync_detailed as post_api_v1_traces_single
 
-API_KEY = os.getenv("NOVEUM_API_KEY", "nv_H18oSsoyVFvllPma7XAeR3PgGENXKobr")
+API_KEY = os.getenv("NOVEUM_API_KEY", "******")
 BASE_URL = os.getenv("NOVEUM_BASE_URL", "https://api.noveum.ai")
 PROJECT_NAME = os.getenv("NOVEUM_PROJECT", "SDK_Test_Project")
 ENVIRONMENT = os.getenv("NOVEUM_ENVIRONMENT", "test")

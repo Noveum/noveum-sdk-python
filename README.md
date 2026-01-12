@@ -11,17 +11,19 @@
 [![AI Observability](https://img.shields.io/badge/AI-Observability-orange?style=flat)](https://noveum.ai/)
 [![LLM Evaluation](https://img.shields.io/badge/LLM-Evaluation-purple?style=flat)](https://noveum.ai/)
 
-A professional Python SDK for the [Noveum.ai](https://noveum.ai) API. Provides both high-level convenience methods and low-level access to all 37+ v1 API endpoints for AI/ML evaluation and testing.
+A professional Python SDK for the [Noveum.ai](https://noveum.ai) API. Provides both high-level convenience methods and low-level access to 180+ API endpoints for AI/ML evaluation, testing, and observability.
 
 ## Features
 
-✨ **Complete API Coverage** - All 37 v1 endpoints fully implemented  
+✨ **Complete API Coverage** - 180+ endpoints fully implemented across all API categories  
 🚀 **Full IDE Support** - Complete type hints, autocomplete, and docstrings  
 ⚡ **Async & Sync** - Both async/await and synchronous support  
 🔐 **Secure** - API key authentication, HTTPS only, proper error handling  
 📚 **Well-Documented** - Comprehensive guides, examples, and inline documentation  
-🧪 **Production-Ready** - Tested with real API, 100% test coverage  
+🧪 **Production-Ready** - Extensive test suite with integration and unit tests  
 🎯 **Easy to Use** - High-level wrapper for common operations  
+🔍 **AI Observability** - Full support for traces, telemetry, and evaluation  
+🤖 **Multi-Agent Support** - Built-in support for AI chats and agent workflows  
 
 ## Quick Start
 
@@ -564,7 +566,7 @@ logger.info(f"Listed datasets: {len(response['data'])} found")
 
 **Solution:**
 ```bash
-cd noveum-sdk-autogen
+cd noveum-sdk-python
 pip install -e .
 ```
 
@@ -639,27 +641,65 @@ response = client.get_dataset_items("my-dataset")
 ### Project Structure
 
 ```
-noveum-sdk-autogen/
+noveum-sdk-python/
 ├── noveum_api_client/           # Main package
 │   ├── __init__.py              # Public API exports
 │   ├── client.py                # Generated base client
 │   ├── noveum_client.py         # High-level wrapper
 │   ├── errors.py                # Error definitions
 │   ├── types.py                 # Type definitions
-│   ├── api/                     # Generated API endpoints
+│   ├── py.typed                 # PEP 561 type marker
+│   ├── api/                     # Generated API endpoints (180+ endpoints)
+│   │   ├── administration/      # Admin operations
+│   │   ├── ai/                  # AI chat operations
+│   │   ├── api_keys/            # API key management
+│   │   ├── auth/                # Authentication endpoints
+│   │   ├── credentials/         # Credential management
 │   │   ├── datasets/            # Dataset operations
-│   │   ├── traces/              # Trace operations
+│   │   ├── etl_jobs/            # ETL job management
+│   │   ├── projects/            # Project operations
 │   │   ├── scorers/             # Scorer operations
 │   │   ├── scorer_results/      # Evaluation results
+│   │   ├── telemetry/           # Telemetry operations
+│   │   ├── telemetry_plugins/   # Plugin management
+│   │   ├── traces/              # Trace operations
+│   │   ├── webhooks/            # Webhook management
 │   │   └── ...                  # Other endpoints
-│   └── models/                  # Pydantic data models
-├── tests/                       # Test suite
+│   └── models/                  # Pydantic data models (700+ models)
+├── tests/                       # Comprehensive test suite
+│   ├── integration/             # Integration tests with live API
+│   │   ├── test_ai_chats.py    # AI chat endpoint tests
+│   │   ├── test_api_keys.py    # API key tests
+│   │   ├── test_auth.py        # Authentication tests
+│   │   ├── test_credentials.py # Credentials tests
+│   │   ├── test_datasets.py    # Dataset tests
+│   │   ├── test_projects.py    # Project tests
+│   │   ├── test_scorers.py     # Scorer tests
+│   │   ├── test_telemetry.py   # Telemetry tests
+│   │   ├── test_traces.py      # Trace tests
+│   │   └── ...                 # More integration tests
+│   ├── unit/                    # Unit tests (mocked)
+│   │   ├── test_client_wrapper.py
+│   │   ├── test_auth_wrappers.py
+│   │   ├── test_datasets_wrappers.py
+│   │   └── ...                 # More unit tests
+│   ├── test_config.py          # Test configuration
 │   └── test_integration_complete.py
+├── doc/                         # Documentation
+│   ├── ARCHITECTURE.md         # Architecture details
+│   ├── USAGE_GUIDE.md         # Detailed usage guide
+│   └── AUTOGEN_README.md      # Code generation details
+├── dist/                        # Built distributions
 ├── README.md                    # This file
-├── USAGE_GUIDE.md              # Detailed usage guide
-├── AUTOGEN_README.md           # Code generation details
+├── CHANGELOG.md                # Version history
+├── CONTRIBUTING.md             # Contribution guidelines
+├── RELEASE_GUIDE.md            # Release process
+├── VERIFICATION_CHECKLIST.md   # QA checklist
+├── SDK_VERIFICATION_NOTEBOOK.ipynb  # Verification notebook
 ├── pyproject.toml              # Project configuration
-└── .gitignore                  # Git rules
+├── setup.py                     # Setup script
+├── codecov.yml                  # Code coverage config
+└── .gitignore                  # Git ignore rules
 ```
 
 ### Two-Layer Architecture
@@ -697,14 +737,21 @@ git push origin main --tags
 
 GitHub Actions will automatically build and publish to PyPI using Trusted Publishing.
 
+## Related Packages
+
+The Noveum ecosystem includes multiple specialized packages:
+
+- **[noveum-trace](https://pypi.org/project/noveum-trace/)** - Lightweight tracing SDK for LLM applications and multi-agent systems with decorator-based API
+- **[noveum-sdk-python](https://pypi.org/project/noveum-sdk-python/)** - This package - comprehensive API client for evaluation, datasets, and platform management
+
 ## Support
 
+- **Platform**: https://noveum.ai/
 - **PyPI Package**: https://pypi.org/project/noveum-sdk-python/
 - **API Documentation**: https://noveum.ai/docs
 - **GitHub Repository**: https://github.com/Noveum/noveum-sdk-python
 - **GitHub Issues**: https://github.com/Noveum/noveum-sdk-python/issues
 - **Email**: support@noveum.ai
-- **Docs**: https://noveum.ai/docs
 
 ## License
 
@@ -721,5 +768,5 @@ See [CHANGELOG.md](CHANGELOG.md) for version history and updates.
 ---
 
 **Status**: ✅ Production Ready  
-**Last Updated**: December 17, 2025  
-**Version**: 1.0.0
+**Last Updated**: January 12, 2026  
+**Version**: 1.0.3

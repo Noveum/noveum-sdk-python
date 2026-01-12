@@ -24,7 +24,7 @@ sys.path.insert(0, os.path.abspath("../../tests"))
 from noveum_api_client import Client, NoveumClient
 from noveum_api_client.api.scorer_results.get_api_v1_scorers_results import sync_detailed as get_api_v1_scorers_results
 
-API_KEY = os.getenv("NOVEUM_API_KEY", "nv_H18oSsoyVFvllPma7XAeR3PgGENXKobr")
+API_KEY = os.getenv("NOVEUM_API_KEY", "******")
 BASE_URL = os.getenv("NOVEUM_BASE_URL", "https://api.noveum.ai")
 
 test_results = []

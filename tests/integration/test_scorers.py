@@ -72,7 +72,7 @@ from noveum_api_client.models.post_api_v1_datasets_by_dataset_slug_items_body im
 # Configuration
 # =============================================================================
 
-API_KEY = os.getenv("NOVEUM_API_KEY", "nv_H18oSsoyVFvllPma7XAeR3PgGENXKobr")
+API_KEY = os.getenv("NOVEUM_API_KEY", "******")
 BASE_URL = os.getenv("NOVEUM_BASE_URL", "https://api.noveum.ai")
 
 # =============================================================================

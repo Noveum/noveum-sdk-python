@@ -24,7 +24,7 @@ from noveum_api_client.api.api_keys.get_api_by_organisation_slug_api_keys import
     sync_detailed as get_api_by_organisation_slug_api_keys,
 )
 
-API_KEY = os.getenv("NOVEUM_API_KEY", "nv_H18oSsoyVFvllPma7XAeR3PgGENXKobr")
+API_KEY = os.getenv("NOVEUM_API_KEY", "******")
 BASE_URL = os.getenv("NOVEUM_BASE_URL", "https://api.noveum.ai")
 ORG_SLUG = os.getenv("NOVEUM_ORG_SLUG", "NoveumSDK")
 

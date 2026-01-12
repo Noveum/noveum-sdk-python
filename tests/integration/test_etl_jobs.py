@@ -28,7 +28,7 @@ sys.path.insert(0, os.path.abspath("../../tests"))
 from noveum_api_client import Client, NoveumClient
 from noveum_api_client.api.etl_jobs.get_api_v1_etl_jobs import sync_detailed as get_api_v1_etl_jobs
 
-API_KEY = os.getenv("NOVEUM_API_KEY", "nv_H18oSsoyVFvllPma7XAeR3PgGENXKobr")
+API_KEY = os.getenv("NOVEUM_API_KEY", "******")
 BASE_URL = os.getenv("NOVEUM_BASE_URL", "https://api.noveum.ai")
 
 test_results: list[dict[str, Any]] = []
