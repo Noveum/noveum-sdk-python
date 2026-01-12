@@ -69,11 +69,11 @@ jobs:
 
       - name: Run bandit security linter
         run: |
-          bandit -r noveum_api_client/ -f json -o bandit-report.json || true
+          bandit -r noveum_api_client/ -f json -o bandit-report.json
 
       - name: Run safety check
         run: |
-          safety check --json --output safety-report.json || true
+          safety check --json --output safety-report.json
 
   # Run unit tests on PRs and pushes - faster feedback, no API costs
   unit-test:

@@ -80,7 +80,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: pypi
-      url: https://pypi.org/p/noveum-api-client
+      url: https://pypi.org/p/noveum-sdk
     permissions:
       id-token: write  # IMPORTANT: mandatory for trusted publishing
     steps:
@@ -107,7 +107,7 @@ jobs:
         path: dist/
 
     - name: Create GitHub Release
-      uses: softprops/action-gh-release@v1
+      uses: softprops/action-gh-release@v2
       with:
         files: dist/*
         generate_release_notes: true
