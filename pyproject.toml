@@ -1,9 +1,14 @@
 [tool.poetry]
 name = "noveum-sdk"
 version = "1.0.3"
-description = "A client library for accessing Noveum API"
-authors = []
+description = "Official Python SDK for the Noveum.ai API - AI/ML evaluation and testing platform"
+authors = ["Noveum Team <team@noveum.ai>"]
 readme = "README.md"
+homepage = "https://noveum.ai"
+repository = "https://github.com/Noveum/noveum-sdk-python"
+documentation = "https://github.com/Noveum/noveum-sdk-python"
+keywords = ["noveum", "ai", "ml", "evaluation", "testing", "api", "sdk"]
+license = "Apache-2.0"
 packages = [
     { include = "noveum_api_client" },
 ]
