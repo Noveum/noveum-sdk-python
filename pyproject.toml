@@ -105,6 +105,16 @@ target-version = "py310"
 
 [tool.ruff.lint]
 select = ["F", "E", "W", "I", "UP", "B", "C4", "SIM"]
+# Ignore line length and simplification rules in generated API code
+ignore = []
+
+[tool.ruff.lint.per-file-ignores]
+# Generated API models and endpoints - ignore line length and simplification warnings
+"noveum_api_client/models/*.py" = ["E501", "SIM108"]
+"noveum_api_client/api/**/*.py" = ["E501"]
+# Generated client files - ignore line length in docstrings
+"noveum_api_client/client.py" = ["E501"]
+"noveum_api_client/errors.py" = ["E501"]
 
 [tool.black]
 line-length = 120
