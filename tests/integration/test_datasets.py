@@ -151,13 +151,13 @@ def load_test_data(file_path: str) -> list[dict]:
 # =============================================================================
 
 
-def test_list_datasets(client, low_level_client):
+def test_list_datasets(noveum_client, low_level_client):
     """Test 1: List Datasets (GET /api/v1/datasets)"""
     print_section("TEST 1: List Datasets")
 
     try:
         # High-level client
-        response = client.list_datasets(limit=10)
+        response = noveum_client.list_datasets(limit=10)
         passed = response["status_code"] == 200
         log_test("List datasets (high-level)", passed, f"Status: {response['status_code']}")
 

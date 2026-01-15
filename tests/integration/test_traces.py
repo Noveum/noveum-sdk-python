@@ -68,7 +68,7 @@ created_resources: dict[str, list[Any]] = {"traces": [], "trace_ids": []}
 # Global client variables (initialized in run_tests)
 client: NoveumClient
 low_level_client: Client
-SAMPLE_TRACE_ID: str | None
+SAMPLE_TRACE_ID: str | None = None
 
 
 def log_test(name: str, passed: bool, details: str = "") -> bool:
@@ -156,8 +156,8 @@ def create_demo_traces(count: int = 10):
 
     try:
         # Try using noveum_trace SDK if available
-        import noveum_trace
-        from noveum_trace.context_managers import trace_llm
+        import noveum_trace  # type: ignore[import-not-found]
+        from noveum_trace.context_managers import trace_llm  # type: ignore[import-not-found]
 
         noveum_trace.init(
             api_key=API_KEY,

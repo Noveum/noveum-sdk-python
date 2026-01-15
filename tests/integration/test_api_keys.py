@@ -40,6 +40,12 @@ test_results: list[dict[str, Any]] = []
 created_resources: dict[str, list[Any]] = {"api_keys": []}
 
 
+@pytest.fixture(autouse=True)
+def _cleanup_after_test(low_level_client):
+    yield
+    cleanup_resources(low_level_client)
+
+
 def log_test(name: str, passed: bool, details: str = "") -> bool:
     test_results.append({"test": name, "passed": passed, "details": details, "timestamp": datetime.now().isoformat()})
     print(f"{'✅' if passed else '❌'} {name}" + (f" - {details}" if details else ""))
@@ -50,6 +56,16 @@ def print_section(title: str):
     print("\n" + "=" * 60)
     print(title)
     print("=" * 60)
+
+
+def _create_api_key(low_level_client, title: str):
+    body = {"title": title}
+    response = post_api_by_organisation_slug_api_keys(client=low_level_client, organisation_slug=ORG_SLUG, body=body)
+    api_key_id = None
+    if response.status_code == 201 and response.parsed and hasattr(response.parsed, "id"):
+        api_key_id = response.parsed.id  # type: ignore[union-attr]
+        created_resources["api_keys"].append(api_key_id)
+    return response, api_key_id
 
 
 def test_list_api_keys(low_level_client):
@@ -69,20 +85,13 @@ def test_list_api_keys(low_level_client):
 def test_create_api_key(low_level_client):
     print_section("TEST 2: Create API Key")
     try:
-        api_key_id = None
         # Create API key with a test title
         test_title = f"SDK Test Key {datetime.now().strftime('%Y%m%d_%H%M%S')}"
-        body = {"title": test_title}
-
-        response = post_api_by_organisation_slug_api_keys(
-            client=low_level_client, organisation_slug=ORG_SLUG, body=body
-        )
+        response, api_key_id = _create_api_key(low_level_client, test_title)
         passed = response.status_code == 201
         details = f"Status: {response.status_code}"
 
-        if passed and response.parsed:
-            api_key_id = response.parsed.id
-            created_resources["api_keys"].append(api_key_id)
+        if passed and api_key_id:
             details += f", Created API key ID: {api_key_id[:8]}..."
 
         log_test("Create API key", passed, details)
@@ -92,13 +101,15 @@ def test_create_api_key(low_level_client):
         return None
 
 
-def test_delete_api_key(low_level_client, api_key_id: str | None):
+def test_delete_api_key(low_level_client):
     print_section("TEST 3: Delete API Key")
-    if not api_key_id:
-        log_test("Delete API key", True, "Skipped - no API key to delete")
-        return
-
     try:
+        test_title = f"SDK Test Key {datetime.now().strftime('%Y%m%d_%H%M%S')}"
+        create_response, api_key_id = _create_api_key(low_level_client, test_title)
+        if create_response.status_code != 201 or not api_key_id:
+            log_test("Delete API key", False, f"Create failed: {create_response.status_code}")
+            return
+
         response = delete_api_by_organisation_slug_api_keys(
             client=low_level_client, organisation_slug=ORG_SLUG, id=api_key_id
         )
