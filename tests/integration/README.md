@@ -21,7 +21,7 @@ End-to-end integration tests for the Noveum SDK.
 
 ### Unit Tests (Recommended for Development)
 ```bash
-cd /Users/mramanindia/work/noveum-sdk-python/tests/unit
+cd tests/unit
 pytest -v                     # All unit tests
 pytest test_models.py -v      # Specific file
 ```
@@ -30,7 +30,7 @@ pytest test_models.py -v      # Specific file
 ```bash
 # Setup
 export NOVEUM_API_KEY="your_api_key_here"
-cd /Users/mramanindia/work/noveum-sdk-python/tests/integration
+cd tests/integration
 
 # Run tests (choose one method)
 ./run_test.sh datasets        # Helper script

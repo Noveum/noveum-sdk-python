@@ -22,8 +22,7 @@ The SDK includes two types of tests:
 ### Prerequisites
 
 ```bash
-# Install SDK with dev dependencies
-cd /Users/mramanindia/work/noveum-sdk-python
+# Install SDK with dev dependencies (run from the repository root)
 pip install --upgrade pip setuptools wheel
 pip install -e ".[dev]"
 
@@ -357,8 +356,7 @@ pytest tests/integration/ -x
 
 **Solution**:
 ```bash
-# Reinstall SDK in development mode
-cd /Users/mramanindia/work/noveum-sdk-python
+# Reinstall SDK in development mode (run from the repository root)
 pip install -e .
 
 # Verify installation
