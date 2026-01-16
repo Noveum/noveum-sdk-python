@@ -4,7 +4,7 @@
 [![Release](https://github.com/Noveum/noveum-sdk-python/actions/workflows/release.yml/badge.svg)](https://github.com/Noveum/noveum-sdk-python/actions/workflows/release.yml)
 [![codecov](https://codecov.io/gh/Noveum/noveum-sdk-python/branch/main/graph/badge.svg)](https://codecov.io/gh/Noveum/noveum-sdk-python)
 [![PyPI version](https://badge.fury.io/py/noveum-sdk-python.svg)](https://badge.fury.io/py/noveum-sdk-python)
-[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
+[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 [![Noveum Platform](https://img.shields.io/badge/Noveum-Platform-blue?style=flat&logo=data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMTIgMkw0IDdWMTdMMTIgMjJMMjAgMTdWN0wxMiAyWiIgZmlsbD0id2hpdGUiLz48L3N2Zz4=)](https://noveum.ai/)
@@ -12,19 +12,17 @@
 [![AI Observability](https://img.shields.io/badge/AI-Observability-orange?style=flat)](https://noveum.ai/)
 [![LLM Evaluation](https://img.shields.io/badge/LLM-Evaluation-purple?style=flat)](https://noveum.ai/)
 
-A professional Python SDK for the [Noveum.ai](https://noveum.ai) API. Provides both high-level convenience methods and low-level access to 180+ API endpoints for AI/ML evaluation, testing, and observability.
+A professional Python SDK for the [Noveum.ai](https://noveum.ai) API. Provides both high-level convenience methods and low-level access to core API endpoints for AI/ML evaluation, testing, and observability.
 
 ## Features
 
-✨ **Complete API Coverage** - 180+ endpoints fully implemented across all API categories  
-🚀 **Full IDE Support** - Complete type hints, autocomplete, and docstrings  
-⚡ **Async & Sync** - Both async/await and synchronous support  
-🔐 **Secure** - API key authentication, HTTPS only, proper error handling  
-📚 **Well-Documented** - Comprehensive guides, examples, and inline documentation  
-🧪 **Production-Ready** - Extensive test suite with integration and unit tests  
-🎯 **Easy to Use** - High-level wrapper for common operations  
-🔍 **AI Observability** - Full support for traces, telemetry, and evaluation  
-🤖 **Multi-Agent Support** - Built-in support for AI chats and agent workflows  
+- **Core API Coverage** - Essential endpoints for datasets, traces, scorers, projects, and ETL jobs
+- **Full IDE Support** - Complete type hints, autocomplete, and docstrings
+- **Async & Sync** - Both async/await and synchronous support
+- **Secure** - API key authentication, HTTPS only, proper error handling
+- **Well-Documented** - Comprehensive guides, examples, and inline documentation
+- **Production-Ready** - Extensive test suite with integration and unit tests
+- **Easy to Use** - High-level wrapper for common operations
 
 ## Quick Start
 
@@ -51,9 +49,6 @@ pip install -e .
 
 # Or install with dev dependencies for development
 pip install -e ".[dev]"
-
-# Verify installation
-python verify_install.py
 ```
 
 ### Basic Usage (High-Level Client)
@@ -221,6 +216,57 @@ print(f"Status: {response.status_code}")
 print(f"Data: {response.parsed}")
 ```
 
+## Available API Endpoints
+
+The SDK provides access to the following API categories:
+
+| Category | Description |
+|----------|-------------|
+| `health/` | Health check endpoint |
+| `status/` | API status endpoint |
+| `datasets/` | Dataset CRUD operations |
+| `traces/` | Trace management and querying |
+| `scorers/` | Scorer definitions and management |
+| `scorer_results/` | Evaluation results |
+| `projects/` | Project management |
+| `etl_jobs/` | ETL job operations |
+
+### Example: Using Traces API
+
+```python
+from noveum_api_client import Client
+from noveum_api_client.api.traces import get_api_v1_traces, post_api_v1_traces
+
+client = Client(
+    base_url="https://api.noveum.ai",
+    headers={"Authorization": f"Bearer {api_key}"}
+)
+
+# List traces
+response = get_api_v1_traces.sync_detailed(client=client)
+print(f"Traces: {response.parsed}")
+```
+
+### Example: Using Scorers API
+
+```python
+from noveum_api_client.api.scorers import get_api_v1_scorers
+
+# List scorers
+response = get_api_v1_scorers.sync_detailed(client=client)
+print(f"Scorers: {response.parsed}")
+```
+
+### Example: Using ETL Jobs API
+
+```python
+from noveum_api_client.api.etl_jobs import get_api_v1_etl_jobs
+
+# List ETL jobs
+response = get_api_v1_etl_jobs.sync_detailed(client=client)
+print(f"ETL Jobs: {response.parsed}")
+```
+
 ## Common Use Cases
 
 ### Use Case 1: CI/CD Regression Testing
@@ -248,12 +294,12 @@ def test_agent_quality():
         # Check quality
         for result in results["data"]:
             if result.get("score", 0) < 0.8:
-                print(f"❌ Item {item['id']} failed: {result['score']}")
+                print(f"Item {item['id']} failed: {result['score']}")
                 failed += 1
     
     # Assert
     assert failed == 0, f"{failed} items failed quality check"
-    print("✅ All items passed quality check")
+    print("All items passed quality check")
 
 # Run test
 test_agent_quality()
@@ -304,12 +350,6 @@ avg_score = sum(r.get("score", 0) for r in results["data"]) / total if total > 0
 print(f"Total: {total}")
 print(f"Passed: {passed} ({passed/total*100:.1f}%)")
 print(f"Average Score: {avg_score:.2f}")
-
-# Find failures
-failures = [r for r in results["data"] if not r.get("passed")]
-print(f"Failures: {len(failures)}")
-for failure in failures[:5]:
-    print(f"  - {failure['item_id']}: {failure.get('reason', 'Unknown')}")
 ```
 
 ### Use Case 4: Async Operations
@@ -345,24 +385,6 @@ asyncio.run(main())
 client = NoveumClient(
     api_key="nv_...",
     base_url="https://custom.api.noveum.ai"
-)
-```
-
-### SSL Certificate Verification
-
-```python
-from noveum_api_client import Client
-
-# Custom certificate
-client = Client(
-    base_url="https://api.noveum.ai",
-    verify_ssl="/path/to/certificate.pem"
-)
-
-# Disable verification (NOT recommended for production)
-client = Client(
-    base_url="https://api.noveum.ai",
-    verify_ssl=False
 )
 ```
 
@@ -473,184 +495,6 @@ pytest tests/integration/ -v
 pytest tests/ -v --cov=noveum_api_client --cov-report=term-missing
 ```
 
-### Troubleshooting Test Setup
-
-If you encounter `ModuleNotFoundError: No module named 'pytest'`:
-
-```bash
-# Ensure setuptools is up to date (required for PEP 621)
-pip install --upgrade pip setuptools wheel
-
-# Reinstall with dev dependencies
-pip install -e ".[dev]"
-
-# Verify pytest is installed
-pytest --version
-```
-
-For more troubleshooting and advanced testing options, see [TESTING.md](TESTING.md).
-
-## Best Practices
-
-### 1. Use Environment Variables
-
-```python
-import os
-from noveum_api_client import NoveumClient
-
-# Never hardcode API keys
-api_key = os.getenv("NOVEUM_API_KEY")
-if not api_key:
-    raise ValueError("NOVEUM_API_KEY environment variable not set")
-
-client = NoveumClient(api_key=api_key)
-```
-
-### 2. Handle Pagination
-
-```python
-client = NoveumClient(api_key="nv_...")
-
-# Paginate through all datasets
-offset = 0
-all_datasets = []
-
-while True:
-    response = client.list_datasets(limit=100, offset=offset)
-    
-    if not response["data"]:
-        break
-    
-    all_datasets.extend(response["data"])
-    offset += 100
-
-print(f"Total datasets: {len(all_datasets)}")
-```
-
-### 3. Use Context Managers
-
-```python
-from noveum_api_client import NoveumClient
-
-# Ensures proper cleanup
-with NoveumClient(api_key="nv_...") as client:
-    datasets = client.list_datasets()
-    # Connection automatically closed
-```
-
-### 4. Check Status Codes
-
-```python
-response = client.list_datasets()
-
-if response["status_code"] == 200:
-    # Success
-    print(response["data"])
-elif response["status_code"] == 401:
-    # Unauthorized - check API key
-    print("Invalid API key")
-elif response["status_code"] == 404:
-    # Not found
-    print("Resource not found")
-else:
-    # Other error
-    print(f"Error: {response['status_code']}")
-```
-
-### 5. Add Logging
-
-```python
-import logging
-from noveum_api_client import NoveumClient
-
-# Configure logging
-logging.basicConfig(level=logging.DEBUG)
-logger = logging.getLogger(__name__)
-
-client = NoveumClient(api_key="nv_...")
-
-response = client.list_datasets()
-logger.info(f"Listed datasets: {len(response['data'])} found")
-```
-
-## Troubleshooting
-
-### ImportError: No module named 'noveum_api_client'
-
-**Problem:** SDK not installed
-
-**Solution:**
-```bash
-cd noveum-sdk-python
-pip install -e .
-```
-
-### 401 Unauthorized
-
-**Problem:** Invalid or missing API key
-
-**Solution:**
-```bash
-# Check API key is set
-echo $NOVEUM_API_KEY
-
-# Set it if missing
-export NOVEUM_API_KEY="nv_your_key"
-
-# Verify it's correct at https://noveum.ai/settings/api-keys
-```
-
-### Connection Timeout
-
-**Problem:** API is slow or unreachable
-
-**Solution:**
-```python
-import httpx
-from noveum_api_client import Client
-
-# Increase timeout
-client = Client(
-    base_url="https://api.noveum.ai",
-    timeout=httpx.Timeout(60.0)  # 60 seconds
-)
-```
-
-### SSL Certificate Error
-
-**Problem:** Certificate verification failed
-
-**Solution:**
-```python
-from noveum_api_client import Client
-
-# Use custom certificate
-client = Client(
-    base_url="https://api.noveum.ai",
-    verify_ssl="/path/to/ca-bundle.crt"
-)
-
-# Or disable (not recommended)
-client = Client(
-    base_url="https://api.noveum.ai",
-    verify_ssl=False
-)
-```
-
-### AttributeError: 'NoneType' object has no attribute 'value'
-
-**Problem:** Invalid parameter passed to API
-
-**Solution:** Check that all required parameters are provided and valid
-
-```python
-# ❌ Wrong - missing required parameter
-response = client.get_dataset_items()
-
-# ✅ Correct - provide dataset_slug
-response = client.get_dataset_items("my-dataset")
-```
-
 ## Architecture
 
 ### Project Structure
@@ -664,57 +508,30 @@ noveum-sdk-python/
 │   ├── errors.py                # Error definitions
 │   ├── types.py                 # Type definitions
 │   ├── py.typed                 # PEP 561 type marker
-│   ├── api/                     # Generated API endpoints (180+ endpoints)
-│   │   ├── administration/      # Admin operations
-│   │   ├── ai/                  # AI chat operations
-│   │   ├── api_keys/            # API key management
-│   │   ├── auth/                # Authentication endpoints
-│   │   ├── credentials/         # Credential management
+│   ├── api/                     # Generated API endpoints
 │   │   ├── datasets/            # Dataset operations
 │   │   ├── etl_jobs/            # ETL job management
+│   │   ├── health/              # Health check
 │   │   ├── projects/            # Project operations
 │   │   ├── scorers/             # Scorer operations
 │   │   ├── scorer_results/      # Evaluation results
-│   │   ├── telemetry/           # Telemetry operations
-│   │   ├── telemetry_plugins/   # Plugin management
-│   │   ├── traces/              # Trace operations
-│   │   ├── webhooks/            # Webhook management
-│   │   └── ...                  # Other endpoints
-│   └── models/                  # Pydantic data models (700+ models)
-├── tests/                       # Comprehensive test suite
+│   │   ├── status/              # Status endpoint
+│   │   └── traces/              # Trace operations
+│   └── models/                  # Data models
+├── tests/                       # Test suite
 │   ├── integration/             # Integration tests with live API
-│   │   ├── test_ai_chats.py    # AI chat endpoint tests
-│   │   ├── test_api_keys.py    # API key tests
-│   │   ├── test_auth.py        # Authentication tests
-│   │   ├── test_credentials.py # Credentials tests
-│   │   ├── test_datasets.py    # Dataset tests
-│   │   ├── test_projects.py    # Project tests
-│   │   ├── test_scorers.py     # Scorer tests
-│   │   ├── test_telemetry.py   # Telemetry tests
-│   │   ├── test_traces.py      # Trace tests
-│   │   └── ...                 # More integration tests
-│   ├── unit/                    # Unit tests (mocked)
-│   │   ├── test_client_wrapper.py
-│   │   ├── test_auth_wrappers.py
-│   │   ├── test_datasets_wrappers.py
-│   │   └── ...                 # More unit tests
-│   ├── test_config.py          # Test configuration
-│   └── test_integration_complete.py
+│   │   ├── test_datasets.py     # Dataset tests
+│   │   ├── test_etl_jobs.py     # ETL job tests
+│   │   ├── test_projects.py     # Project tests
+│   │   ├── test_scorers.py      # Scorer tests
+│   │   ├── test_scorer_results.py # Scorer results tests
+│   │   └── test_traces.py       # Trace tests
+│   └── unit/                    # Unit tests (mocked)
 ├── doc/                         # Documentation
-│   ├── ARCHITECTURE.md         # Architecture details
-│   ├── USAGE_GUIDE.md         # Detailed usage guide
-│   └── AUTOGEN_README.md      # Code generation details
-├── dist/                        # Built distributions
 ├── README.md                    # This file
-├── CHANGELOG.md                # Version history
-├── CONTRIBUTING.md             # Contribution guidelines
-├── RELEASE_GUIDE.md            # Release process
-├── VERIFICATION_CHECKLIST.md   # QA checklist
-├── SDK_VERIFICATION_NOTEBOOK.ipynb  # Verification notebook
-├── pyproject.toml              # Project configuration
-├── setup.py                     # Setup script
-├── codecov.yml                  # Code coverage config
-└── .gitignore                  # Git ignore rules
+├── CHANGELOG.md                 # Version history
+├── CONTRIBUTING.md              # Contribution guidelines
+└── pyproject.toml               # Project configuration
 ```
 
 ### Two-Layer Architecture
@@ -730,27 +547,6 @@ noveum-sdk-python/
 - Simplified API for typical use cases
 - Automatic error handling
 - Better developer experience
-
-## Publishing to PyPI
-
-This package is automatically published to PyPI when a new version tag is pushed:
-
-```bash
-# Update version in pyproject.toml
-vim pyproject.toml
-
-# Update CHANGELOG.md with release notes
-vim CHANGELOG.md
-
-# Commit changes
-git commit -am "chore: Bump version to X.Y.Z"
-
-# Create and push tag
-git tag vX.Y.Z
-git push origin main --tags
-```
-
-GitHub Actions will automatically build and publish to PyPI using Trusted Publishing.
 
 ## Related Packages
 
@@ -782,6 +578,6 @@ See [CHANGELOG.md](CHANGELOG.md) for version history and updates.
 
 ---
 
-**Status**: ✅ Production Ready  
-**Last Updated**: January 12, 2026  
+**Status**: Production Ready  
+**Last Updated**: January 16, 2026  
 **Version**: 1.0.3

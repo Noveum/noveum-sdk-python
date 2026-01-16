@@ -1,7 +1,7 @@
 """
-Unit Tests for Webhooks, Projects, and Other API Wrappers
+Unit Tests for Projects, ETL Jobs, Health, and Other API Wrappers
 
-Tests webhooks, projects, credentials, ETL jobs, and misc API wrapper functions.
+Tests projects, ETL jobs, health, and misc API wrapper functions.
 """
 
 from unittest.mock import Mock
@@ -12,16 +12,6 @@ import pytest
 from noveum_api_client import Client
 
 
-class TestWebhooksWrappers:
-    """Test webhooks API wrappers"""
-
-    def test_webhooks_module_exists(self):
-        """Test that webhooks module exists"""
-        from noveum_api_client.api import webhooks
-
-        assert webhooks is not None
-
-
 class TestProjectsWrappers:
     """Test projects API wrappers"""
 
@@ -30,16 +20,6 @@ class TestProjectsWrappers:
         from noveum_api_client.api import projects
 
         assert projects is not None
-
-
-class TestCredentialsWrappers:
-    """Test credentials API wrappers"""
-
-    def test_credentials_module_exists(self):
-        """Test that credentials module exists"""
-        from noveum_api_client.api import credentials
-
-        assert credentials is not None
 
 
 class TestETLJobsWrappers:
@@ -55,57 +35,17 @@ class TestETLJobsWrappers:
 class TestHealthCheckWrappers:
     """Test health check API wrappers"""
 
-    def test_health_module_or_status_exists(self):
-        """Test that health/status checking functionality exists"""
-        # Health checks may be in various modules
-        try:
-            from noveum_api_client.api import health
+    def test_health_module_exists(self):
+        """Test that health module exists"""
+        from noveum_api_client.api import health
 
-            assert health is not None
-        except ImportError:
-            # May be in another module
-            assert True
+        assert health is not None
 
+    def test_status_module_exists(self):
+        """Test that status module exists"""
+        from noveum_api_client.api import status
 
-class TestOrganizationsWrappers:
-    """Test organizations API wrappers"""
-
-    def test_organizations_functionality_exists(self):
-        """Test that organization functionality exists"""
-        # Organization endpoints may be in auth or separate module
-        from noveum_api_client.api import auth
-
-        assert hasattr(auth, "get_api_auth_organization_list")
-
-
-class TestTelemetryPluginsWrappers:
-    """Test telemetry plugins API wrappers"""
-
-    def test_telemetry_plugins_module_exists(self):
-        """Test that telemetry plugins module exists"""
-        try:
-            from noveum_api_client.api import telemetry_plugins
-
-            assert telemetry_plugins is not None
-        except ImportError:
-            # May be part of telemetry module
-            from noveum_api_client.api import telemetry
-
-            assert telemetry is not None
-
-
-class TestAIChatsWrappers:
-    """Test AI chats API wrappers"""
-
-    def test_ai_chats_module_exists(self):
-        """Test that AI chats module exists"""
-        try:
-            from noveum_api_client.api import ai_chats
-
-            assert ai_chats is not None
-        except ImportError:
-            # Module may not exist or be named differently
-            assert True
+        assert status is not None
 
 
 class TestModuleStructure:
@@ -119,7 +59,11 @@ class TestModuleStructure:
         assert hasattr(api, "datasets")
         assert hasattr(api, "traces")
         assert hasattr(api, "scorers")
-        assert hasattr(api, "auth")
+        assert hasattr(api, "scorer_results")
+        assert hasattr(api, "projects")
+        assert hasattr(api, "etl_jobs")
+        assert hasattr(api, "health")
+        assert hasattr(api, "status")
 
     def test_client_import_works(self):
         """Test that Client can be imported"""
@@ -175,6 +119,18 @@ class TestAsyncSupportAcrossModules:
         from noveum_api_client.api.scorers import get_api_v1_scorers
 
         assert hasattr(get_api_v1_scorers, "asyncio_detailed")
+
+    def test_projects_has_async_support(self):
+        """Test projects module has async methods"""
+        from noveum_api_client.api.projects import get_api_v1_projects
+
+        assert hasattr(get_api_v1_projects, "asyncio_detailed")
+
+    def test_etl_jobs_has_async_support(self):
+        """Test etl_jobs module has async methods"""
+        from noveum_api_client.api.etl_jobs import get_api_v1_etl_jobs
+
+        assert hasattr(get_api_v1_etl_jobs, "asyncio_detailed")
 
 
 class TestPaginationSupportAcrossModules:

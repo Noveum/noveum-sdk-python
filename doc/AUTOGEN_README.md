@@ -1,17 +1,17 @@
 # Noveum SDK - Auto-Generated from OpenAPI
 
-This is a **complete, auto-generated Python SDK** for the Noveum.ai API, generated directly from the OpenAPI specification.
+This is a **Python SDK** for the Noveum.ai API, generated directly from the OpenAPI specification.
 
-## ✨ Features
+## Features
 
-### Complete API Coverage
-- **37 v1 API endpoints** fully implemented
+### Core API Coverage
+- **8 API endpoint categories** fully implemented
 - **All request/response models** with full type hints
 - **Both sync and async** support for every endpoint
 - **Full IDE support** with autocomplete and type checking
 
 ### Generated from OpenAPI
-- Auto-generated from `noveum-openapi.json`
+- Auto-generated from OpenAPI specification
 - Guaranteed to stay in sync with API spec
 - Easy to regenerate when API changes
 - Professional code quality
@@ -29,12 +29,8 @@ datasets = client.list_datasets()
 # Get dataset items
 items = client.get_dataset_items("my-dataset")
 
-# Score outputs
-result = client.score_output(
-    item_id="item-123",
-    output="model output",
-    scorers=["factuality_scorer"]
-)
+# Get evaluation results
+results = client.get_results(dataset_slug="my-dataset")
 ```
 
 Or use the low-level generated client for full control:
@@ -46,10 +42,10 @@ client = Client(base_url="https://api.noveum.ai")
 response = get_api_v1_datasets.sync_detailed(client=client)
 ```
 
-## 📦 Package Structure
+## Package Structure
 
 ```
-noveum-sdk-autogen/
+noveum-sdk-python/
 ├── noveum_api_client/
 │   ├── __init__.py              # Main exports
 │   ├── client.py                # Generated client class
@@ -61,19 +57,16 @@ noveum-sdk-autogen/
 │   │   ├── scorer_results/      # Evaluation results
 │   │   ├── projects/            # Project operations
 │   │   ├── etl_jobs/            # ETL job operations
-│   │   └── ...                  # Other endpoints
-│   ├── models/                  # Generated Pydantic models
-│   │   ├── user.py
-│   │   ├── organization.py
-│   │   ├── dataset.py
-│   │   └── ...
+│   │   ├── health/              # Health check
+│   │   └── status/              # Status endpoint
+│   ├── models/                  # Generated data models
 │   ├── errors.py                # Error handling
 │   └── types.py                 # Type definitions
 ├── pyproject.toml               # Project configuration
-└── README.md                    # This file
+└── README.md                    # Main documentation
 ```
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Installation
 ```bash
@@ -101,35 +94,23 @@ print(f"Data: {response['data']}")
 # Get dataset items
 items = client.get_dataset_items("my-dataset")
 
-# Score an output
-result = client.score_output(
-    item_id="item-123",
-    output="model output",
-    scorers=["factuality_scorer"]
-)
+# Get results
+results = client.get_results()
 ```
 
-## 📚 API Reference
+## API Reference
 
 ### High-Level Client (`NoveumClient`)
 
 #### Methods
 
-**`list_datasets(limit=20, offset=0, visibility=None, organization_slug=None, include_versions=False)`**
+**`list_datasets(limit=20, offset=0)`**
 - List all datasets
 - Returns: Dict with status_code, data, headers
 
 **`get_dataset_items(dataset_slug, limit=20, offset=0)`**
 - Get items from a dataset
 - Returns: Dict with status_code, data, headers
-
-**`score_output(item_id, output, scorers, dataset_slug=None, **kwargs)`**
-- Score an agent/model output
-- Returns: Dict with scores and reasoning
-
-**`batch_score(items, scorers, **kwargs)`**
-- Score multiple outputs in batch
-- Returns: Dict with batch results
 
 **`get_results(dataset_slug=None, item_id=None, scorer_id=None, limit=100, offset=0)`**
 - Get evaluation results
@@ -158,12 +139,12 @@ async with Client(...) as client:
     response = await get_api_v1_datasets.asyncio_detailed(client=client)
 ```
 
-## 🔄 Regenerating from OpenAPI
+## Regenerating from OpenAPI
 
 When the API changes:
 
 ```bash
-# 1. Update noveum-openapi.json
+# 1. Update OpenAPI spec
 # 2. Fix any schema issues
 python3 scripts/fix_openapi.py
 
@@ -181,7 +162,7 @@ git add .
 git commit -m "Regenerate SDK from updated OpenAPI spec"
 ```
 
-## 🧪 Testing
+## Testing
 
 ### Run Tests
 ```bash
@@ -194,16 +175,22 @@ export NOVEUM_API_KEY="nv_..."
 pytest tests/integration/ -v
 ```
 
-## 🔐 Security
+## Security
 
 - API key from environment variable: `NOVEUM_API_KEY`
 - Bearer token in Authorization header
 - HTTPS only
 - No API keys in logs
 
-## 📋 API Endpoints
+## API Endpoints
 
-The SDK covers all v1 endpoints:
+The SDK covers these endpoint categories:
+
+### Health
+- `GET /api/health` - Health check
+
+### Status
+- `GET /api/v1/status` - API status
 
 ### Datasets
 - `GET /api/v1/datasets` - List datasets
@@ -249,7 +236,7 @@ The SDK covers all v1 endpoints:
 - `GET /api/v1/etl-jobs/{id}` - Get job
 - And more...
 
-## 💡 Examples
+## Examples
 
 ### CI/CD Regression Testing
 ```python
@@ -264,33 +251,10 @@ def test_agent_quality():
     # Evaluate each item
     for item in items["data"]:
         output = my_agent.run(item["input"])
-        result = client.score_output(
-            item_id=item["id"],
-            output=output,
-            scorers=["factuality_scorer", "relevance_scorer"]
-        )
+        result = client.get_results(item_id=item["id"])
         
         # Assert quality
-        assert result["data"]["overall_score"] > 0.8
-```
-
-### Batch Evaluation
-```python
-client = NoveumClient(api_key="nv_...")
-
-# Prepare items
-items = [
-    {"item_id": "1", "output": "output1"},
-    {"item_id": "2", "output": "output2"},
-]
-
-# Batch score
-result = client.batch_score(
-    items=items,
-    scorers=["factuality_scorer"]
-)
-
-print(f"Batch results: {result['data']}")
+        assert result["data"][0]["score"] > 0.8
 ```
 
 ### Using Low-Level API
@@ -311,7 +275,7 @@ print(f"Data: {response.parsed}")
 print(f"Headers: {response.headers}")
 ```
 
-## 🛠️ Development
+## Development
 
 ### Project Structure
 - `noveum_api_client/` - Generated SDK
@@ -333,27 +297,26 @@ To add convenience methods to the high-level client:
 3. Use underlying `self._client` to call API
 4. Add tests
 
-## 📞 Support
+## Support
 
 - **API Documentation**: https://api.noveum.ai/docs
-- **OpenAPI Spec**: noveum-openapi.json
 - **Issues**: Open on GitHub
 - **Email**: support@noveum.ai
 
-## 📜 License
+## License
 
 MIT License
 
-## ✨ Summary
+## Summary
 
-This is a **complete, professional-grade Python SDK** for Noveum.ai featuring:
+This is a **professional-grade Python SDK** for Noveum.ai featuring:
 
-✅ **All 37 v1 API endpoints** fully implemented  
-✅ **Full IDE support** with autocomplete and type hints  
-✅ **Both sync and async** for every endpoint  
-✅ **Auto-generated** from OpenAPI specification  
-✅ **High-level wrapper** for convenience  
-✅ **Production-ready** code quality  
-✅ **Comprehensive tests** included  
+- **8 API endpoint categories** fully implemented
+- **Full IDE support** with autocomplete and type hints
+- **Both sync and async** for every endpoint
+- **Auto-generated** from OpenAPI specification
+- **High-level wrapper** for convenience
+- **Production-ready** code quality
+- **Comprehensive tests** included
 
-**Ready to use immediately!** 🚀
+**Ready to use immediately!**

@@ -47,7 +47,7 @@ dev = [
 [project.urls]
 Homepage = "https://noveum.ai"
 Repository = "https://github.com/Noveum/noveum-sdk-python"
-Documentation = "https://docs.noveum.ai"
+Documentation = "https://noveum.ai/docs"
 "Bug Tracker" = "https://github.com/Noveum/noveum-sdk-python/issues"
 Changelog = "https://github.com/Noveum/noveum-sdk-python/blob/main/CHANGELOG.md"
 
