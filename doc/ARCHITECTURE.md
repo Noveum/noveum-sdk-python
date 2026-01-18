@@ -351,22 +351,42 @@ def list_datasets(
 
 ```
 tests/
-└── test_integration_complete.py
-    ├── TestDatasets
-    ├── TestTraces
-    ├── TestScorers
-    ├── TestScorerResults
-    ├── TestHighLevelClient
-    └── TestClientConfiguration
+├── unit/                          # Unit tests
+│   ├── test_client_wrapper.py
+│   ├── test_datasets_wrappers.py
+│   ├── test_models.py
+│   └── ...
+└── integration/                   # Integration tests with real API
+    ├── conftest.py                # Shared fixtures and configuration
+    ├── test_traces.py             # 24 tests - traces + LangChain/LangGraph
+    ├── test_datasets.py           # 18 tests - full dataset lifecycle
+    ├── test_scorer_results.py     # 15 tests - scorer results CRUD
+    ├── test_scorers.py            # Scorer operations
+    ├── test_projects.py           # Project operations
+    └── test_etl_jobs.py           # ETL job operations
 ```
 
 ### Test Categories
 
 | Category | Purpose | Count |
 | :--- | :--- | :--- |
-| Unit Tests | Test individual methods | - |
-| Integration Tests | Test with real API | 10 |
-| Configuration Tests | Test client setup | 3 |
+| Unit Tests | Test individual methods | 20+ |
+| Integration Tests | Test with real API | 70+ |
+| LangChain Tests | E2E LLM tracing | 9 |
+
+### Integration Test Features
+
+- **Full Response Body Validation** - Not just status codes
+- **E2E Lifecycle Testing** - Create → Read → Update → Delete
+- **LangChain/LangGraph Integration** - Real LLM calls with Gemini
+- **Automatic Cleanup** - Tests clean up after themselves
+
+### Environment Variables
+
+```bash
+NOVEUM_API_KEY="nv_..."      # Required for all tests
+GEMINI_API_KEY="..."         # Required for LangChain/LangGraph tests
+```
 
 ## Performance Considerations
 

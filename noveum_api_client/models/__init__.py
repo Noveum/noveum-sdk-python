@@ -1,5 +1,6 @@
 """A client library for accessing Noveum API"""
 
+from .delete_api_v1_audio_by_id_response_200 import DeleteApiV1AudioByIdResponse200
 from .delete_api_v1_datasets_by_dataset_slug_items_body import DeleteApiV1DatasetsByDatasetSlugItemsBody
 from .get_api_v1_datasets_by_dataset_slug_items_sort_order import GetApiV1DatasetsByDatasetSlugItemsSortOrder
 from .get_api_v1_datasets_visibility import GetApiV1DatasetsVisibility
@@ -85,6 +86,7 @@ from .put_api_v1_scorers_results_by_dataset_slug_by_item_id_by_scorer_id_body im
 from .put_api_v1_scorers_results_by_dataset_slug_by_item_id_by_scorer_id_body_metadata import PutApiV1ScorersResultsByDatasetSlugByItemIdByScorerIdBodyMetadata
 
 __all__ = (
+    "DeleteApiV1AudioByIdResponse200",
     "DeleteApiV1DatasetsByDatasetSlugItemsBody",
     "GetApiV1DatasetsByDatasetSlugItemsSortOrder",
     "GetApiV1DatasetsVisibility",

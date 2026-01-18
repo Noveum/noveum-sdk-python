@@ -230,6 +230,91 @@ api_key = os.getenv("NOVEUM_API_KEY")
 client = NoveumClient(api_key=api_key)
 ```
 
+## LangChain/LangGraph Integration
+
+The SDK includes a tracing callback handler for LangChain and LangGraph.
+
+### Setup
+
+```bash
+pip install noveum-trace langchain-google-genai langgraph
+export NOVEUM_API_KEY="nv_..."
+export GEMINI_API_KEY="..."
+```
+
+### LangChain Example
+
+```python
+import os
+import noveum_trace
+from noveum_trace import NoveumTraceCallbackHandler
+from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.output_parsers import StrOutputParser
+
+# Initialize Noveum Trace
+noveum_trace.init(
+    api_key=os.getenv("NOVEUM_API_KEY"),
+    project="my-chatbot",
+    environment="development"
+)
+
+# Create callback handler
+handler = NoveumTraceCallbackHandler()
+
+# Create chain using LCEL
+prompt = ChatPromptTemplate.from_template("Summarize: {text}")
+llm = ChatGoogleGenerativeAI(
+    model="gemini-2.0-flash",
+    google_api_key=os.getenv("GEMINI_API_KEY")
+)
+chain = prompt | llm | StrOutputParser()
+
+# Run with tracing
+result = chain.invoke(
+    {"text": "Your document here"},
+    config={"callbacks": [handler]}
+)
+```
+
+### LangGraph Example
+
+```python
+from langgraph.graph import StateGraph, START, END
+from typing import TypedDict
+
+class State(TypedDict):
+    question: str
+    answer: str
+
+def ask_llm(state: State) -> State:
+    llm = ChatGoogleGenerativeAI(
+        model="gemini-2.0-flash",
+        google_api_key=os.getenv("GEMINI_API_KEY")
+    )
+    prompt = ChatPromptTemplate.from_template("Answer: {question}")
+    chain = prompt | llm | StrOutputParser()
+    
+    answer = chain.invoke(
+        {"question": state["question"]},
+        config={"callbacks": [handler]}
+    )
+    return {"question": state["question"], "answer": answer}
+
+# Build graph
+builder = StateGraph(State)
+builder.add_node("ask", ask_llm)
+builder.add_edge(START, "ask")
+builder.add_edge("ask", END)
+graph = builder.compile()
+
+# Run with tracing
+result = graph.invoke(
+    {"question": "What is Python?", "answer": ""},
+    config={"callbacks": [handler]}
+)
+```
+
 ## Response Format
 
 All high-level client methods return a dictionary with:

@@ -164,16 +164,33 @@ git commit -m "Regenerate SDK from updated OpenAPI spec"
 
 ## Testing
 
-### Run Tests
+### Run Unit Tests
 ```bash
-pytest tests/ -v
+pytest tests/unit/ -v
 ```
 
-### Test with Real API
+### Run Integration Tests (requires API key)
 ```bash
 export NOVEUM_API_KEY="nv_..."
 pytest tests/integration/ -v
 ```
+
+### Run LangChain/LangGraph Tests (requires Gemini API key)
+```bash
+export NOVEUM_API_KEY="nv_..."
+export GEMINI_API_KEY="..."
+pytest tests/integration/test_traces.py -v -k "LangChain or LangGraph"
+```
+
+### Test Coverage by Module
+
+| Test File | Tests | Coverage |
+| :--- | :--- | :--- |
+| `test_traces.py` | 24 | Traces API + LangChain/LangGraph E2E |
+| `test_datasets.py` | 18 | Full dataset lifecycle |
+| `test_scorer_results.py` | 15 | Scorer results CRUD |
+| `test_scorers.py` | - | Scorer operations |
+| `test_projects.py` | - | Project operations |
 
 ## Security
 

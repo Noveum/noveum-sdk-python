@@ -323,6 +323,90 @@ async def main():
 asyncio.run(main())
 ```
 
+## LangChain/LangGraph Integration
+
+The SDK includes tracing support for LangChain and LangGraph applications using the `noveum-trace` package.
+
+### Setup
+
+```bash
+pip install noveum-trace langchain-google-genai langgraph
+export NOVEUM_API_KEY="nv_..."
+export GEMINI_API_KEY="..."
+```
+
+### LangChain Example
+
+```python
+import os
+import noveum_trace
+from noveum_trace import NoveumTraceCallbackHandler
+from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.output_parsers import StrOutputParser
+
+# Initialize Noveum Trace
+noveum_trace.init(
+    api_key=os.getenv("NOVEUM_API_KEY"),
+    project="my-chatbot",
+    environment="development"
+)
+
+# Create callback handler
+handler = NoveumTraceCallbackHandler()
+
+# Create chain using LCEL
+prompt = ChatPromptTemplate.from_template("Summarize: {text}")
+llm = ChatGoogleGenerativeAI(
+    model="gemini-2.0-flash",
+    google_api_key=os.getenv("GEMINI_API_KEY")
+)
+chain = prompt | llm | StrOutputParser()
+
+# Run with tracing - all LLM calls are automatically traced
+result = chain.invoke(
+    {"text": "Your document here"},
+    config={"callbacks": [handler]}
+)
+```
+
+### LangGraph Example
+
+```python
+from langgraph.graph import StateGraph, START, END
+from typing import TypedDict
+
+class State(TypedDict):
+    question: str
+    answer: str
+
+def ask_llm(state: State) -> State:
+    llm = ChatGoogleGenerativeAI(
+        model="gemini-2.0-flash",
+        google_api_key=os.getenv("GEMINI_API_KEY")
+    )
+    prompt = ChatPromptTemplate.from_template("Answer: {question}")
+    chain = prompt | llm | StrOutputParser()
+    
+    answer = chain.invoke(
+        {"question": state["question"]},
+        config={"callbacks": [handler]}
+    )
+    return {"question": state["question"], "answer": answer}
+
+# Build and run graph with tracing
+builder = StateGraph(State)
+builder.add_node("ask", ask_llm)
+builder.add_edge(START, "ask")
+builder.add_edge("ask", END)
+graph = builder.compile()
+
+result = graph.invoke(
+    {"question": "What is Python?", "answer": ""},
+    config={"callbacks": [handler]}
+)
+```
+
 ## Configuration
 
 ### Custom Base URL
@@ -450,12 +534,27 @@ pytest tests/unit/ -v
 export NOVEUM_API_KEY="nv_your_api_key"
 pytest tests/integration/ -v
 
+# Run LangChain/LangGraph tests (requires Gemini API key)
+export NOVEUM_API_KEY="nv_your_api_key"
+export GEMINI_API_KEY="your_gemini_api_key"
+pytest tests/integration/test_traces.py -v -k "LangChain or LangGraph"
+
 # Run all tests
 pytest tests/ -v
 
 # Run specific test
 pytest tests/unit/test_client_wrapper.py::TestNoveumClientInit -v
 ```
+
+### Integration Test Coverage
+
+| Test File | Tests | Coverage |
+| :--- | :--- | :--- |
+| `test_traces.py` | 24 | Traces API + LangChain/LangGraph E2E |
+| `test_datasets.py` | 18 | Full dataset lifecycle (CRUD + versioning) |
+| `test_scorer_results.py` | 15 | Scorer results with prerequisites |
+| `test_scorers.py` | - | Scorer CRUD operations |
+| `test_projects.py` | - | Project management |
 
 ### Run with Coverage
 

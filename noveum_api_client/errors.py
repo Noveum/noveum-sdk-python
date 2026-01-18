@@ -1,5 +1,7 @@
 """Contains shared errors types that can be raised from API functions"""
 
+from .constants import UNEXPECTED_STATUS_MESSAGE
+
 
 class UnexpectedStatus(Exception):
     """Raised by api functions when the response status an undocumented status and Client.raise_on_unexpected_status is True"""
@@ -9,7 +11,10 @@ class UnexpectedStatus(Exception):
         self.content = content
 
         super().__init__(
-            f"Unexpected status code: {status_code}\n\nResponse content:\n{content.decode(errors='ignore')}"
+            UNEXPECTED_STATUS_MESSAGE.format(
+                status_code=status_code,
+                content=content.decode(errors="ignore")
+            )
         )
 
 
