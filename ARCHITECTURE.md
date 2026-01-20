@@ -26,10 +26,10 @@ This hybrid approach combines the best of both worlds: automatic API coverage wi
                               ↓
 ┌─────────────────────────────────────────────────────────────┐
 │           Generated API Client (Client)                     │
-│  • 37 v1 endpoints                                          │
-│  • Full OpenAPI coverage                                    │
+│  • 47 core endpoints across 8 categories                    │
+│  • Core evaluation API coverage                             │
 │  • Both sync and async                                      │
-│  • Type-safe with Pydantic                                  │
+│  • Type-safe with Pydantic (77 models)                      │
 └─────────────────────────────────────────────────────────────┘
                               ↓
 ┌─────────────────────────────────────────────────────────────┐
@@ -97,7 +97,7 @@ print(f"Headers: {response.headers}")
 ```
 
 ### Advantages
-- ✅ Full API coverage (all 37 endpoints)
+- ✅ Core API coverage (47 endpoints across 8 categories)
 - ✅ Complete type safety
 - ✅ IDE autocomplete
 - ✅ Both sync and async
@@ -541,11 +541,12 @@ version = "1.0.1"  # Bump version
 
 The Noveum SDK provides a professional, well-architected Python client with:
 
-- ✅ Complete API coverage (37+ endpoints)
+- ✅ Core API coverage (47 endpoints across 8 categories)
 - ✅ Two-layer architecture (generated + wrapper)
-- ✅ Full type safety with Pydantic
+- ✅ Full type safety with Pydantic (77 models)
 - ✅ Both sync and async support
 - ✅ Excellent developer experience
 - ✅ Production-ready code quality
+- ✅ Focused on evaluation and data management
 
 The hybrid approach ensures both automatic API coverage and optimized developer experience.

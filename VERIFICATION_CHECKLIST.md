@@ -1,10 +1,13 @@
-# Noveum SDK - Verification Checklist
+# Noveum SDK - Verification Checklist (v2.0.0)
 
 **Purpose**: Comprehensive checklist for engineers to validate the Noveum SDK before production deployment.
 
+**Version**: 2.0.0 (Core APIs Only - 8 categories, 47 endpoints)
 **Duration**: ~2-3 hours for complete verification  
 **Tools**: Python 3.10+, pytest, Jupyter Notebook  
 **API Key Required**: Yes (test key provided)
+
+**Note**: v2.0.0 removed 15 non-core API categories. Only core evaluation APIs remain: datasets, traces, scorers, scorer_results, etl_jobs, audio, health, status.
 
 ---
 

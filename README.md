@@ -4,16 +4,16 @@
 ![Python](https://img.shields.io/badge/python-3.10%2B-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
-A professional Python SDK for the [Noveum.ai](https://noveum.ai) API. Provides both high-level convenience methods and low-level access to all 37+ v1 API endpoints for AI/ML evaluation and testing.
+A professional Python SDK for the [Noveum.ai](https://noveum.ai) API. Provides both high-level convenience methods and low-level access to core evaluation and data management APIs (47 endpoints across 8 categories).
 
 ## Features
 
-✨ **Complete API Coverage** - All 37 v1 endpoints fully implemented  
+✨ **Core API Coverage** - 47 endpoints across 8 core evaluation categories
 🚀 **Full IDE Support** - Complete type hints, autocomplete, and docstrings  
 ⚡ **Async & Sync** - Both async/await and synchronous support  
 🔐 **Secure** - API key authentication, HTTPS only, proper error handling  
 📚 **Well-Documented** - Comprehensive guides, examples, and inline documentation  
-🧪 **Production-Ready** - Tested with real API, 100% test coverage  
+🧪 **Production-Ready** - Tested with real API, focused on core evaluation workflows
 🎯 **Easy to Use** - High-level wrapper for common operations  
 
 ## Quick Start
@@ -622,13 +622,16 @@ noveum-sdk-autogen/
 │   ├── noveum_client.py         # High-level wrapper
 │   ├── errors.py                # Error definitions
 │   ├── types.py                 # Type definitions
-│   ├── api/                     # Generated API endpoints
-│   │   ├── datasets/            # Dataset operations
-│   │   ├── traces/              # Trace operations
-│   │   ├── scorers/             # Scorer operations
-│   │   ├── scorer_results/      # Evaluation results
-│   │   └── ...                  # Other endpoints
-│   └── models/                  # Pydantic data models
+│   ├── api/                     # Generated API endpoints (8 categories, 47 endpoints)
+│   │   ├── audio/               # Audio processing
+│   │   ├── datasets/            # Dataset operations (15 endpoints)
+│   │   ├── etl_jobs/            # ETL job management (9 endpoints)
+│   │   ├── health/              # Health checks (1 endpoint)
+│   │   ├── scorer_results/      # Evaluation results (6 endpoints)
+│   │   ├── scorers/             # Scorer management (5 endpoints)
+│   │   ├── status/              # Status endpoints (1 endpoint)
+│   │   └── traces/              # Trace operations (10 endpoints)
+│   └── models/                  # Pydantic data models (77 models)
 ├── tests/                       # Test suite
 │   └── test_integration_complete.py
 ├── README.md                    # This file
@@ -691,6 +694,8 @@ See CHANGELOG.md for version history and updates.
 
 ---
 
-**Status**: ✅ Production Ready  
-**Last Updated**: December 17, 2025  
-**Version**: 1.0.0
+**Status**: ✅ Production Ready (Core APIs Only)
+**Version**: 2.0.0 (Breaking Change - Non-core APIs removed)
+**API Categories**: 8 core evaluation categories
+**Endpoints**: 47 total endpoints
+**Models**: 77 Pydantic models

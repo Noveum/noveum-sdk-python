@@ -4,9 +4,9 @@ This is a **complete, auto-generated Python SDK** for the Noveum.ai API, generat
 
 ## ✨ Features
 
-### Complete API Coverage
-- **37 v1 API endpoints** fully implemented
-- **All request/response models** with full type hints
+### Core API Coverage
+- **47 core endpoints** across 8 evaluation categories
+- **77 request/response models** with full type hints
 - **Both sync and async** support for every endpoint
 - **Full IDE support** with autocomplete and type checking
 
@@ -203,9 +203,9 @@ pytest tests/integration/ -v
 
 ## 📋 API Endpoints
 
-The SDK covers all v1 endpoints:
+The SDK covers 8 core evaluation API categories with 47 endpoints:
 
-### Datasets
+### Datasets (15 endpoints)
 - `GET /api/v1/datasets` - List datasets
 - `POST /api/v1/datasets` - Create dataset
 - `GET /api/v1/datasets/{slug}` - Get dataset
@@ -213,41 +213,43 @@ The SDK covers all v1 endpoints:
 - `DELETE /api/v1/datasets/{slug}` - Delete dataset
 - `GET /api/v1/datasets/{datasetSlug}/items` - List items
 - `POST /api/v1/datasets/{datasetSlug}/items` - Create item
-- `GET /api/v1/datasets/{datasetSlug}/items/{itemId}` - Get item
-- `DELETE /api/v1/datasets/{datasetSlug}/items/{itemId}` - Delete item
-- And more...
+- And more dataset operations...
 
-### Traces
+### Traces (10 endpoints)
 - `GET /api/v1/traces` - List traces
 - `POST /api/v1/traces` - Create traces
 - `GET /api/v1/traces/{id}` - Get trace
 - `GET /api/v1/traces/{traceId}/spans` - Get spans
-- And more...
+- And more trace operations...
 
-### Scorers
+### Scorers (5 endpoints)
 - `GET /api/v1/scorers` - List scorers
 - `POST /api/v1/scorers` - Create scorer
 - `GET /api/v1/scorers/{id}` - Get scorer
 - `PUT /api/v1/scorers/{id}` - Update scorer
 - `DELETE /api/v1/scorers/{id}` - Delete scorer
 
-### Scorer Results
+### Scorer Results (6 endpoints)
 - `GET /api/v1/scorers/results` - List results
 - `POST /api/v1/scorers/results` - Create result
 - `POST /api/v1/scorers/results/batch` - Batch results
-- And more...
+- And more result operations...
 
-### Projects
-- `GET /api/v1/projects` - List projects
-- `POST /api/v1/projects` - Create project
-- `GET /api/v1/projects/{id}` - Get project
-- And more...
-
-### ETL Jobs
+### ETL Jobs (9 endpoints)
 - `GET /api/v1/etl-jobs` - List jobs
 - `POST /api/v1/etl-jobs` - Create job
 - `GET /api/v1/etl-jobs/{id}` - Get job
-- And more...
+- `POST /api/v1/etl-jobs/{id}/trigger` - Trigger job
+- And more ETL operations...
+
+### Audio
+- Audio processing endpoints
+
+### Health (1 endpoint)
+- Health check endpoint
+
+### Status (1 endpoint)
+- Status endpoint
 
 ## 💡 Examples
 
@@ -346,14 +348,14 @@ MIT License
 
 ## ✨ Summary
 
-This is a **complete, professional-grade Python SDK** for Noveum.ai featuring:
+This is a **professional-grade Python SDK** for Noveum.ai featuring:
 
-✅ **All 37 v1 API endpoints** fully implemented  
+✅ **47 core endpoints** across 8 evaluation categories
 ✅ **Full IDE support** with autocomplete and type hints  
 ✅ **Both sync and async** for every endpoint  
 ✅ **Auto-generated** from OpenAPI specification  
 ✅ **High-level wrapper** for convenience  
 ✅ **Production-ready** code quality  
-✅ **Comprehensive tests** included  
+✅ **77 Pydantic models** for type safety
 
-**Ready to use immediately!** 🚀
+**Focused on core evaluation and data management!** 🚀

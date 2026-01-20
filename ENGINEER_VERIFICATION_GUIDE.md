@@ -1,9 +1,12 @@
-# Engineer Verification Guide - Noveum SDK
+# Engineer Verification Guide - Noveum SDK (v2.0.0)
 
 **Target Audience**: QA Engineers, DevOps Engineers, Integration Engineers  
 **Time Estimate**: 2-3 hours  
 **Difficulty**: Intermediate  
-**Status**: Production Ready
+**Status**: Production Ready  
+**Version**: 2.0.0 (Core APIs Only - 8 categories, 47 endpoints)
+
+**Important**: v2.0.0 is a breaking change. Only core evaluation APIs remain: datasets, traces, scorers, scorer_results, etl_jobs, audio, health, status. All auth, projects, admin, and other non-core APIs have been removed.
 
 ---
 

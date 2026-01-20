@@ -1,4 +1,4 @@
-# Noveum SDK - Complete Usage Guide
+# Noveum SDK - Complete Usage Guide (v2.0.0 - Core APIs)
 
 ## Quick Start
 
