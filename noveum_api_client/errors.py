@@ -11,10 +11,7 @@ class UnexpectedStatus(Exception):
         self.content = content
 
         super().__init__(
-            UNEXPECTED_STATUS_MESSAGE.format(
-                status_code=status_code,
-                content=content.decode(errors="ignore")
-            )
+            UNEXPECTED_STATUS_MESSAGE.format(status_code=status_code, content=content.decode(errors="ignore"))
         )
 
 
