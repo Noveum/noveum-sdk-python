@@ -26,7 +26,9 @@ class PostApiV1DatasetsByDatasetSlugItemsBodyItemsItemContentConversationContext
         d = dict(src_dict)
         post_api_v1_datasets_by_dataset_slug_items_body_items_item_content_conversation_context = cls()
 
-        post_api_v1_datasets_by_dataset_slug_items_body_items_item_content_conversation_context.additional_properties = d
+        post_api_v1_datasets_by_dataset_slug_items_body_items_item_content_conversation_context.additional_properties = (
+            d
+        )
         return post_api_v1_datasets_by_dataset_slug_items_body_items_item_content_conversation_context
 
     @property

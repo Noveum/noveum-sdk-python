@@ -39,7 +39,7 @@
 
 - [ ] **1.6** Set API key
   ```bash
-  export NOVEUM_API_KEY="nv_uxVvrZzzaNvO49TAFQEe9CLlTBqELMLm"
+  export NOVEUM_API_KEY="******"
   ```
 
 ---

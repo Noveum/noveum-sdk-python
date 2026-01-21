@@ -1,0 +1,172 @@
+[
+  {
+    "item_id": "conv_001",
+    "item_type": "conversational",
+    "content": {
+      "input": "What is the capital of France?",
+      "output": "The capital of France is Paris.",
+      "agent_name": "assistant",
+      "agent_role": "helpful_assistant",
+      "system_prompt": "You are a helpful assistant."
+    },
+    "metadata": {
+      "model": "gpt-4",
+      "tokens": 15,
+      "latency_ms": 850,
+      "organization": "Noveum Inc"
+    }
+  },
+  {
+    "item_id": "conv_002",
+    "item_type": "conversational",
+    "content": {
+      "input": "Explain quantum computing briefly",
+      "output": "Quantum computing uses quantum mechanics principles like superposition and entanglement to perform calculations that would be impossible for classical computers.",
+      "agent_name": "assistant",
+      "agent_role": "explainer",
+      "system_prompt": "You are a helpful assistant."
+    },
+    "metadata": {
+      "model": "gpt-4",
+      "tokens": 38,
+      "latency_ms": 1200,
+      "organization": "Noveum Inc"
+    }
+  },
+  {
+    "item_id": "conv_003",
+    "item_type": "conversational",
+    "content": {
+      "input": "Write a Python function to calculate factorial",
+      "output": "def factorial(n):\n    if n <= 1:\n        return 1\n    return n * factorial(n - 1)",
+      "agent_name": "code_assistant",
+      "agent_role": "coder",
+      "system_prompt": "You are a coding assistant."
+    },
+    "metadata": {
+      "model": "gpt-3.5-turbo",
+      "tokens": 42,
+      "latency_ms": 650,
+      "organization": "Noveum Inc"
+    }
+  },
+  {
+    "item_id": "conv_004",
+    "item_type": "conversational",
+    "content": {
+      "input": "What are the benefits of regular exercise?",
+      "output": "Regular exercise improves cardiovascular health, strengthens muscles, boosts mental health, helps maintain healthy weight, and increases energy levels.",
+      "agent_name": "assistant",
+      "agent_role": "health_advisor",
+      "system_prompt": "You are a helpful assistant."
+    },
+    "metadata": {
+      "model": "claude-3-sonnet",
+      "tokens": 45,
+      "latency_ms": 920,
+      "organization": "Noveum Inc"
+    }
+  },
+  {
+    "item_id": "conv_005",
+    "item_type": "conversational",
+    "content": {
+      "input": "Translate 'Hello, how are you?' to Spanish",
+      "output": "Hola, ¿cómo estás?",
+      "agent_name": "translator",
+      "agent_role": "translator",
+      "system_prompt": "You are a translation assistant."
+    },
+    "metadata": {
+      "model": "gpt-3.5-turbo",
+      "tokens": 12,
+      "latency_ms": 450,
+      "organization": "Noveum Inc"
+    }
+  },
+  {
+    "item_id": "conv_006",
+    "item_type": "conversational",
+    "content": {
+      "input": "What is the difference between AI and ML?",
+      "output": "AI (Artificial Intelligence) is the broader concept of machines mimicking human intelligence, while ML (Machine Learning) is a subset of AI focused on learning from data without explicit programming.",
+      "agent_name": "assistant",
+      "agent_role": "tech_explainer",
+      "system_prompt": "You are a helpful assistant."
+    },
+    "metadata": {
+      "model": "claude-3-opus",
+      "tokens": 52,
+      "latency_ms": 1100,
+      "organization": "Noveum Inc"
+    }
+  },
+  {
+    "item_id": "conv_007",
+    "item_type": "conversational",
+    "content": {
+      "input": "Summarize the plot of Romeo and Juliet",
+      "output": "Romeo and Juliet is a tragedy about two young lovers from feuding families in Verona. They secretly marry but ultimately die by suicide due to miscommunication.",
+      "agent_name": "assistant",
+      "agent_role": "summarizer",
+      "system_prompt": "You are a helpful assistant."
+    },
+    "metadata": {
+      "model": "gpt-4",
+      "tokens": 48,
+      "latency_ms": 980,
+      "organization": "Noveum Inc"
+    }
+  },
+  {
+    "item_id": "conv_008",
+    "item_type": "conversational",
+    "content": {
+      "input": "What is the speed of light?",
+      "output": "The speed of light in a vacuum is approximately 299,792,458 meters per second (about 186,282 miles per second).",
+      "agent_name": "assistant",
+      "agent_role": "fact_provider",
+      "system_prompt": "You are a helpful assistant."
+    },
+    "metadata": {
+      "model": "gpt-3.5-turbo",
+      "tokens": 32,
+      "latency_ms": 520,
+      "organization": "Noveum Inc"
+    }
+  },
+  {
+    "item_id": "conv_009",
+    "item_type": "conversational",
+    "content": {
+      "input": "How do I make a cup of coffee?",
+      "output": "For a good cup of coffee: use fresh beans, grind just before brewing, use water at 195-205°F, maintain a 1:16 coffee-to-water ratio, and brew for 4-5 minutes.",
+      "agent_name": "assistant",
+      "agent_role": "practical_advisor",
+      "system_prompt": "You are a helpful assistant."
+    },
+    "metadata": {
+      "model": "claude-3-sonnet",
+      "tokens": 55,
+      "latency_ms": 890,
+      "organization": "Noveum Inc"
+    }
+  },
+  {
+    "item_id": "conv_010",
+    "item_type": "conversational",
+    "content": {
+      "input": "What is photosynthesis?",
+      "output": "Photosynthesis is the process by which plants convert sunlight, water, and carbon dioxide into glucose and oxygen using chlorophyll.",
+      "agent_name": "assistant",
+      "agent_role": "science_explainer",
+      "system_prompt": "You are a helpful assistant."
+    },
+    "metadata": {
+      "model": "gpt-4",
+      "tokens": 38,
+      "latency_ms": 780,
+      "organization": "Noveum Inc"
+    }
+  }
+]
