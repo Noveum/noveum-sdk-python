@@ -5,6 +5,25 @@ All notable changes to the Noveum SDK Python client will be documented in this f
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2026-01-21
+
+### Added
+- Enhanced integration test coverage for complete API workflows
+- Improved security with removal of potentially sensitive API endpoints
+- Comprehensive test suite for API keys and telemetry
+- Updated documentation for testing procedures
+
+### Changed
+- Streamlined CI/CD pipeline by removing redundant workflow files
+- Improved test organization and structure
+- Enhanced error handling and logging in integration tests
+- Better test fixtures and helper utilities
+
+### Fixed
+- Test reliability improvements across all integration tests
+- Documentation references and internal links
+- Test cleanup and resource management
+
 ## [1.0.3] - 2026-01-12
 
 ### Added

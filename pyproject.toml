@@ -1,7 +1,7 @@
 # PEP 621 compliant project metadata for pip compatibility
 [project]
 name = "noveum-sdk"
-version = "1.0.3"
+version = "1.1.0"
 description = "Official Python SDK for the Noveum.ai API - AI/ML evaluation and testing platform"
 authors = [
     {name = "Noveum Team", email = "team@noveum.ai"}
