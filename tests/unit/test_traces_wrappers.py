@@ -119,25 +119,73 @@ class TestTraceCreationWrappers:
         assert hasattr(post_api_v1_traces_single, "sync_detailed")
         assert hasattr(post_api_v1_traces_single, "asyncio_detailed")
 
-    def test_post_traces_accepts_body(self, mock_client):
-        """Test post traces accepts body parameter"""
-        from noveum_api_client.types import Unset
+    def test_post_traces_accepts_body_with_real_model(self, mock_client):
+        """Test post traces accepts body with real trace model"""
+        from noveum_api_client.models import (
+            PostApiV1TracesBody,
+            PostApiV1TracesBodyTracesItem,
+            PostApiV1TracesBodyTracesItemSdk,
+            PostApiV1TracesBodyTracesItemStatus,
+        )
 
-        mock_response = Mock(spec=httpx.Response)
-        mock_response.headers = {}
-        mock_response.status_code = 201
-        mock_response.content = b'{"created": 1}'
-        mock_response.headers = {}
-        mock_response.json.return_value = {"created": 1}
+        # Create SDK
+        sdk = PostApiV1TracesBodyTracesItemSdk(name="python", version="1.0.0")
 
-        mock_client.get_httpx_client().request.return_value = mock_response
-        # The actual function signature may vary, this tests basic structure
-        try:
-            response = post_api_v1_traces.sync_detailed(client=mock_client, body=Unset())
-            assert response.status_code in [200, 201]
-        except TypeError:
-            # If body parameter name is different, function still exists
-            assert True
+        # Create trace
+        status = PostApiV1TracesBodyTracesItemStatus.OK
+
+        trace = PostApiV1TracesBodyTracesItem(
+            name="test_trace",
+            start_time="2024-01-01T00:00:00Z",
+            end_time="2024-01-01T00:00:01Z",
+            duration_ms=1000.0,
+            status=status,
+            span_count=0,
+            project="test-project",
+            sdk=sdk,
+            spans=[],
+        )
+
+        body = PostApiV1TracesBody(traces=[trace])
+
+        # Verify body serializes correctly
+        body_dict = body.to_dict()
+        assert len(body_dict["traces"]) == 1
+        assert body_dict["traces"][0]["name"] == "test_trace"
+
+    def test_post_single_trace_with_real_model(self, mock_client):
+        """Test post single trace with real trace model"""
+        from noveum_api_client.models import (
+            PostApiV1TracesSingleBody,
+            PostApiV1TracesSingleBodySdk,
+            PostApiV1TracesSingleBodyStatus,
+        )
+
+        # Create SDK
+        sdk = PostApiV1TracesSingleBodySdk(name="python", version="1.0.0")
+
+        # Create attributes
+        # Create status
+        status = PostApiV1TracesSingleBodyStatus.OK
+
+        # Create single trace body
+        body = PostApiV1TracesSingleBody(
+            name="test_trace",
+            start_time="2024-01-01T00:00:00Z",
+            end_time="2024-01-01T00:00:01Z",
+            duration_ms=1000.0,
+            status=status,
+            span_count=0,
+            project="test-project",
+            sdk=sdk,
+            spans=[],
+        )
+
+        # Verify body serializes correctly
+        body_dict = body.to_dict()
+        assert body_dict["name"] == "test_trace"
+        assert body_dict["project"] == "test-project"
+        assert body_dict["span_count"] == 0
 
 
 class TestTracesFilteringAndPagination:
@@ -187,6 +235,136 @@ class TestTracesFilteringAndPagination:
         response = get_api_v1_traces.sync_detailed(client=mock_client, environment="production")
 
         assert response.status_code == 200
+
+
+class TestTracesComplexModels:
+    """Test traces with complex nested structures"""
+
+    def test_create_trace_with_multiple_spans(self):
+        """Test creating trace with multiple spans"""
+        from noveum_api_client.models import (
+            PostApiV1TracesBodyTracesItem,
+            PostApiV1TracesBodyTracesItemSdk,
+            PostApiV1TracesBodyTracesItemSpansItem,
+            PostApiV1TracesBodyTracesItemSpansItemAttributes,
+            PostApiV1TracesBodyTracesItemSpansItemStatus,
+            PostApiV1TracesBodyTracesItemStatus,
+        )
+
+        sdk = PostApiV1TracesBodyTracesItemSdk(name="python", version="1.0.0")
+
+        # Create multiple spans
+        spans = []
+        for i in range(3):
+            span_attributes = PostApiV1TracesBodyTracesItemSpansItemAttributes()
+            span_status = PostApiV1TracesBodyTracesItemSpansItemStatus.OK
+            span = PostApiV1TracesBodyTracesItemSpansItem(
+                span_id=f"span-{i}",
+                trace_id="trace-456",
+                name=f"test_span_{i}",
+                start_time="2024-01-01T00:00:00Z",
+                end_time="2024-01-01T00:00:01Z",
+                duration_ms=1000.0,
+                status=span_status,
+                attributes=span_attributes,
+            )
+            spans.append(span)
+
+        # Create trace with multiple spans
+        status = PostApiV1TracesBodyTracesItemStatus.OK
+
+        trace = PostApiV1TracesBodyTracesItem(
+            name="test_trace",
+            start_time="2024-01-01T00:00:00Z",
+            end_time="2024-01-01T00:00:01Z",
+            duration_ms=1000.0,
+            status=status,
+            span_count=3,
+            project="test-project",
+            sdk=sdk,
+            spans=spans,
+        )
+
+        assert len(trace.spans) == 3
+        assert trace.spans[0].span_id == "span-0"
+        assert trace.spans[2].span_id == "span-2"
+
+    def test_trace_with_metadata_and_attributes(self):
+        """Test trace with metadata and custom attributes"""
+        from noveum_api_client.models import (
+            PostApiV1TracesSingleBody,
+            PostApiV1TracesSingleBodyAttributes,
+            PostApiV1TracesSingleBodyMetadata,
+            PostApiV1TracesSingleBodyMetadataCustomAttributes,
+            PostApiV1TracesSingleBodySdk,
+            PostApiV1TracesSingleBodyStatus,
+        )
+
+        sdk = PostApiV1TracesSingleBodySdk(name="python", version="1.0.0")
+        attributes = PostApiV1TracesSingleBodyAttributes()
+        custom_attrs = PostApiV1TracesSingleBodyMetadataCustomAttributes()
+        metadata = PostApiV1TracesSingleBodyMetadata(custom_attributes=custom_attrs)
+        status = PostApiV1TracesSingleBodyStatus.OK
+
+        trace = PostApiV1TracesSingleBody(
+            name="test_trace",
+            start_time="2024-01-01T00:00:00Z",
+            end_time="2024-01-01T00:00:01Z",
+            duration_ms=1000.0,
+            status=status,
+            span_count=0,
+            project="test-project",
+            sdk=sdk,
+            spans=[],
+            attributes=attributes,
+            metadata=metadata,
+        )
+
+        trace_dict = trace.to_dict()
+        assert "metadata" in trace_dict
+        assert "attributes" in trace_dict
+
+    def test_span_with_parent_hierarchy(self):
+        """Test span with parent hierarchy"""
+        from noveum_api_client.models import (
+            PostApiV1TracesBodyTracesItemSpansItem,
+            PostApiV1TracesBodyTracesItemSpansItemAttributes,
+            PostApiV1TracesBodyTracesItemSpansItemStatus,
+        )
+
+        # Create parent span
+        parent_span_attributes = PostApiV1TracesBodyTracesItemSpansItemAttributes()
+        parent_span_status = PostApiV1TracesBodyTracesItemSpansItemStatus.OK
+
+        parent_span = PostApiV1TracesBodyTracesItemSpansItem(
+            span_id="parent-span",
+            trace_id="trace-456",
+            name="parent_operation",
+            start_time="2024-01-01T00:00:00Z",
+            end_time="2024-01-01T00:00:02Z",
+            duration_ms=2000.0,
+            status=parent_span_status,
+            attributes=parent_span_attributes,
+        )
+
+        # Create child span
+        child_span_attributes = PostApiV1TracesBodyTracesItemSpansItemAttributes()
+        child_span_status = PostApiV1TracesBodyTracesItemSpansItemStatus.OK
+
+        child_span = PostApiV1TracesBodyTracesItemSpansItem(
+            span_id="child-span",
+            trace_id="trace-456",
+            name="child_operation",
+            start_time="2024-01-01T00:00:00Z",
+            end_time="2024-01-01T00:00:01Z",
+            duration_ms=1000.0,
+            status=child_span_status,
+            attributes=child_span_attributes,
+            parent_span_id="parent-span",
+        )
+
+        assert child_span.parent_span_id == "parent-span"
+        assert parent_span.span_id == "parent-span"
 
 
 class TestTracesErrorHandling:

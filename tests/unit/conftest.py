@@ -11,7 +11,7 @@ from unittest.mock import Mock, patch
 import pytest
 
 # Add parent directories to path
-sys.path.insert(0, os.path.abspath("../../.."))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 
 from noveum_api_client import Client, NoveumClient
 
@@ -58,7 +58,7 @@ def mock_noveum_client():
         mock_client_instance = Mock()
         mock_client_class.return_value = mock_client_instance
 
-        client = NoveumClient(api_key="test_key", base_url="https://api.noveum.ai")
+        client = NoveumClient(api_key="test_key")
         client._client = mock_client_instance
 
         yield client

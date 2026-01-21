@@ -125,3 +125,29 @@ SKIP_NO_AUDIO_ID = "No audio ID available from list or upload"
 SKIP_NO_AUDIO_ID_TO_DELETE = "No audio ID available to delete"
 SKIP_AUDIO_FILE_NOT_FOUND = "Audio file not found - may have been deleted"
 SKIP_NO_AUDIO_ID_VERIFY_DELETION = "No audio ID available to verify deletion"
+
+# =============================================================================
+# Expected Failure Messages (xfail)
+# =============================================================================
+
+# Backend Known Issues - 500 Errors
+XFAIL_AUDIO_DELETION_500 = "Audio deletion returned 500 (known backend issue)"
+XFAIL_DATASET_DELETION_500 = "Dataset deletion returned 500 (known backend issue)"
+XFAIL_REMOVE_DATASET_500 = "Remove dataset returned 500 (known backend issue)"
+XFAIL_DELETE_RESULT_500 = "Delete returned 500 (known backend issue)"
+XFAIL_RESULT_DELETION_500 = "Result deletion returned 500 (known backend issue)"
+XFAIL_SCORER_CREATION_500 = "Create scorer returned 500 (known backend issue)"
+XFAIL_ETL_JOB_CREATION_500 = "Create ETL job returned 500 (known backend issue)"
+XFAIL_ETL_JOB_DELETION_500 = "ETL job deletion returned 500 (known backend issue)"
+XFAIL_PROJECT_ASSOCIATE_DATASET_500 = "Associate dataset returned 500 (known backend issue)"
+XFAIL_PROJECT_DELETION_500 = "Project deletion returned 500 (known backend issue)"
+
+# Backend Known Issues - 403 ORG_CONTEXT_MISMATCH
+XFAIL_API_403_ORG_CONTEXT = "API returned 403 (ORG_CONTEXT_MISMATCH)"
+XFAIL_ETL_JOBS_403_ORG_CONTEXT = "ETL jobs API returned 403 (ORG_CONTEXT_MISMATCH)"
+XFAIL_PROJECTS_403_ORG_CONTEXT = "Projects API returned 403 (ORG_CONTEXT_MISMATCH)"
+
+# Trace Ingestion Delays
+XFAIL_TRACE_NOT_FOUND_INGESTION_DELAY = "Trace not found - may be ingestion delay"
+XFAIL_TRACE_SPANS_NOT_FOUND_DELAY = "Trace spans not found - may be ingestion delay"
+XFAIL_SINGLE_TRACE_NOT_FOUND_DELAY = "Single trace not found after waiting. May be ingestion delay."

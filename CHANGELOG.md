@@ -166,7 +166,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Links
 
-- [PyPI Package](https://pypi.org/project/noveum-sdk-python/)
+- [PyPI Package](https://pypi.org/project/noveum-sdk/)
 - [GitHub Repository](https://github.com/Noveum/noveum-sdk-python)
 - [Documentation](https://noveum.ai/docs)
 - [API Reference](https://noveum.ai/docs/api)

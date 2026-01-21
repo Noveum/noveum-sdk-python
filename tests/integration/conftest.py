@@ -14,30 +14,31 @@ import os
 import sys
 import time
 import uuid
+from collections.abc import Generator
 from datetime import datetime
-from typing import Any, Generator
+from typing import Any, cast
 
+import httpx
 import pytest
 
 # Add parent directories to path
-sys.path.insert(0, os.path.abspath("../.."))
-sys.path.insert(0, os.path.abspath("../../tests"))
-
-from noveum_api_client import Client, NoveumClient
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from constants import (
-    SKIP_NO_API_KEY,
-    SKIP_TEST_DATA_FILE_NOT_FOUND,
-    FAIL_INVALID_RESPONSE_FORMAT,
-    API_CALL_FAILED_HEADER,
+    API_CALL_FAILED_CONTENT,
     API_CALL_FAILED_EXPECTED,
     API_CALL_FAILED_GOT,
-    API_CALL_FAILED_RESPONSE,
-    API_CALL_FAILED_CONTENT,
+    API_CALL_FAILED_HEADER,
     API_CALL_FAILED_HINT,
+    API_CALL_FAILED_RESPONSE,
+    FAIL_INVALID_RESPONSE_FORMAT,
+    SKIP_NO_API_KEY,
+    SKIP_TEST_DATA_FILE_NOT_FOUND,
     STATUS_CODE_HINTS,
 )
 
+from noveum_api_client import Client, NoveumClient
 
 # =============================================================================
 # Constants
@@ -46,8 +47,8 @@ from constants import (
 DEFAULT_BASE_URL = "https://api.noveum.ai"
 DEFAULT_PROJECT = "SDK_Integration_Test"
 DEFAULT_ENVIRONMENT = "test"
-DEFAULT_ORG_SLUG = "noveum-inc"
-DEFAULT_ORG_NAME = "Noveum Inc"
+DEFAULT_ORG_SLUG = "magic-api"
+DEFAULT_ORG_NAME = "Magic API"
 WAIT_FOR_INGESTION_SECONDS = 3
 
 
@@ -99,11 +100,11 @@ def pytest_report_header(config: pytest.Config) -> list[str]:
     api_key = os.getenv("NOVEUM_API_KEY")
     api_key_status = "✓ Set" if api_key else "✗ Not Set"
     org_slug = os.getenv("NOVEUM_ORG_SLUG", DEFAULT_ORG_SLUG)
-    
+
     return [
         "",
         "=" * 70,
-        f"{DEFAULT_ORG_NAME} - SDK Integration Tests",
+        "Noveum SDK Integration Tests",
         "=" * 70,
         f"  API Key: {api_key_status}",
         f"  Base URL: {os.getenv('NOVEUM_BASE_URL', DEFAULT_BASE_URL)}",
@@ -175,7 +176,7 @@ def session_client(api_config: dict[str, str]) -> Generator[Client, None, None]:
     client = Client(
         base_url=api_config["base_url"],
         headers={"Authorization": f"Bearer {api_config['api_key']}"},
-        timeout=60.0,
+        timeout=httpx.Timeout(60.0),
     )
     yield client
 
@@ -185,7 +186,6 @@ def session_noveum_client(api_config: dict[str, str]) -> Generator[NoveumClient,
     """Provide a session-scoped high-level Noveum client."""
     client = NoveumClient(
         api_key=api_config["api_key"],
-        base_url=api_config["base_url"],
     )
     yield client
     client.close()
@@ -201,7 +201,6 @@ def noveum_client(api_config: dict[str, str]) -> Generator[NoveumClient, None, N
     """Provide test-scoped high-level Noveum client."""
     client = NoveumClient(
         api_key=api_config["api_key"],
-        base_url=api_config["base_url"],
     )
     yield client
     client.close()
@@ -213,7 +212,7 @@ def low_level_client(api_config: dict[str, str]) -> Client:
     return Client(
         base_url=api_config["base_url"],
         headers={"Authorization": f"Bearer {api_config['api_key']}"},
-        timeout=60.0,
+        timeout=httpx.Timeout(60.0),
     )
 
 
@@ -254,7 +253,7 @@ def sample_trace_data(api_config: dict[str, str]) -> dict[str, Any]:
     trace_id = str(uuid.uuid4())
     span_id = str(uuid.uuid4())[:16]
     now = datetime.now()
-    
+
     return {
         "trace_id": trace_id,
         "name": "test_trace_operation",
@@ -302,39 +301,41 @@ def sample_traces_batch(api_config: dict[str, str]) -> list[dict[str, Any]]:
     traces = []
     models = ["gpt-4", "gpt-3.5-turbo", "claude-3-opus", "claude-3-sonnet"]
     operations = ["question_answering", "summarization", "code_generation"]
-    
+
     for i in range(5):
         trace_id = str(uuid.uuid4())
         span_id = str(uuid.uuid4())[:16]
         now = datetime.now()
-        
-        traces.append({
-            "trace_id": trace_id,
-            "name": f"batch_trace_{i}",
-            "project": api_config["project"],
-            "environment": api_config["environment"],
-            "start_time": int((now.timestamp() - 1) * 1_000_000),
-            "end_time": int(now.timestamp() * 1_000_000),
-            "status": {"code": "OK"},
-            "attributes": {
-                "llm.model": models[i % len(models)],
-                "llm.operation": operations[i % len(operations)],
-                "batch_index": i,
-            },
-            "spans": [
-                {
-                    "span_id": span_id,
-                    "trace_id": trace_id,
-                    "name": f"span_{i}",
-                    "kind": "LLM",
-                    "start_time": int((now.timestamp() - 0.5) * 1_000_000),
-                    "end_time": int(now.timestamp() * 1_000_000),
-                    "status": {"code": "OK"},
-                    "attributes": {"index": i},
-                }
-            ],
-        })
-    
+
+        traces.append(
+            {
+                "trace_id": trace_id,
+                "name": f"batch_trace_{i}",
+                "project": api_config["project"],
+                "environment": api_config["environment"],
+                "start_time": int((now.timestamp() - 1) * 1_000_000),
+                "end_time": int(now.timestamp() * 1_000_000),
+                "status": {"code": "OK"},
+                "attributes": {
+                    "llm.model": models[i % len(models)],
+                    "llm.operation": operations[i % len(operations)],
+                    "batch_index": i,
+                },
+                "spans": [
+                    {
+                        "span_id": span_id,
+                        "trace_id": trace_id,
+                        "name": f"span_{i}",
+                        "kind": "LLM",
+                        "start_time": int((now.timestamp() - 0.5) * 1_000_000),
+                        "end_time": int(now.timestamp() * 1_000_000),
+                        "status": {"code": "OK"},
+                        "attributes": {"index": i},
+                    }
+                ],
+            }
+        )
+
     return traces
 
 
@@ -343,26 +344,28 @@ def sample_dataset_items() -> list[dict[str, Any]]:
     """Generate sample dataset items for testing."""
     items = []
     for i in range(10):
-        items.append({
-            "item_id": f"test-item-{i:03d}",
-            "item_type": "conversational",
-            "content": {
-                "agent_name": f"test_agent_{i}",
-                "agent_role": "assistant",
-                "agent_task": f"Task {i}: Answer user questions",
-                "agent_response": f"Response to query {i}",
-                "system_prompt": "You are a helpful assistant.",
-                "user_id": f"user_{i}",
-                "session_id": f"session_{i}",
-                "input_text": f"What is {i} + {i}?",
-                "output_text": f"The answer is {i + i}.",
-                "ground_truth": str(i + i),
-            },
-            "metadata": {
-                "test_index": i,
-                "created_by": "sdk_integration_test",
-            },
-        })
+        items.append(
+            {
+                "item_id": f"test-item-{i:03d}",
+                "item_type": "conversational",
+                "content": {
+                    "agent_name": f"test_agent_{i}",
+                    "agent_role": "assistant",
+                    "agent_task": f"Task {i}: Answer user questions",
+                    "agent_response": f"Response to query {i}",
+                    "system_prompt": "You are a helpful assistant.",
+                    "user_id": f"user_{i}",
+                    "session_id": f"session_{i}",
+                    "input_text": f"What is {i} + {i}?",
+                    "output_text": f"The answer is {i + i}.",
+                    "ground_truth": str(i + i),
+                },
+                "metadata": {
+                    "test_index": i,
+                    "created_by": "sdk_integration_test",
+                },
+            }
+        )
     return items
 
 
@@ -371,17 +374,19 @@ def sample_scorer_results(unique_slug: str) -> list[dict[str, Any]]:
     """Generate sample scorer results for testing."""
     results = []
     for i in range(5):
-        results.append({
-            "datasetSlug": unique_slug,
-            "itemId": f"test-item-{i:03d}",
-            "scorerId": f"test-scorer-{i:03d}",
-            "score": 0.8 + (i * 0.02),
-            "reason": f"Test result {i}: Score based on evaluation criteria",
-            "metadata": {
-                "evaluation_type": "automated",
-                "test_index": i,
-            },
-        })
+        results.append(
+            {
+                "datasetSlug": unique_slug,
+                "itemId": f"test-item-{i:03d}",
+                "scorerId": f"test-scorer-{i:03d}",
+                "score": 0.8 + (i * 0.02),
+                "reason": f"Test result {i}: Score based on evaluation criteria",
+                "metadata": {
+                    "evaluation_type": "automated",
+                    "test_index": i,
+                },
+            }
+        )
     return results
 
 
@@ -399,28 +404,28 @@ def assert_api_success(response: Any, expected_codes: list[int] | None = None) -
     """Assert API response is successful with helpful error messages."""
     if expected_codes is None:
         expected_codes = [200, 201, 204]
-    
+
     if hasattr(response, "status_code"):
         status = response.status_code
     elif isinstance(response, dict) and "status_code" in response:
         status = response["status_code"]
     else:
         pytest.fail(FAIL_INVALID_RESPONSE_FORMAT.format(response_type=type(response)))
-    
+
     if status not in expected_codes:
         error_msg = API_CALL_FAILED_HEADER
         error_msg += API_CALL_FAILED_EXPECTED.format(expected_codes=expected_codes)
         error_msg += API_CALL_FAILED_GOT.format(status=status)
-        
+
         if hasattr(response, "parsed"):
             error_msg += API_CALL_FAILED_RESPONSE.format(parsed=response.parsed)
         if hasattr(response, "content"):
             error_msg += API_CALL_FAILED_CONTENT.format(content=response.content[:500])
-        
+
         # Add helpful hints based on status code
         if status in STATUS_CODE_HINTS:
             error_msg += API_CALL_FAILED_HINT.format(hint=STATUS_CODE_HINTS[status])
-        
+
         pytest.fail(error_msg)
 
 
@@ -475,7 +480,10 @@ EMBEDDED_CONVERSATION_DATA: list[dict[str, Any]] = [
         "item_type": "conversational",
         "content": {
             "input": "Explain quantum computing briefly",
-            "output": "Quantum computing uses quantum mechanics principles like superposition and entanglement to perform calculations.",
+            "output": (
+                "Quantum computing uses quantum mechanics principles like superposition "
+                "and entanglement to perform calculations."
+            ),
             "agent_name": "assistant",
             "agent_role": "explainer",
             "system_prompt": "You are a helpful assistant.",
@@ -509,7 +517,10 @@ EMBEDDED_CONVERSATION_DATA: list[dict[str, Any]] = [
         "item_type": "conversational",
         "content": {
             "input": "What are the benefits of exercise?",
-            "output": "Exercise improves cardiovascular health, strengthens muscles, boosts mental health, and increases energy.",
+            "output": (
+                "Exercise improves cardiovascular health, strengthens muscles, "
+                "boosts mental health, and increases energy."
+            ),
             "agent_name": "assistant",
             "agent_role": "health_advisor",
             "system_prompt": "You are a helpful assistant.",
@@ -655,19 +666,21 @@ def scorer_results_dataset() -> list[dict[str, Any]]:
 def conversation_dataset_from_file(test_data_dir: str) -> list[dict[str, Any]]:
     """Load conversation dataset from test data file (optional, for larger tests)."""
     file_path = os.path.join(test_data_dir, "conversation_dataset.json")
-    
+
     if not os.path.exists(file_path):
         pytest.skip(SKIP_TEST_DATA_FILE_NOT_FOUND.format(file_path=file_path))
-    
+
     with open(file_path, encoding="utf-8") as f:
         data = json.load(f)
-    
+
     # Handle nested structure
     if isinstance(data, dict) and "items" in data:
-        return data["items"][:10]  # Limit for testing
+        items = data["items"]
+        if isinstance(items, list):
+            return cast(list[dict[str, Any]], items[:10])  # Limit for testing
     elif isinstance(data, list):
-        return data[:10]
-    
+        return cast(list[dict[str, Any]], data[:10])
+
     return []
 
 
@@ -675,19 +688,21 @@ def conversation_dataset_from_file(test_data_dir: str) -> list[dict[str, Any]]:
 def scorer_results_dataset_from_file(test_data_dir: str) -> list[dict[str, Any]]:
     """Load scorer results dataset from test data file (optional)."""
     file_path = os.path.join(test_data_dir, "scorer_results_dataset_new.json")
-    
+
     if not os.path.exists(file_path):
         pytest.skip(SKIP_TEST_DATA_FILE_NOT_FOUND.format(file_path=file_path))
-    
+
     with open(file_path, encoding="utf-8") as f:
         data = json.load(f)
-    
+
     # Handle nested structure
     if isinstance(data, dict) and "items" in data:
-        return data["items"][:10]
+        items = data["items"]
+        if isinstance(items, list):
+            return cast(list[dict[str, Any]], items[:10])
     elif isinstance(data, list):
-        return data[:10]
-    
+        return cast(list[dict[str, Any]], data[:10])
+
     return []
 
 
