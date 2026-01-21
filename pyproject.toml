@@ -54,7 +54,7 @@ Changelog = "https://github.com/Noveum/noveum-sdk-python/blob/main/CHANGELOG.md"
 # Poetry configuration (for Poetry users)
 [tool.poetry]
 name = "noveum-sdk"
-version = "1.0.4"
+version = "1.1.0"
 description = "Official Python SDK for the Noveum.ai API - AI/ML evaluation and testing platform"
 authors = ["Noveum Team <team@noveum.ai>"]
 readme = "README.md"
@@ -93,7 +93,7 @@ build-backend = "setuptools.build_meta"
 
 [tool.commitizen]
 name = "cz_conventional_commits"
-version = "1.0.4"
+version = "1.1.0"
 version_files = [
     "pyproject.toml:version"
 ]
