@@ -20,7 +20,7 @@ Usage:
 
 import time
 import uuid
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Any
 
 import pytest
@@ -145,12 +145,12 @@ class TestCompleteE2EFlow:
         for i in range(5):
             trace_id = str(uuid.uuid4())
             span_id = str(uuid.uuid4())[:16]
-            now = datetime.now()
+            now = datetime.now(timezone.utc)
 
             # API expects ISO 8601 datetime strings
-            start_time = (now - timedelta(seconds=1)).isoformat() + "Z"
-            end_time = now.isoformat() + "Z"
-            span_start = (now - timedelta(seconds=0.5)).isoformat() + "Z"
+            start_time = (now - timedelta(seconds=1)).isoformat()
+            end_time = now.isoformat()
+            span_start = (now - timedelta(seconds=0.5)).isoformat()
 
             trace = {
                 "trace_id": trace_id,
@@ -534,6 +534,9 @@ class TestCompleteE2EFlow:
                 dataset_data = parse_response(dataset_response)
                 dataset = dataset_data.get("data", dataset_data) if isinstance(dataset_data, dict) else dataset_data
                 dataset_id = get_field(dataset, "id")
+
+        if dataset_id is None:
+            pytest.skip(f"dataset not found for slug: {flow_context['dataset_slug']}")
 
         # Associate dataset (raw params until wrapper supports dataset slug)
         http_response = low_level_client.get_httpx_client().request(

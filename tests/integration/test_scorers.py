@@ -42,7 +42,9 @@ from constants import (
     SKIP_NO_ITEMS_BATCH_RESULTS,
     SKIP_NO_RESULT_IDS,
     SKIP_NO_SCORER_ID,
+    XFAIL_DATASET_CREATION_500,
     XFAIL_DATASET_DELETION_500,
+    XFAIL_DATASET_ITEMS_500,
     XFAIL_RESULT_DELETION_500,
     XFAIL_SCORER_CREATION_500,
 )
@@ -140,7 +142,7 @@ class TestScorersE2EFlow:
                 body=body,
             )
             if response.status_code == 500:
-                pytest.xfail(XFAIL_SCORER_CREATION_500)
+                pytest.xfail(XFAIL_DATASET_CREATION_500)
             assert response.status_code in [200, 201], f"Create dataset failed: {response.status_code}"
             scorer_context["dataset_slug"] = dataset_slug
             scorer_context["dataset_name"] = dataset_name
@@ -168,7 +170,7 @@ class TestScorersE2EFlow:
                 body=items_body,
             )
             if response.status_code == 500:
-                pytest.xfail(XFAIL_SCORER_CREATION_500)
+                pytest.xfail(XFAIL_DATASET_ITEMS_500)
             assert response.status_code in [200, 201], f"Add items failed: {response.status_code}"
             scorer_context["item_ids"] = [item["item_id"] for item in items]
 
@@ -229,7 +231,7 @@ class TestScorersE2EFlow:
 
         # Handle known backend 500 error for scorer creation
         if response.status_code == 500:
-            pytest.xfail(XFAIL_SCORER_CREATION_500)
+            pytest.xfail(XFAIL_DATASET_CREATION_500)
 
         assert response.status_code in [200, 201], f"Create dataset failed: {response.status_code}"
 
@@ -283,7 +285,7 @@ class TestScorersE2EFlow:
 
         # Handle known backend 500 error for scorer creation
         if response.status_code == 500:
-            pytest.xfail(XFAIL_SCORER_CREATION_500)
+            pytest.xfail(XFAIL_DATASET_ITEMS_500)
 
         assert response.status_code in [200, 201], f"Add items failed: {response.status_code}"
 

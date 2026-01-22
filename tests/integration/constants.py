@@ -132,7 +132,9 @@ SKIP_NO_AUDIO_ID_VERIFY_DELETION = "No audio ID available to verify deletion"
 
 # Backend Known Issues - 500 Errors
 XFAIL_AUDIO_DELETION_500 = "Audio deletion returned 500 (known backend issue)"
+XFAIL_DATASET_CREATION_500 = "Dataset creation returned 500 (known backend issue)"
 XFAIL_DATASET_DELETION_500 = "Dataset deletion returned 500 (known backend issue)"
+XFAIL_DATASET_ITEMS_500 = "Dataset item addition returned 500 (known backend issue)"
 XFAIL_REMOVE_DATASET_500 = "Remove dataset returned 500 (known backend issue)"
 XFAIL_DELETE_RESULT_500 = "Delete returned 500 (known backend issue)"
 XFAIL_RESULT_DELETION_500 = "Result deletion returned 500 (known backend issue)"

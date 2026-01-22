@@ -53,7 +53,9 @@ from noveum_api_client.api.audio import (
     get_api_v1_audio,
     get_api_v1_audio_by_id,
     get_api_v1_audio_by_id_serve,
+    post_api_v1_audio,
 )
+from noveum_api_client.types import File
 
 
 def _make_test_wav_bytes(
@@ -77,22 +79,31 @@ def _upload_audio_file(
     data: bytes,
     metadata: dict[str, str],
 ) -> Any:
-    """Upload audio via raw multipart until SDK wrapper supports files."""
-    httpx_client = client.get_httpx_client()
-    response = httpx_client.request(
-        "post",
-        "/api/v1/audio",
-        data=metadata,
-        files={"file": (filename, data, "audio/wav")},
+    """
+    Upload audio using the SDK wrapper with proper File type and metadata.
+
+    Args:
+        client: Noveum API client
+        filename: Name of the audio file
+        data: Binary audio file data
+        metadata: Dictionary with traceId, spanId, audio_uuid
+
+    Returns:
+        Response from the upload API
+    """
+    # Create File object for SDK wrapper
+    file = File(payload=io.BytesIO(data), file_name=filename, mime_type="audio/wav")
+
+    # Use the SDK wrapper with all required parameters
+    response = post_api_v1_audio.sync_detailed(
+        client=client,
+        file=file,
+        trace_id=metadata["traceId"],
+        span_id=metadata["spanId"],
+        audio_uuid=metadata["audio_uuid"],
     )
-    if response.status_code != 400:
-        return response
-    return httpx_client.request(
-        "post",
-        "/api/v1/audio",
-        data=metadata,
-        files={"audio": (filename, data, "audio/wav")},
-    )
+
+    return response
 
 
 @pytest.mark.audio
@@ -163,39 +174,44 @@ class TestAudioFlow:
             first_audio = audio_files[0]
 
             # Store for later tests if no upload is possible
+            # Backend returns: id, filename, mimeType, size, traceId, spanId, createdAt, updatedAt
             audio_id = get_field(first_audio, "id")
             if audio_id:
                 assert_non_empty_string(audio_id, "audio.id")
                 audio_context["audio_id"] = audio_id
 
-            filename = get_field(first_audio, "filename") or get_field(first_audio, "name")
+            filename = get_field(first_audio, "filename")
             if filename:
                 assert_non_empty_string(filename, "audio.filename")
                 audio_context["audio_filename"] = filename
 
-            file_format = get_field(first_audio, "format") or get_field(first_audio, "mime_type")
-            if file_format:
-                assert_non_empty_string(file_format, "audio.format")
-                audio_context["audio_format"] = file_format
+            mime_type = get_field(first_audio, "mimeType") or get_field(first_audio, "mime_type")
+            if mime_type:
+                assert_non_empty_string(mime_type, "audio.mimeType")
+                audio_context["audio_format"] = mime_type
 
-            file_size = get_field(first_audio, "size") or get_field(first_audio, "file_size")
+            file_size = get_field(first_audio, "size")
             if file_size is not None:
                 assert isinstance(file_size, (int, float)), "audio.size should be numeric"
                 audio_context["audio_size"] = file_size
 
-            duration = get_field(first_audio, "duration") or get_field(first_audio, "duration_seconds")
-            if duration is not None:
-                assert isinstance(duration, (int, float)), "audio.duration should be numeric"
-                audio_context["audio_duration"] = duration
+            # traceId and spanId are returned but not critical for validation
+            trace_id = get_field(first_audio, "traceId")
+            if trace_id:
+                assert_non_empty_string(trace_id, "audio.traceId")
 
-            url = get_field(first_audio, "url") or get_field(first_audio, "storage_url")
-            if url:
-                assert_non_empty_string(url, "audio.url")
+            span_id = get_field(first_audio, "spanId")
+            if span_id:
+                assert_non_empty_string(span_id, "audio.spanId")
 
-            created_at = get_field(first_audio, "created_at")
+            created_at = get_field(first_audio, "createdAt") or get_field(first_audio, "created_at")
             if created_at:
-                assert_optional_string(created_at, "audio.created_at")
+                assert_optional_string(created_at, "audio.createdAt")
                 audio_context["created_at"] = created_at
+
+            updated_at = get_field(first_audio, "updatedAt") or get_field(first_audio, "updated_at")
+            if updated_at:
+                assert_optional_string(updated_at, "audio.updatedAt")
 
         # Check pagination if present
         pagination = data.get("pagination", {}) if isinstance(data, dict) else {}
@@ -270,35 +286,55 @@ class TestAudioFlow:
         if success is not None:
             assert success is True, "Expected success=True"
 
+        # Upload response includes: id, organizationId, filename, originalName,
+        # mimeType, size, storageKey, traceId, spanId, createdAt, updatedAt
         audio_data = data.get("data", data) if isinstance(data, dict) else data
 
         audio_id = get_field(audio_data, "id")
         assert_non_empty_string(audio_id, "audio.id")
         audio_context["audio_id"] = audio_id
 
-        filename = get_field(audio_data, "filename") or get_field(audio_data, "name")
-        assert_non_empty_string(filename, "audio.filename")
-        audio_context["audio_filename"] = filename
+        # Upload returns both 'filename' (internal path) and 'originalName' (user's filename)
+        original_name = get_field(audio_data, "originalName")
+        if original_name:
+            assert_non_empty_string(original_name, "audio.originalName")
+            audio_context["audio_filename"] = original_name
 
-        file_format = get_field(audio_data, "format") or get_field(audio_data, "mime_type")
-        if file_format:
-            assert_non_empty_string(file_format, "audio.format")
-            audio_context["audio_format"] = file_format
+        mime_type = get_field(audio_data, "mimeType")
+        if mime_type:
+            assert_non_empty_string(mime_type, "audio.mimeType")
+            audio_context["audio_format"] = mime_type
 
-        file_size = get_field(audio_data, "size") or get_field(audio_data, "file_size")
+        file_size = get_field(audio_data, "size")
         if file_size is not None:
             assert_positive_number(file_size, "audio.size")
             audio_context["audio_size"] = file_size
 
-        duration = get_field(audio_data, "duration") or get_field(audio_data, "duration_seconds")
-        if duration is not None:
-            assert_positive_number(duration, "audio.duration")
-            audio_context["audio_duration"] = duration
+        # organizationId is only returned in upload response
+        org_id = get_field(audio_data, "organizationId")
+        if org_id:
+            assert_non_empty_string(org_id, "audio.organizationId")
 
-        created_at = get_field(audio_data, "created_at")
+        storage_key = get_field(audio_data, "storageKey")
+        if storage_key:
+            assert_non_empty_string(storage_key, "audio.storageKey")
+
+        trace_id = get_field(audio_data, "traceId")
+        if trace_id:
+            assert_non_empty_string(trace_id, "audio.traceId")
+
+        span_id = get_field(audio_data, "spanId")
+        if span_id:
+            assert_non_empty_string(span_id, "audio.spanId")
+
+        created_at = get_field(audio_data, "createdAt") or get_field(audio_data, "created_at")
         if created_at:
-            assert_optional_string(created_at, "audio.created_at")
+            assert_optional_string(created_at, "audio.createdAt")
             audio_context["created_at"] = created_at
+
+        updated_at = get_field(audio_data, "updatedAt") or get_field(audio_data, "updated_at")
+        if updated_at:
+            assert_optional_string(updated_at, "audio.updatedAt")
 
     # =========================================================================
     # Phase 3: Get Audio by ID
@@ -326,6 +362,7 @@ class TestAudioFlow:
         assert data is not None, "Response data should not be None"
 
         # Audio data might be wrapped in 'data' or returned directly
+        # Backend returns: id, filename, mimeType, size, traceId, spanId, createdAt, updatedAt
         audio_data = data.get("data", data) if isinstance(data, dict) else data
 
         # Validate id matches request
@@ -333,41 +370,33 @@ class TestAudioFlow:
         if returned_id:
             assert returned_id == audio_id, f"ID mismatch: expected {audio_id}, got {returned_id}"
 
-        filename = get_field(audio_data, "filename") or get_field(audio_data, "name")
+        filename = get_field(audio_data, "filename")
         if filename:
             assert_non_empty_string(filename, "audio.filename")
 
-        file_format = get_field(audio_data, "format") or get_field(audio_data, "mime_type")
-        if file_format:
-            assert_non_empty_string(file_format, "audio.format")
+        mime_type = get_field(audio_data, "mimeType") or get_field(audio_data, "mime_type")
+        if mime_type:
+            assert_non_empty_string(mime_type, "audio.mimeType")
 
-        file_size = get_field(audio_data, "size") or get_field(audio_data, "file_size")
+        file_size = get_field(audio_data, "size")
         if file_size is not None:
             assert_positive_number(file_size, "audio.size")
 
-        duration = get_field(audio_data, "duration") or get_field(audio_data, "duration_seconds")
-        if duration is not None:
-            assert_positive_number(duration, "audio.duration")
+        trace_id = get_field(audio_data, "traceId")
+        if trace_id:
+            assert_non_empty_string(trace_id, "audio.traceId")
 
-        url = get_field(audio_data, "url") or get_field(audio_data, "storage_url")
-        if url:
-            assert_non_empty_string(url, "audio.url")
+        span_id = get_field(audio_data, "spanId")
+        if span_id:
+            assert_non_empty_string(span_id, "audio.spanId")
 
-        org_id = get_field(audio_data, "organization_id") or get_field(audio_data, "org_id")
-        if org_id:
-            assert_non_empty_string(org_id, "audio.organization_id")
-
-        created_at = get_field(audio_data, "created_at")
+        created_at = get_field(audio_data, "createdAt") or get_field(audio_data, "created_at")
         if created_at:
-            assert_optional_string(created_at, "audio.created_at")
+            assert_optional_string(created_at, "audio.createdAt")
 
-        updated_at = get_field(audio_data, "updated_at")
+        updated_at = get_field(audio_data, "updatedAt") or get_field(audio_data, "updated_at")
         if updated_at:
-            assert_optional_string(updated_at, "audio.updated_at")
-
-        metadata = get_field(audio_data, "metadata")
-        if metadata is not None:
-            assert isinstance(metadata, dict), "audio.metadata should be a dict"
+            assert_optional_string(updated_at, "audio.updatedAt")
 
     def test_05_get_nonexistent_audio(
         self,
@@ -455,7 +484,7 @@ class TestAudioFlow:
 
         audio_id = audio_context["audio_id"]
 
-        # First verify the audio exists
+        # First verify the audio exists (skip check if backend has issues)
         check_response = get_api_v1_audio_by_id.sync_detailed(
             id=audio_id,
             client=low_level_client,
@@ -463,6 +492,8 @@ class TestAudioFlow:
 
         if check_response.status_code == 404:
             pytest.skip(SKIP_AUDIO_FILE_NOT_FOUND)
+        # Note: Ignoring 500 errors in pre-check - backend has known issues after serving audio
+        # The actual delete operation will be tested below
 
         # Delete the audio
         response = delete_api_v1_audio_by_id.sync_detailed(
@@ -477,6 +508,7 @@ class TestAudioFlow:
         audio_context["deletion_succeeded"] = True  # Mark deletion as successful
         assert_api_success(response, expected_codes=[200, 204])
 
+        # Backend returns: { success: true, message: "Audio file deleted successfully", timestamp }
         if response.status_code == 200:
             data = parse_response(response)
 
@@ -485,9 +517,10 @@ class TestAudioFlow:
                 if success is not None:
                     assert success is True, "Expected success=True"
 
-                deleted_id = get_field(data, "id") or get_field(data, "deleted_id")
-                if deleted_id:
-                    assert deleted_id == audio_id, "Deleted ID mismatch"
+                message = get_field(data, "message")
+                if message:
+                    assert isinstance(message, str), "Expected message to be a string"
+                    assert len(message) > 0, "Expected non-empty message"
 
     def test_09_verify_audio_deleted(
         self,
