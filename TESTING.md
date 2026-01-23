@@ -63,11 +63,13 @@ Fast, isolated tests with mocked API responses.
 
 | File | Focus |
 |------|-------|
+| `test_audio_wrappers.py` | Audio API wrappers |
 | `test_datasets_wrappers.py` | Dataset API wrappers |
-| `test_traces_wrappers.py` | Traces API wrappers |
+| `test_etl_jobs_wrappers.py` | ETL job API wrappers |
+| `test_projects_wrappers.py` | Project API wrappers |
 | `test_scorers_wrappers.py` | Scorers API wrappers |
 | `test_scorer_results_wrappers.py` | Scorer results API wrappers |
-| `test_webhooks_projects_other_wrappers.py` | Projects, ETL jobs, health, and misc wrappers |
+| `test_traces_wrappers.py` | Traces API wrappers |
 
 ### Running Unit Tests
 
@@ -146,12 +148,14 @@ End-to-end tests with real API calls.
 
 | File | Focus |
 |------|-------|
+| `test_audio.py` | Audio file upload, retrieval, and management |
+| `test_complete_flow.py` | End-to-end workflow tests |
 | `test_datasets.py` | Dataset CRUD operations + items |
-| `test_traces.py` | Trace creation and retrieval |
+| `test_etl_jobs.py` | ETL job management |
+| `test_projects.py` | Project operations |
 | `test_scorers.py` | Scorer workflow |
 | `test_scorer_results.py` | Scorer results retrieval |
-| `test_projects.py` | Project operations |
-| `test_etl_jobs.py` | ETL job management |
+| `test_traces.py` | Trace creation and retrieval |
 
 ### Running Integration Tests
 
@@ -176,11 +180,6 @@ pytest -vv -s
 
 # Stop on first failure
 pytest -x
-
-# Use helper script (convenient)
-./run_test.sh datasets
-./run_test.sh traces
-./run_test.sh all
 ```
 
 ### Example: Running Integration Tests
@@ -210,10 +209,9 @@ test_datasets.py::test_delete_dataset_item PASSED
 ### Configuration Files
 
 - `tests/unit/conftest.py` - Unit test fixtures (mocks)
-- `tests/unit/pytest.ini` - Unit test pytest settings
 - `tests/integration/conftest.py` - Integration test fixtures (API client)
-- `tests/integration/pytest.ini` - Integration test pytest settings
 - `tests/test_config.py` - Shared test configuration
+- `pyproject.toml` - Pytest configuration and settings
 - `codecov.yml` - Code coverage configuration
 
 ### Environment Variables

@@ -3,7 +3,7 @@
 [![CI](https://github.com/Noveum/noveum-sdk-python/actions/workflows/ci.yml/badge.svg)](https://github.com/Noveum/noveum-sdk-python/actions/workflows/ci.yml)
 [![Release](https://github.com/Noveum/noveum-sdk-python/actions/workflows/release.yml/badge.svg)](https://github.com/Noveum/noveum-sdk-python/actions/workflows/release.yml)
 [![codecov](https://codecov.io/gh/Noveum/noveum-sdk-python/branch/main/graph/badge.svg)](https://codecov.io/gh/Noveum/noveum-sdk-python)
-[![PyPI version](https://badge.fury.io/py/noveum-sdk-python.svg)](https://badge.fury.io/py/noveum-sdk-python)
+[![PyPI version](https://badge.fury.io/py/noveum-sdk.svg)](https://badge.fury.io/py/noveum-sdk)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
@@ -31,7 +31,7 @@ A professional Python SDK for the [Noveum.ai](https://noveum.ai) API. Provides b
 #### From PyPI (Recommended)
 
 ```bash
-pip install noveum-sdk-python
+pip install noveum-sdk
 ```
 
 #### From Source
@@ -224,6 +224,7 @@ The SDK provides access to the following API categories:
 |----------|-------------|
 | `health/` | Health check endpoint |
 | `status/` | API status endpoint |
+| `audio/` | Audio file upload, retrieval, and management |
 | `datasets/` | Dataset CRUD operations |
 | `traces/` | Trace management and querying |
 | `scorers/` | Scorer definitions and management |
@@ -231,16 +232,31 @@ The SDK provides access to the following API categories:
 | `projects/` | Project management |
 | `etl_jobs/` | ETL job operations |
 
-### Example: Using Traces API
+### Example: Using Audio API
 
 ```python
 from noveum_api_client import Client
-from noveum_api_client.api.traces import get_api_v1_traces, post_api_v1_traces
+from noveum_api_client.api.audio import get_api_v1_audio, post_api_v1_audio
 
 client = Client(
     base_url="https://api.noveum.ai",
     headers={"Authorization": f"Bearer {api_key}"}
 )
+
+# List audio files
+response = get_api_v1_audio.sync_detailed(client=client)
+print(f"Audio files: {response.parsed}")
+
+# Upload audio file
+with open("audio.wav", "rb") as f:
+    response = post_api_v1_audio.sync_detailed(client=client, file=f)
+    print(f"Uploaded: {response.parsed}")
+```
+
+### Example: Using Traces API
+
+```python
+from noveum_api_client.api.traces import get_api_v1_traces, post_api_v1_traces
 
 # List traces
 response = get_api_v1_traces.sync_detailed(client=client)
@@ -509,6 +525,7 @@ noveum-sdk-python/
 │   ├── types.py                 # Type definitions
 │   ├── py.typed                 # PEP 561 type marker
 │   ├── api/                     # Generated API endpoints
+│   │   ├── audio/               # Audio file operations
 │   │   ├── datasets/            # Dataset operations
 │   │   ├── etl_jobs/            # ETL job management
 │   │   ├── health/              # Health check
@@ -520,6 +537,8 @@ noveum-sdk-python/
 │   └── models/                  # Data models
 ├── tests/                       # Test suite
 │   ├── integration/             # Integration tests with live API
+│   │   ├── test_audio.py        # Audio API tests
+│   │   ├── test_complete_flow.py # End-to-end workflow tests
 │   │   ├── test_datasets.py     # Dataset tests
 │   │   ├── test_etl_jobs.py     # ETL job tests
 │   │   ├── test_projects.py     # Project tests
@@ -527,10 +546,21 @@ noveum-sdk-python/
 │   │   ├── test_scorer_results.py # Scorer results tests
 │   │   └── test_traces.py       # Trace tests
 │   └── unit/                    # Unit tests (mocked)
+│       ├── test_audio_wrappers.py  # Audio API wrapper tests
+│       ├── test_client_wrapper.py  # High-level client tests
+│       ├── test_datasets_wrappers.py # Dataset wrapper tests
+│       ├── test_etl_jobs_wrappers.py # ETL job wrapper tests
+│       ├── test_models.py          # Model tests
+│       ├── test_module_structure.py # Module structure tests
+│       ├── test_projects_wrappers.py # Project wrapper tests
+│       ├── test_scorer_results_wrappers.py # Scorer results wrapper tests
+│       ├── test_scorers_wrappers.py # Scorer wrapper tests
+│       └── test_traces_wrappers.py # Trace wrapper tests
 ├── doc/                         # Documentation
 ├── README.md                    # This file
 ├── CHANGELOG.md                 # Version history
 ├── CONTRIBUTING.md              # Contribution guidelines
+├── TESTING.md                   # Testing guide
 └── pyproject.toml               # Project configuration
 ```
 
@@ -553,12 +583,12 @@ noveum-sdk-python/
 The Noveum ecosystem includes multiple specialized packages:
 
 - **[noveum-trace](https://pypi.org/project/noveum-trace/)** - Lightweight tracing SDK for LLM applications and multi-agent systems with decorator-based API
-- **[noveum-sdk-python](https://pypi.org/project/noveum-sdk-python/)** - This package - comprehensive API client for evaluation, datasets, and platform management
+- **[noveum-sdk](https://pypi.org/project/noveum-sdk/)** - This package - comprehensive API client for evaluation, datasets, and platform management
 
 ## Support
 
 - **Platform**: https://noveum.ai/
-- **PyPI Package**: https://pypi.org/project/noveum-sdk-python/
+- **PyPI Package**: https://pypi.org/project/noveum-sdk/
 - **API Documentation**: https://noveum.ai/docs
 - **GitHub Repository**: https://github.com/Noveum/noveum-sdk-python
 - **GitHub Issues**: https://github.com/Noveum/noveum-sdk-python/issues

@@ -49,23 +49,35 @@ class TestScorerResultsCreationWrappers:
         assert hasattr(post_api_v1_scorers_results, "sync_detailed")
         assert hasattr(post_api_v1_scorers_results, "asyncio_detailed")
 
-    def test_post_scorer_results_accepts_body(self, mock_client):
-        """Test post scorer results accepts body parameter"""
-        from noveum_api_client.types import Unset
+    def test_post_scorer_results_accepts_body_with_real_model(self):
+        """Test post scorer results accepts body with real model"""
+        from noveum_api_client.models import (
+            PostApiV1ScorersResultsBatchBody,
+            PostApiV1ScorersResultsBatchBodyResultsItem,
+            PostApiV1ScorersResultsBatchBodyResultsItemMetadata,
+        )
 
-        mock_response = Mock(spec=httpx.Response)
-        mock_response.headers = {}
-        mock_response.status_code = 201
-        mock_response.content = b'{"created": 1}'
-        mock_response.headers = {}
-        mock_response.json.return_value = {"created": 1}
+        # Create multiple results
+        results = []
+        for i in range(3):
+            metadata = PostApiV1ScorersResultsBatchBodyResultsItemMetadata()
+            result = PostApiV1ScorersResultsBatchBodyResultsItem(
+                dataset_slug="test-dataset",
+                item_id=f"item-{i}",
+                scorer_id="scorer-1",
+                score=0.8 + (i * 0.05),
+                passed=True,
+                metadata=metadata,
+            )
+            results.append(result)
 
-        mock_client.get_httpx_client().request.return_value = mock_response
-        try:
-            response = post_api_v1_scorers_results.sync_detailed(client=mock_client, body=Unset())
-            assert response.status_code in [200, 201]
-        except TypeError:
-            assert True
+        body = PostApiV1ScorersResultsBatchBody(results=results)
+
+        # Verify body serializes correctly
+        body_dict = body.to_dict()
+        assert len(body_dict["results"]) == 3
+        assert body_dict["results"][0]["datasetSlug"] == "test-dataset"
+        assert body_dict["results"][0]["passed"] is True
 
 
 class TestScorerResultsFiltering:
@@ -141,20 +153,70 @@ class TestScorerResultsResponseStructure:
 
         assert response.status_code == 200
 
-    def test_post_scorer_results_returns_confirmation(self, mock_client):
-        """Test post scorer results returns confirmation"""
-        from noveum_api_client.types import Unset
+    def test_scorer_result_with_execution_metadata(self):
+        """Test scorer result with execution time and error metadata"""
+        from noveum_api_client.models import (
+            PostApiV1ScorersResultsBatchBodyResultsItem,
+            PostApiV1ScorersResultsBatchBodyResultsItemMetadata,
+        )
 
-        mock_response = Mock(spec=httpx.Response)
-        mock_response.headers = {}
-        mock_response.status_code = 201
-        mock_response.content = b'{"created": 5}'
-        mock_response.headers = {}
-        mock_response.json.return_value = {"created": 5}
+        metadata = PostApiV1ScorersResultsBatchBodyResultsItemMetadata()
 
-        mock_client.get_httpx_client().request.return_value = mock_response
-        try:
-            response = post_api_v1_scorers_results.sync_detailed(client=mock_client, body=Unset())
-            assert response.status_code == 201
-        except TypeError:
-            assert True
+        result = PostApiV1ScorersResultsBatchBodyResultsItem(
+            dataset_slug="test-dataset",
+            item_id="item-1",
+            scorer_id="scorer-1",
+            score=0.95,
+            passed=True,
+            metadata=metadata,
+            error="",
+            execution_time_ms=125.5,
+        )
+
+        result_dict = result.to_dict()
+        assert result_dict["executionTimeMs"] == 125.5
+        assert result_dict["error"] == ""
+        assert result_dict["passed"] is True
+
+    def test_batch_results_with_mixed_pass_fail(self):
+        """Test batch results with mixed pass/fail statuses"""
+        from noveum_api_client.models import (
+            PostApiV1ScorersResultsBatchBody,
+            PostApiV1ScorersResultsBatchBodyResultsItem,
+            PostApiV1ScorersResultsBatchBodyResultsItemMetadata,
+        )
+
+        results = []
+
+        # Passing result
+        metadata_pass = PostApiV1ScorersResultsBatchBodyResultsItemMetadata()
+        result_pass = PostApiV1ScorersResultsBatchBodyResultsItem(
+            dataset_slug="test-dataset",
+            item_id="item-pass",
+            scorer_id="scorer-1",
+            score=0.95,
+            passed=True,
+            metadata=metadata_pass,
+        )
+        results.append(result_pass)
+
+        # Failing result
+        metadata_fail = PostApiV1ScorersResultsBatchBodyResultsItemMetadata()
+        result_fail = PostApiV1ScorersResultsBatchBodyResultsItem(
+            dataset_slug="test-dataset",
+            item_id="item-fail",
+            scorer_id="scorer-1",
+            score=0.45,
+            passed=False,
+            metadata=metadata_fail,
+            error="Score below threshold",
+        )
+        results.append(result_fail)
+
+        body = PostApiV1ScorersResultsBatchBody(results=results)
+
+        body_dict = body.to_dict()
+        assert len(body_dict["results"]) == 2
+        assert body_dict["results"][0]["passed"] is True
+        assert body_dict["results"][1]["passed"] is False
+        assert "threshold" in body_dict["results"][1]["error"]

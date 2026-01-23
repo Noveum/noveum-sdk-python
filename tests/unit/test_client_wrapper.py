@@ -12,7 +12,7 @@ class TestNoveumClientInit:
 
     def test_client_initialization(self):
         """Test that client initializes correctly"""
-        client = NoveumClient(api_key="test_key", base_url="https://api.noveum.ai")
+        client = NoveumClient(api_key="test_key")
 
         assert client.api_key == "test_key"
         assert client.base_url == "https://api.noveum.ai"

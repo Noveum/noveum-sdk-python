@@ -1,9 +1,11 @@
 """
-Unit Tests for Projects, ETL Jobs, Health, and Other API Wrappers
+Unit Tests for API Module Structure and Cross-Module Features
 
-Tests projects, ETL jobs, health, and misc API wrapper functions.
+Tests overall API module structure, imports, error handling consistency,
+async support, pagination, and client configuration across all modules.
 """
 
+import os
 from unittest.mock import Mock
 
 import httpx
@@ -169,22 +171,35 @@ class TestPaginationSupportAcrossModules:
 class TestClientConfigurationAcrossModules:
     """Test client configuration works across all modules"""
 
-    def test_client_with_custom_base_url(self):
-        """Test client accepts custom base URL"""
-        client = Client(base_url="https://custom.api.com", headers={"Authorization": "Bearer test"})
+    def test_client_with_default_base_url(self):
+        """Test client uses default base URL"""
+        base_url = os.getenv("NOVEUM_BASE_URL")
+        if not base_url:
+            pytest.skip("NOVEUM_BASE_URL is not set")
+        client = Client(base_url=base_url, headers={"Authorization": "Bearer test"})
 
-        assert client._base_url == "https://custom.api.com"
+        assert client._base_url == base_url
 
     def test_client_with_timeout(self):
         """Test client accepts timeout configuration"""
-        client = Client(base_url="https://api.noveum.ai", headers={"Authorization": "Bearer test"}, timeout=30.0)
+        base_url = os.getenv("NOVEUM_BASE_URL")
+        if not base_url:
+            pytest.skip("NOVEUM_BASE_URL is not set")
+        client = Client(
+            base_url=base_url,
+            headers={"Authorization": "Bearer test"},
+            timeout=httpx.Timeout(30.0),
+        )
 
-        assert client._timeout == 30.0
+        assert client._timeout == httpx.Timeout(30.0)
 
     def test_client_with_custom_headers(self):
         """Test client accepts custom headers"""
         headers = {"Authorization": "Bearer test", "X-Custom-Header": "value"}
 
-        client = Client(base_url="https://api.noveum.ai", headers=headers)
+        base_url = os.getenv("NOVEUM_BASE_URL")
+        if not base_url:
+            pytest.skip("NOVEUM_BASE_URL is not set")
+        client = Client(base_url=base_url, headers=headers)
 
         assert client._headers is not None

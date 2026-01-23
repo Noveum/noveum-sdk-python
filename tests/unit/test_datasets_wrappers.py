@@ -198,6 +198,96 @@ class TestDatasetModelSerialization:
         assert len(body.items) == 3
 
 
+class TestDatasetVersioningWrappers:
+    """Test dataset versioning API wrappers"""
+
+    def test_get_dataset_versions_has_methods(self):
+        """Test get dataset versions has methods"""
+        from noveum_api_client.api.datasets import get_api_v1_datasets_by_dataset_slug_versions
+
+        assert hasattr(get_api_v1_datasets_by_dataset_slug_versions, "sync_detailed")
+        assert hasattr(get_api_v1_datasets_by_dataset_slug_versions, "asyncio_detailed")
+
+    def test_get_dataset_versions_accepts_dataset_slug(self, mock_client):
+        """Test get dataset versions accepts dataset_slug parameter"""
+        from noveum_api_client.api.datasets import get_api_v1_datasets_by_dataset_slug_versions
+
+        mock_response = Mock(spec=httpx.Response)
+        mock_response.headers = {}
+        mock_response.status_code = 200
+        mock_response.json.return_value = []
+
+        mock_client.get_httpx_client().request.return_value = mock_response
+        response = get_api_v1_datasets_by_dataset_slug_versions.sync_detailed(
+            dataset_slug="test-dataset", client=mock_client
+        )
+
+        assert response.status_code == 200
+
+    def test_get_dataset_version_by_id_has_methods(self):
+        """Test get dataset version by ID has methods"""
+        from noveum_api_client.api.datasets import get_api_v1_datasets_by_dataset_slug_versions_by_version
+
+        assert hasattr(get_api_v1_datasets_by_dataset_slug_versions_by_version, "sync_detailed")
+        assert hasattr(get_api_v1_datasets_by_dataset_slug_versions_by_version, "asyncio_detailed")
+
+    def test_get_dataset_version_diff_has_methods(self):
+        """Test get dataset version diff has methods"""
+        from noveum_api_client.api.datasets import get_api_v1_datasets_by_dataset_slug_versions_diff
+
+        assert hasattr(get_api_v1_datasets_by_dataset_slug_versions_diff, "sync_detailed")
+        assert hasattr(get_api_v1_datasets_by_dataset_slug_versions_diff, "asyncio_detailed")
+
+    def test_post_dataset_version_has_methods(self):
+        """Test post dataset version has methods"""
+        from noveum_api_client.api.datasets import post_api_v1_datasets_by_dataset_slug_versions
+
+        assert hasattr(post_api_v1_datasets_by_dataset_slug_versions, "sync_detailed")
+        assert hasattr(post_api_v1_datasets_by_dataset_slug_versions, "asyncio_detailed")
+
+    def test_post_dataset_version_accepts_body(self, mock_client):
+        """Test post dataset version accepts body parameter"""
+        from noveum_api_client.api.datasets import post_api_v1_datasets_by_dataset_slug_versions
+        from noveum_api_client.models import PostApiV1DatasetsByDatasetSlugVersionsBody
+
+        body = PostApiV1DatasetsByDatasetSlugVersionsBody(version="v1.0.0")
+
+        mock_response = Mock(spec=httpx.Response)
+        mock_response.headers = {}
+        mock_response.status_code = 201
+        mock_response.json.return_value = {"version": "v1.0.0"}
+
+        mock_client.get_httpx_client().request.return_value = mock_response
+        response = post_api_v1_datasets_by_dataset_slug_versions.sync_detailed(
+            dataset_slug="test-dataset", client=mock_client, body=body
+        )
+
+        assert response.status_code == 201
+
+    def test_publish_dataset_version_has_methods(self):
+        """Test publish dataset version has methods"""
+        from noveum_api_client.api.datasets import post_api_v1_datasets_by_dataset_slug_versions_publish
+
+        assert hasattr(post_api_v1_datasets_by_dataset_slug_versions_publish, "sync_detailed")
+        assert hasattr(post_api_v1_datasets_by_dataset_slug_versions_publish, "asyncio_detailed")
+
+    def test_publish_dataset_version_basic_call(self, mock_client):
+        """Test publish dataset version basic call"""
+        from noveum_api_client.api.datasets import post_api_v1_datasets_by_dataset_slug_versions_publish
+
+        mock_response = Mock(spec=httpx.Response)
+        mock_response.headers = {}
+        mock_response.status_code = 200
+        mock_response.json.return_value = {"message": "Version published"}
+
+        mock_client.get_httpx_client().request.return_value = mock_response
+        response = post_api_v1_datasets_by_dataset_slug_versions_publish.sync_detailed(
+            dataset_slug="test-dataset", client=mock_client
+        )
+
+        assert response.status_code == 200
+
+
 class TestDatasetErrorHandling:
     """Test error handling in dataset wrappers"""
 

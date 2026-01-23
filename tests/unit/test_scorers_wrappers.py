@@ -67,25 +67,24 @@ class TestScorersCRUDWrappers:
         assert hasattr(delete_api_v1_scorers_by_id, "sync_detailed")
         assert hasattr(delete_api_v1_scorers_by_id, "asyncio_detailed")
 
-    def test_post_scorers_accepts_body(self, mock_client):
-        """Test post scorers accepts body parameter"""
-        from noveum_api_client.types import Unset
+    def test_post_scorers_accepts_body_with_real_model(self):
+        """Test post scorers accepts body with real model"""
+        from noveum_api_client.models import PostApiV1ScorersBody
 
-        mock_response = Mock(spec=httpx.Response)
-        mock_response.headers = {}
-        mock_response.status_code = 201
-        mock_response.content = b'{"id": "scorer-1"}'
-        mock_response.headers = {}
-        mock_response.json.return_value = {"id": "scorer-1"}
+        body = PostApiV1ScorersBody(
+            name="Test Scorer",
+            description="A test scorer for validation",
+            type_="llm_judge",
+            tag="v1",
+            config={"model": "gpt-4", "temperature": 0.7},
+        )
 
-        # Test without body since creating a proper body model is complex
-        mock_client.get_httpx_client().request.return_value = mock_response
-        try:
-            response = post_api_v1_scorers.sync_detailed(client=mock_client, body=Unset())
-            assert response.status_code in [200, 201]
-        except TypeError:
-            # If parameter structure is different
-            assert True
+        # Verify body serializes correctly
+        body_dict = body.to_dict()
+        assert body_dict["name"] == "Test Scorer"
+        assert body_dict["type"] == "llm_judge"
+        assert body_dict["tag"] == "v1"
+        assert body_dict["config"]["model"] == "gpt-4"
 
 
 class TestScorersFilteringAndQuerying:
@@ -184,23 +183,30 @@ class TestScorersResponseStructure:
 
         assert response.status_code == 200
 
-    def test_post_scorers_returns_created_scorer(self, mock_client):
-        """Test post scorers returns created scorer object"""
-        from noveum_api_client.types import Unset
+    def test_scorer_body_model_with_complex_config(self):
+        """Test scorer body model with complex configuration"""
+        from noveum_api_client.models import PostApiV1ScorersBody
 
-        mock_response = Mock(spec=httpx.Response)
-        mock_response.headers = {}
-        mock_response.status_code = 201
-        mock_response.content = b'{"id": "scorer-1", "name": "New Scorer", "type": "llm_judge"}'
-        mock_response.headers = {}
-        mock_response.json.return_value = {"id": "scorer-1", "name": "New Scorer", "type": "llm_judge"}
+        complex_config = {
+            "model": "gpt-4",
+            "temperature": 0.7,
+            "max_tokens": 1000,
+            "system_prompt": "You are an evaluator",
+            "scoring_criteria": ["accuracy", "relevance", "coherence"],
+        }
 
-        mock_client.get_httpx_client().request.return_value = mock_response
-        try:
-            response = post_api_v1_scorers.sync_detailed(client=mock_client, body=Unset())
-            assert response.status_code == 201
-        except TypeError:
-            assert True
+        body = PostApiV1ScorersBody(
+            name="Advanced Scorer",
+            description="Scorer with complex config",
+            type_="llm_judge",
+            tag="v1",
+            config=complex_config,
+        )
+
+        body_dict = body.to_dict()
+        assert body_dict["config"]["model"] == "gpt-4"
+        assert body_dict["config"]["temperature"] == 0.7
+        assert len(body_dict["config"]["scoring_criteria"]) == 3
 
     def test_get_scorer_by_id_returns_single_object(self, mock_client):
         """Test get scorer by ID returns single object"""
@@ -230,21 +236,23 @@ class TestScorersResponseStructure:
 class TestScorersPatchOperations:
     """Test scorers patch/update operations"""
 
-    def test_patch_scorer_accepts_updates(self, mock_client):
-        """Test patch scorer accepts update data"""
-        mock_response = Mock(spec=httpx.Response)
-        mock_response.headers = {}
-        mock_response.status_code = 200
-        mock_response.json.return_value = {"id": "scorer-1", "name": "Updated"}
+    def test_patch_scorer_accepts_updates_with_real_model(self):
+        """Test patch scorer accepts update with real model"""
+        from noveum_api_client.models import PutApiV1ScorersByIdBody
 
-        update_data = {"name": "Updated Name"}
+        body = PutApiV1ScorersByIdBody(
+            name="Updated Scorer",
+            description="Updated description",
+            type_="llm_judge",
+            tag="v2",
+            config={"model": "gpt-4", "temperature": 0.5},
+        )
 
-        mock_client.get_httpx_client().request.return_value = mock_response
-        try:
-            response = put_api_v1_scorers_by_id.sync_detailed(id_path="scorer-1", client=mock_client, body=update_data)
-            assert response.status_code == 200
-        except TypeError:
-            assert True
+        # Verify body serializes correctly
+        body_dict = body.to_dict()
+        assert body_dict["name"] == "Updated Scorer"
+        assert body_dict["type"] == "llm_judge"
+        assert body_dict["tag"] == "v2"
 
     def test_delete_scorer_returns_success(self, mock_client):
         """Test delete scorer returns success"""
