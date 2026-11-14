@@ -246,5 +246,5 @@ twine check dist/*
 ---
 
 **Last Updated**: January 9, 2026  
-**Package**: noveum-sdk-python  
+**Package**: noveum-sdk  
 **Repository**: https://github.com/Noveum/noveum-sdk-python

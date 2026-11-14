@@ -1,7 +1,7 @@
 # Noveum SDK - Python Client
 
-[![PyPI version](https://img.shields.io/pypi/v/noveum-sdk-python.svg)](https://pypi.org/project/noveum-sdk-python/)
-[![Python versions](https://img.shields.io/pypi/pyversions/noveum-sdk-python.svg)](https://pypi.org/project/noveum-sdk-python/)
+[![PyPI version](https://img.shields.io/pypi/v/noveum-sdk.svg)](https://pypi.org/project/noveum-sdk/)
+[![Python versions](https://img.shields.io/pypi/pyversions/noveum-sdk.svg)](https://pypi.org/project/noveum-sdk/)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://github.com/Noveum/noveum-sdk-python/blob/main/LICENSE)
 [![CI](https://github.com/Noveum/noveum-sdk-python/workflows/CI/badge.svg)](https://github.com/Noveum/noveum-sdk-python/actions)
 
@@ -24,7 +24,7 @@ A professional Python SDK for the [Noveum.ai](https://noveum.ai) API. Provides b
 #### From PyPI (Recommended)
 
 ```bash
-pip install noveum-sdk-python
+pip install noveum-sdk
 ```
 
 #### From Source
@@ -792,7 +792,7 @@ GitHub Actions will automatically build and publish to PyPI using Trusted Publis
 
 ## Support
 
-- **PyPI Package**: https://pypi.org/project/noveum-sdk-python/
+- **PyPI Package**: https://pypi.org/project/noveum-sdk/
 - **API Documentation**: https://api.noveum.ai/docs
 - **GitHub Repository**: https://github.com/Noveum/noveum-sdk-python
 - **GitHub Issues**: https://github.com/Noveum/noveum-sdk-python/issues
