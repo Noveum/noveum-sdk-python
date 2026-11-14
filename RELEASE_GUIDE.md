@@ -33,17 +33,14 @@ Before your first release, you need to configure Trusted Publishing on PyPI:
 - Verify your email
 
 ### 2. Configure Trusted Publisher
-1. Go to https://pypi.org/manage/account/publishing/
-2. Click "Add a new pending publisher"
+1. Go to https://pypi.org/manage/project/noveum-sdk/settings/publishing/
+2. Under "Add a new publisher", choose GitHub
 3. Fill in:
-   - **PyPI Project Name**: `noveum-sdk-python`
    - **Owner**: `Noveum` (your GitHub organization/username)
    - **Repository name**: `noveum-sdk-python`
    - **Workflow name**: `release.yml`
    - **Environment name**: `pypi`
 4. Click "Add"
-
-**Note**: For the first release, you need to use "pending publisher". After the first successful release, the project will be created on PyPI automatically.
 
 ## Release Steps
 
@@ -130,20 +127,20 @@ After pushing the tag, the release workflow will automatically trigger:
    - ✅ Run integration tests (requires `NOVEUM_API_KEY` secret)
    - ✅ Build package (wheel and source distribution)
    - ✅ Validate package with twine
-   - ✅ Publish to PyPI (via Trusted Publishing)
+   - ✅ Publish to PyPI (via Trusted Publishing). This job waits until a reviewer of the `pypi` environment approves it in the Actions run.
    - ✅ Create GitHub Release with artifacts
 
-3. **Expected duration**: 5-10 minutes
+3. **Expected duration**: 5-10 minutes, plus the time until the upload is approved
 
 ### Step 5: Verify Release
 
 After the workflow completes:
 
-1. **Check PyPI**: https://pypi.org/project/noveum-sdk-python/
+1. **Check PyPI**: https://pypi.org/project/noveum-sdk/
 2. **Test installation**:
    ```bash
    # In a new virtual environment
-   pip install noveum-sdk-python
+   pip install noveum-sdk
    python -c "from noveum_api_client import NoveumClient; print('Success!')"
    ```
 3. **Check GitHub Release**: https://github.com/Noveum/noveum-sdk-python/releases/tag/v1.0.0
@@ -154,8 +151,8 @@ After the workflow completes:
 **Error**: "Trusted publishing exchange failure"
 
 **Solution**: 
-1. Go to https://pypi.org/manage/account/publishing/
-2. Add the pending publisher configuration (see above)
+1. Go to https://pypi.org/manage/project/noveum-sdk/settings/publishing/
+2. Check the GitHub publisher matches the configuration above (repository `noveum-sdk-python`, workflow `release.yml`, environment `pypi`)
 3. Wait a few minutes and retry
 
 ### Issue: Integration Tests Failing
@@ -229,7 +226,7 @@ git push origin v1.0.0
 open https://github.com/Noveum/noveum-sdk-python/actions
 
 # Verify on PyPI
-open https://pypi.org/project/noveum-sdk-python/
+open https://pypi.org/project/noveum-sdk/
 ```
 
 ## Release Workflow Details
@@ -249,7 +246,7 @@ The release workflow (`.github/workflows/release.yml`) performs:
 3. **Publish Job**:
    - Uses PyPI Trusted Publishing (OIDC)
    - No tokens required in repository
-   - Publishes to https://pypi.org/p/noveum-sdk-python
+   - Publishes to https://pypi.org/p/noveum-sdk
 
 4. **GitHub Release Job**:
    - Creates GitHub release
@@ -263,12 +260,12 @@ The release workflow (`.github/workflows/release.yml`) performs:
 - ✅ Uses OpenID Connect (OIDC) for authentication
 - ✅ Short-lived credentials
 - ✅ Audit trail on PyPI
-- ✅ Only runs on tag pushes to `main` branch
+- ✅ Runs on any `v*` tag push; the PyPI upload waits for approval in the `pypi` environment
 
 ## Need Help?
 
 - **GitHub Actions**: https://github.com/Noveum/noveum-sdk-python/actions
-- **PyPI Project**: https://pypi.org/project/noveum-sdk-python/
+- **PyPI Project**: https://pypi.org/project/noveum-sdk/
 - **Trusted Publishing Docs**: https://docs.pypi.org/trusted-publishers/
 
 ---

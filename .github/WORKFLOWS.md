@@ -158,7 +158,7 @@ Integration Tests:
 The release workflow uses PyPI's Trusted Publishing (OIDC) for secure, token-less publishing:
 
 1. **Setup**: Configure Trusted Publisher on PyPI
-   - Project: `noveum-sdk-python`
+   - Project: `noveum-sdk`
    - Repository: `Noveum/noveum-sdk-python`
    - Workflow: `release.yml`
    - Environment: `pypi`
@@ -167,7 +167,7 @@ The release workflow uses PyPI's Trusted Publishing (OIDC) for secure, token-les
    - Tag pushed: `v1.0.0`
    - Tests run (unit + integration)
    - Package built and validated
-   - Published to PyPI automatically
+   - Published to PyPI after a reviewer of the `pypi` environment approves the upload
    - GitHub release created
 
 3. **Security**:
@@ -253,5 +253,5 @@ twine check dist/*
 ---
 
 **Last Updated**: January 9, 2026  
-**Package**: noveum-sdk-python  
+**Package**: noveum-sdk  
 **Repository**: https://github.com/Noveum/noveum-sdk-python
