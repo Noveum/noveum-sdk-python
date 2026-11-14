@@ -130,7 +130,7 @@ After pushing the tag, the release workflow will automatically trigger:
    - ✅ Publish to PyPI (via Trusted Publishing). This job waits until a reviewer of the `pypi` environment approves it in the Actions run.
    - ✅ Create GitHub Release with artifacts
 
-3. **Expected duration**: 5-10 minutes
+3. **Expected duration**: 5-10 minutes, plus the time until the upload is approved
 
 ### Step 5: Verify Release
 

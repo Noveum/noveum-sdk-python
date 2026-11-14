@@ -162,7 +162,7 @@ The release workflow uses PyPI's Trusted Publishing (OIDC) for secure, token-les
    - Tag pushed: `v1.0.0`
    - Tests run (unit + integration)
    - Package built and validated
-   - Published to PyPI automatically
+   - Published to PyPI after a reviewer of the `pypi` environment approves the upload
    - GitHub release created
 
 3. **Security**:

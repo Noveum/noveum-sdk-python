@@ -771,7 +771,7 @@ noveum-sdk-autogen/
 
 ## Publishing to PyPI
 
-This package is automatically published to PyPI when a new version tag is pushed:
+Pushing a new version tag starts the release workflow. It publishes to PyPI once a reviewer of the `pypi` environment approves the upload:
 
 ```bash
 # Update version in pyproject.toml
@@ -788,7 +788,7 @@ git tag vX.Y.Z
 git push origin main --tags
 ```
 
-GitHub Actions will automatically build and publish to PyPI using Trusted Publishing.
+GitHub Actions builds the package and, after that approval, publishes it using Trusted Publishing.
 
 ## Support
 
