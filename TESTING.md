@@ -212,7 +212,6 @@ test_datasets.py::test_delete_dataset_item PASSED
 - `tests/integration/conftest.py` - Integration test fixtures (API client)
 - `tests/test_config.py` - Shared test configuration
 - `pyproject.toml` - Pytest configuration and settings
-- `codecov.yml` - Code coverage configuration
 
 ### Environment Variables
 
@@ -356,7 +355,6 @@ The SDK uses GitHub Actions for automated testing:
 - **Workflow**: `.github/workflows/ci.yml`
 - **Triggers**: Push, pull request
 - **Tests**: Unit tests (fast)
-- **Coverage**: Uploads to codecov.io
 
 ### Local CI Simulation
 
