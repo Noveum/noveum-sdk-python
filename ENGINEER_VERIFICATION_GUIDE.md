@@ -19,7 +19,7 @@ python3 --version  # Should be 3.10+
 pip install -e .
 
 # Set API key
-export NOVEUM_API_KEY="nv_uxVvrZzzaNvO49TAFQEe9CLlTBqELMLm"
+export NOVEUM_API_KEY="nv_your_api_key_here"
 
 # Verify installation
 python -c "from noveum_api_client import NoveumClient; print('✅ Ready')"
