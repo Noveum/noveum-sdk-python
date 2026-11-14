@@ -106,6 +106,19 @@ jobs:
         run: |
           pytest tests/unit/ -v --cov=noveum_api_client --cov-report=xml --cov-report=term-missing --junitxml=junit.xml
 
+      - name: Upload coverage reports to Codecov
+        if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.11'
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          slug: Noveum/noveum-sdk-python
+
+      - name: Upload test results to Codecov
+        if: ${{ !cancelled() }}
+        uses: codecov/test-results-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+
   # Run integration tests on PRs and main - includes API calls
   integration-test:
     runs-on: ubuntu-latest
@@ -131,6 +144,18 @@ jobs:
         env:
           INTEGRATION_TESTS: "true"
           NOVEUM_API_KEY: ${{ secrets.NOVEUM_API_KEY }}
+
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          slug: Noveum/noveum-sdk-python
+
+      - name: Upload test results to Codecov
+        if: ${{ !cancelled() }}
+        uses: codecov/test-results-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
 
   build:
     runs-on: ubuntu-latest

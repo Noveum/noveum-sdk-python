@@ -4,6 +4,7 @@
 [![Python versions](https://img.shields.io/pypi/pyversions/noveum-sdk.svg)](https://pypi.org/project/noveum-sdk/)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://github.com/Noveum/noveum-sdk-python/blob/main/LICENSE)
 [![CI](https://github.com/Noveum/noveum-sdk-python/workflows/CI/badge.svg)](https://github.com/Noveum/noveum-sdk-python/actions)
+[![codecov](https://codecov.io/gh/Noveum/noveum-sdk-python/branch/main/graph/badge.svg)](https://codecov.io/gh/Noveum/noveum-sdk-python)
 
 A professional Python SDK for the [Noveum.ai](https://noveum.ai) API. Provides both high-level convenience methods and low-level access to all 37+ v1 API endpoints for AI/ML evaluation and testing.
 

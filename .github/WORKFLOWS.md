@@ -148,6 +148,11 @@ Integration Tests:
   - Main branch only
 ```
 
+### Coverage Tracking
+- Codecov integration for coverage reports
+- Test results uploaded to Codecov
+- Coverage badges in README
+
 ## PyPI Publishing (Trusted Publishing)
 
 The release workflow uses PyPI's Trusted Publishing (OIDC) for secure, token-less publishing:
@@ -173,6 +178,7 @@ The release workflow uses PyPI's Trusted Publishing (OIDC) for secure, token-les
 
 ## Required GitHub Secrets
 
+- `CODECOV_TOKEN` - For coverage reporting
 - `NOVEUM_API_KEY` - For integration tests
 - No PyPI token needed (using Trusted Publishing)
 
@@ -240,6 +246,7 @@ twine check dist/*
 ## Monitoring
 
 - **GitHub Actions**: Check workflow runs
+- **Codecov**: Monitor test coverage
 - **PyPI**: Verify package uploads
 - **Dependabot**: Review dependency updates
 
