@@ -90,7 +90,7 @@ jobs:
         name: python-package-distributions
         path: dist/
     - name: Publish distribution 📦 to PyPI
-      uses: pypa/gh-action-pypi-publish@release/v1
+      uses: pypa/gh-action-pypi-publish@7245906fb61fa33a13554f9d5fb856fe61758086 # v1.14.3
 
   github-release:
     needs: [build, publish-to-pypi]
@@ -107,7 +107,7 @@ jobs:
         path: dist/
 
     - name: Create GitHub Release
-      uses: softprops/action-gh-release@v2.5.0
+      uses: softprops/action-gh-release@a06a81a03ee405af7f2048a818ed3f03bbf83c7b # v2.5.0
       with:
         files: dist/*
         generate_release_notes: true
