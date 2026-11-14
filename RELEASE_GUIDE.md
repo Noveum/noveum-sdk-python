@@ -33,17 +33,14 @@ Before your first release, you need to configure Trusted Publishing on PyPI:
 - Verify your email
 
 ### 2. Configure Trusted Publisher
-1. Go to https://pypi.org/manage/account/publishing/
-2. Click "Add a new pending publisher"
+1. Go to https://pypi.org/manage/project/noveum-sdk/settings/publishing/
+2. Under "Add a new publisher", choose GitHub
 3. Fill in:
-   - **PyPI Project Name**: `noveum-sdk-python`
    - **Owner**: `Noveum` (your GitHub organization/username)
    - **Repository name**: `noveum-sdk-python`
    - **Workflow name**: `release.yml`
    - **Environment name**: `pypi`
 4. Click "Add"
-
-**Note**: For the first release, you need to use "pending publisher". After the first successful release, the project will be created on PyPI automatically.
 
 ## Release Steps
 
