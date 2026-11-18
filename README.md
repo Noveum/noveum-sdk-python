@@ -602,6 +602,8 @@ Apache 2.0 License - See LICENSE file for details
 
 Contributions welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
+The Noveum team maintains this client. [Shashank Agarwal](https://www.linkedin.com/in/shashankagarwal2/), Noveum’s founder and CEO, contributes to the [client’s release workflows](https://github.com/Noveum/noveum-sdk-python/pull/26).
+
 ## Changelog
 
 See [CHANGELOG.md](CHANGELOG.md) for version history and updates.
