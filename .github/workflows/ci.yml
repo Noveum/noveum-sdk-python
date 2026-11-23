@@ -71,9 +71,15 @@ jobs:
         run: |
           bandit -r noveum_api_client/ -f json -o bandit-report.json
 
-      - name: Run safety check
+      # Audit only what the SDK ships to users, in a clean environment, so
+      # dev tooling (and the scanner's own dependencies) cannot fail the job.
+      - name: Audit runtime dependencies
         run: |
-          safety check --json > safety-report.json
+          python -m venv /tmp/runtime
+          /tmp/runtime/bin/pip install .
+          /tmp/runtime/bin/pip freeze --exclude noveum-sdk > runtime-requirements.txt
+          cat runtime-requirements.txt
+          pip-audit --strict -r runtime-requirements.txt
 
   # Run unit tests on PRs and pushes - faster feedback, no API costs
   unit-test:
